@@ -317,9 +317,9 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 
   <div class="tbar">
     <label>GitHub Repo:</label>
-    <input id="gh-repo" value="DigitalEuan/gce_predictor" style="width:220px;">
+    <input id="gh-repo" value="gce_predictor" style="width:220px;">
     <label>File path:</label>
-    <input id="gh-file" value="gce_predictor/crop_circle_solar_database_v2.csv" style="width:360px;">
+    <input id="gh-file" value="crop_circle_solar_database_v2.csv" style="width:360px;">
     <button class="btn btn-sol" onclick="loadDB()">↻ Load CSV from GitHub</button>
     <button class="btn btn-ghost" onclick="document.getElementById('csv-upload').click()">↑ Load Local CSV</button>
     <input id="csv-upload" type="file" accept=".csv" style="display:none" onchange="loadLocalCSV(event)">
