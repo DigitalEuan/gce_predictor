@@ -317,7 +317,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 
   <div class="tbar">
     <label>GitHub Repo:</label>
-    <input id="gh-repo" value="gce_predictor" style="width:220px;">
+    <input id="gh-repo" value="DigitalEuan/gce_predictor" style="width:220px;">
     <label>File path:</label>
     <input id="gh-file" value="crop_circle_solar_database_v2.csv" style="width:360px;">
     <button class="btn btn-sol" onclick="loadDB()">↻ Load CSV from GitHub</button>
@@ -866,7 +866,7 @@ function dbLog(msg,cls=''){
 async function loadDB(){
   const repo=document.getElementById('gh-repo').value.trim();
   const file=document.getElementById('gh-file').value.trim();
-  const url=`https://github.com/DigitalEuan/${repo}/blob/main/${file}?t=${Date.now()}`;
+  const url=`https://raw.githubusercontent.com/${repo}/blob/main/${file}?t=${Date.now()}`;
   dbLog('Fetching from GitHub: '+url);
   setDot('live','warn');
   try{
