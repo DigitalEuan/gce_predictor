@@ -155,6 +155,39 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 .log-err{color:var(--null);}
 .log-dim{color:var(--tx3);}
 
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;}
+.img-card{background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.img-card:hover{border-color:var(--solar);}
+.img-card img{width:100%;height:140px;object-fit:cover;background:var(--bg3);}
+.img-card-body{padding:9px;}
+.img-card-id{font-family:var(--mono);font-size:8px;color:var(--solar);letter-spacing:1px;text-transform:uppercase;}
+.img-card-loc{font-size:11px;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.img-card-date{font-family:var(--mono);font-size:9px;color:var(--tx3);}
+.img-card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
+.img-ph{width:100%;height:140px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:1px;}
+
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;}
+#lb.on{display:flex;}
+#lb-img{max-width:90vw;max-height:70vh;object-fit:contain;border:1px solid var(--b2);}
+#lb-info{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:16px 20px;max-width:700px;width:90vw;margin-top:12px;}
+#lb-close{position:absolute;top:16px;right:20px;background:none;border:1px solid var(--b2);color:var(--tx2);font-family:var(--mono);font-size:10px;padding:5px 10px;cursor:pointer;border-radius:var(--rad);}
+#lb-close:hover{border-color:var(--null);color:var(--null);}
+#lb-nav{position:absolute;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;width:100%;padding:0 12px;pointer-events:none;}
+.lb-arr{background:var(--bg2);border:1px solid var(--b2);color:var(--tx2);font-family:var(--mono);font-size:16px;padding:8px 14px;cursor:pointer;border-radius:var(--rad);pointer-events:all;}
+.lb-arr:hover{border-color:var(--solar);color:var(--solar);}
+.lb-meta-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;}
+.lb-meta{font-family:var(--mono);font-size:9px;color:var(--tx3);}
+.lb-meta span{color:var(--text);}
+
+.pred-card{background:var(--bg2);border:2px solid var(--solar);border-radius:var(--rad);padding:20px;position:relative;overflow:hidden;}
+.pred-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(240,165,0,.07) 0%,transparent 70%);pointer-events:none;}
+.pred-geo{font-family:var(--mono);font-size:22px;color:var(--white);margin:8px 0;}
+.pred-row{display:flex;gap:10px;margin:3px 0;}
+.pred-k{font-family:var(--mono);font-size:9px;color:var(--tx3);min-width:170px;}
+.pred-v{font-family:var(--mono);font-size:9px;color:var(--text);}
+
+.report-out{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;font-family:var(--mono);font-size:10.5px;white-space:pre-wrap;line-height:1.85;min-height:360px;overflow-y:auto;}
+
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
 .filter-bar select,.filter-bar input{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;}
 .filter-bar select:focus,.filter-bar input:focus{border-color:var(--solar);}
@@ -170,6 +203,30 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 </style>
 </head>
 <body>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button id="lb-close" onclick="closeLB()">✕ Close</button>
+  <div id="lb-nav">
+    <button class="lb-arr" onclick="lbNav(-1)">‹</button>
+    <button class="lb-arr" onclick="lbNav(1)">›</button>
+  </div>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-info">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--white);" id="lb-title">—</div>
+    <div class="lb-meta-row">
+      <div class="lb-meta">Date: <span id="lb-date">—</span></div>
+      <div class="lb-meta">County: <span id="lb-county">—</span></div>
+      <div class="lb-meta">Crop: <span id="lb-crop">—</span></div>
+      <div class="lb-meta">Kp: <span id="lb-kp">—</span></div>
+      <div class="lb-meta">G1+ 3d: <span id="lb-g">—</span></div>
+      <div class="lb-meta">Dec°: <span id="lb-dec">—</span></div>
+      <div class="lb-meta">SSN: <span id="lb-ssn">—</span></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--tx3);margin-top:8px;line-height:1.7;max-height:80px;overflow-y:auto;" id="lb-note">—</div>
+    <a id="lb-src" href="#" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--golay);display:block;margin-top:6px;">View source ↗</a>
+  </div>
+</div>
 
 <!-- HEADER -->
 <div class="hdr">
@@ -192,7 +249,15 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 <!-- TABS -->
 <div class="tabs">
   <button class="tab on" onclick="sw('db',this)">① Database</button>
-  <button class="tab" onclick="sw('analysis',this)">② Analysis</button>
+  <button class="tab" onclick="sw('catalog',this)">② Images</button>
+  <button class="tab" onclick="sw('solar',this)">③ Solar Fetch</button>
+  <button class="tab" onclick="sw('analysis',this)">④ Analysis</button>
+  <button class="tab" onclick="sw('window',this)">⑤ 3-Day Window</button>
+  <button class="tab" onclick="sw('angle',this)">⑥ Solar Angle</button>
+  <button class="tab" onclick="sw('predict',this)">⑦ Predictions</button>
+  <button class="tab" onclick="sw('report',this)">⑧ Reports</button>
+  <button class="tab" onclick="sw('docs',this)">⑨ Documentation</button>
+  <button class="tab" onclick="sw('sci',this)">⑩ Charge Monitor</button>
 </div>
 
 <div class="body">
@@ -211,6 +276,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <button class="btn btn-ghost" onclick="document.getElementById('csv-upload').click()">↑ Local CSV</button>
     <input id="csv-upload" type="file" accept=".csv" style="display:none" onchange="loadLocal(event)">
     <button class="btn btn-ghost" onclick="exportCSV()">↓ Export CSV</button>
+    <button class="btn btn-ghost" onclick="doPush()">↑ Push to GitHub</button>
     <label>Token:</label>
     <input type="password" id="gh-token" placeholder="ghp_... (for push)" oninput="saveToken()" style="width:180px;">
   </div>
@@ -226,7 +292,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 
   <div class="callout cal-sol" style="margin-bottom:14px;">
     <div class="cl">2025–2026 Data Status</div>
-    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system. Keep your local CSV updated or reload from GitHub.
+    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system as <code>new_records_2025_2026.csv</code>. Keep your local CSV updated or reload from GitHub.
   </div>
 
   <div class="filter-bar">
@@ -238,6 +304,9 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <select id="f-hxf" onchange="filterDB()"><option value="">All</option><option value="0">Not hoax</option><option value="1">Hoax</option></select>
     <select id="f-usf" onchange="filterDB()"><option value="">All</option><option value="True">Usable only</option></select>
     <span id="row-ct" style="font-family:var(--mono);font-size:8px;color:var(--tx3);"></span>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      <button class="btn btn-sol sm" onclick="showForm()">+ Add Record</button>
+    </div>
   </div>
 
   <div class="tw scroll">
@@ -260,7 +329,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
         <th onclick="sortBy('solar_Dst_min')">Dst</th>
         <th onclick="sortBy('hoax_flag')">Hoax</th>
         <th onclick="sortBy('data_quality_score')">DQ</th>
-        <th onclick="sortBy('soil_moisture_pct')">SM%</th>
+        <th onclick="sortBy('soil_moisture_pct')">SM%</th><th>Img</th><th>Actions</th>
       </tr></thead>
       <tbody id="db-tbody"></tbody>
     </table>
@@ -268,9 +337,27 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
   <div class="log" id="db-log" style="margin-top:10px;"><span class="log-dim">[GCE Console] Ready. Click "Load from GitHub" or upload a local CSV.</span></div>
 </div>
 
-<!-- ② ANALYSIS -->
-<div id="pane-analysis" class="pane">
+<!-- ② IMAGES -->
+<div id="pane-catalog" class="pane">
   <div class="sec-lbl">Section 02</div>
+  <div class="sec-ttl">Formation Image Catalog</div>
+  <div class="callout cal-sol">
+    <div class="cl">Images</div>
+    Images are stored as URLs in the <code>image_url</code> field of each database record. Edit any record to add an image URL. For 2025 formations, source URLs from Temporary Temples or other formation databases.
+  </div>
+  <div class="filter-bar">
+    <input id="img-q" onkeyup="renderCatalog()" placeholder="Search..." style="width:200px;">
+    <select id="img-yr" onchange="renderCatalog()"><option value="">All Years</option></select>
+    <select id="img-g" onchange="renderCatalog()"><option value="">All</option><option value="1">G-Storm in 3d</option><option value="0">No storm</option></select>
+    <select id="img-has" onchange="renderCatalog()"><option value="">All records</option><option value="1">Has image URL</option></select>
+    <span id="img-ct" style="font-family:var(--mono);font-size:8px;color:var(--tx3);"></span>
+  </div>
+  <div id="img-grid" class="img-grid"></div>
+</div>
+
+<!-- ④ ANALYSIS -->
+<div id="pane-analysis" class="pane">
+  <div class="sec-lbl">Section 04</div>
   <div class="sec-ttl">UBP-NC4 Correlation Analysis</div>
   <div class="toolbar">
     <button class="btn btn-sol" onclick="runAnalysis()">▶ Run Full Analysis</button>
@@ -289,7 +376,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <div class="stat lee"><div class="stat-v" id="a-dec-mean">—</div><div class="stat-l">Mean Solar Dec °</div></div>
     <div class="stat nul"><div class="stat-v" id="a-dst-mean">—</div><div class="stat-l">Mean Dst Min (nT)</div></div>
   </div>
-  
+
   <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Correlation Metrics</div><div id="corr-kv"></div></div>
   
   <!-- STEP 2: NEW Dual Compartment Output UI -->
@@ -323,7 +410,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
       <div style="font-size:9px;color:var(--tx3);margin-top:6px;">NRCI: <span style="color:var(--text);" id="out_nrci">1.00</span></div>
     </div>
   </div>
-  
+
   <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;margin-top:16px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
   <div class="tw scroll" style="max-height:320px;">
     <table>
@@ -332,6 +419,15 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     </table>
   </div>
 </div>
+
+<!-- ③ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ PLACEHOLDER PANES -->
+<div id="pane-solar" class="pane"><div class="sec-ttl">③ Solar Fetch (Placeholder)</div><p>Solar data fetch functionality coming soon.</p></div>
+<div id="pane-window" class="pane"><div class="sec-ttl">⑤ 3-Day Window (Placeholder)</div><p>3-Day window analysis coming soon.</p></div>
+<div id="pane-angle" class="pane"><div class="sec-ttl">⑥ Solar Angle (Placeholder)</div><p>Solar angle calculations coming soon.</p></div>
+<div id="pane-predict" class="pane"><div class="sec-ttl">⑦ Predictions (Placeholder)</div><p>Prediction interface coming soon.</p></div>
+<div id="pane-report" class="pane"><div class="sec-ttl">⑧ Reports (Placeholder)</div><p>Report generation coming soon.</p></div>
+<div id="pane-docs" class="pane"><div class="sec-ttl">⑨ Documentation (Placeholder)</div><p>Documentation coming soon.</p></div>
+<div id="pane-sci" class="pane"><div class="sec-ttl">⑩ Charge Monitor (Placeholder)</div><p>Charge monitor coming soon.</p></div>
 
 </div><!-- /body -->
 
@@ -366,8 +462,9 @@ function saveToken(){localStorage.setItem('gh_tok',document.getElementById('gh-t
 function sw(name,el){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('pane-'+name).classList.add('on');
-  el.classList.add('on');
+  const pane=document.getElementById('pane-'+name);
+  if(pane) pane.classList.add('on');
+  if(el) el.classList.add('on');
   if(name==='analysis') runAnalysis();
 }
 
@@ -417,7 +514,7 @@ function calculateDualBatteryJS(dQ_f, dQ_s, Q_f_prev, Q_s_prev, c_site, r_site) 
 }
 
 // ════════════════════════════════════
-// DATABASE LOAD
+// DATABASE LOAD & FILTER
 // ════════════════════════════════════
 function dlog(m,c=''){
   const el=document.getElementById('db-log');
@@ -436,12 +533,11 @@ async function loadDB(){
   setDot('warn','LOADING');
   try{
     const r=await fetch(url);
-    if(!r.ok) throw new Error('HTTP '+r.status+' — check repo/file path and that the file exists in main branch');
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const text=await r.text();
     parseCSV(text,'GitHub');
   }catch(e){
     dlog('Load failed: '+e.message,'err');
-    dlog('Try: upload a local CSV file instead (the "Local CSV" button)','war');
     setDot('err','ERROR');
   }
 }
@@ -459,7 +555,7 @@ function parseCSV(text,src){
     header:true,skipEmptyLines:true,dynamicTyping:false,
     complete(res){
       DB=res.data.filter(r=>r.year||r.location);
-      dlog(`Loaded ${DB.length} records from ${src}.`,'ok');
+      dlog(`✓ Loaded ${DB.length} records from ${src}.`,'ok');
       setDot('live','ONLINE');
       updateHeader(); buildFilters(); filterDB();
     },
@@ -468,21 +564,23 @@ function parseCSV(text,src){
 }
 
 function setDot(st,lbl){
-  document.getElementById('dot-db').className='sdot '+(st||'');
-  document.getElementById('lbl-db').textContent=lbl||'OFFLINE';
+  const el=document.getElementById('dot-db');
+  if(el) el.className='sdot '+(st||'');
+  const lbl_el=document.getElementById('lbl-db');
+  if(lbl_el) lbl_el.textContent=lbl||'OFFLINE';
 }
 
 function updateHeader(){
   const g1=DB.filter(r=>r.solar_in_G1_window_3d==='True');
-  document.getElementById('s-total').textContent=DB.length;
-  document.getElementById('s-usable').textContent=DB.filter(r=>r.usable_for_analysis==='True').length;
-  document.getElementById('s-g1').textContent=g1.length;
-  document.getElementById('s-g2').textContent=DB.filter(r=>r.solar_in_G2_window_3d==='True').length;
+  if(document.getElementById('s-total')) document.getElementById('s-total').textContent=DB.length;
+  if(document.getElementById('s-usable')) document.getElementById('s-usable').textContent=DB.filter(r=>r.usable_for_analysis==='True').length;
+  if(document.getElementById('s-g1')) document.getElementById('s-g1').textContent=g1.length;
+  if(document.getElementById('s-g2')) document.getElementById('s-g2').textContent=DB.filter(r=>r.solar_in_G2_window_3d==='True').length;
   const yrs=DB.map(r=>parseInt(r.year)).filter(n=>!isNaN(n));
-  document.getElementById('s-years').textContent=yrs.length?`${Math.min(...yrs)}–${Math.max(...yrs)}`:'—';
-  document.getElementById('s-hoax').textContent=DB.filter(r=>r.hoax_flag==='1'||r.hoax_flag===1).length;
-  document.getElementById('h-records').textContent=DB.length;
-  document.getElementById('h-g1').textContent=g1.length;
+  if(document.getElementById('s-years')) document.getElementById('s-years').textContent=yrs.length?`${Math.min(...yrs)}–${Math.max(...yrs)}`:'—';
+  if(document.getElementById('s-hoax')) document.getElementById('s-hoax').textContent=DB.filter(r=>r.hoax_flag==='1'||r.hoax_flag===1).length;
+  if(document.getElementById('h-records')) document.getElementById('h-records').textContent=DB.length;
+  if(document.getElementById('h-g1')) document.getElementById('h-g1').textContent=g1.length;
 }
 
 function buildFilters(){
@@ -503,12 +601,13 @@ function buildFilters(){
 }
 
 function filterDB(){
-  const sq=document.getElementById('f-search').value.toLowerCase();
-  const yr=document.getElementById('f-yr').value;
-  const co=document.getElementById('f-co').value;
-  const g1=document.getElementById('f-g1f').value;
-  const hx=document.getElementById('f-hxf').value;
-  const us=document.getElementById('f-usf').value;
+  const sq=document.getElementById('f-search')?.value.toLowerCase() || '';
+  const yr=document.getElementById('f-yr')?.value || '';
+  const co=document.getElementById('f-co')?.value || '';
+  const g1=document.getElementById('f-g1f')?.value || '';
+  const hx=document.getElementById('f-hxf')?.value || '';
+  const us=document.getElementById('f-usf')?.value || '';
+  
   filteredDB=DB.filter(r=>{
     if(sq && !JSON.stringify(r).toLowerCase().includes(sq)) return false;
     if(yr && r.year!==yr) return false;
@@ -522,7 +621,9 @@ function filterDB(){
     if(av===bv) return 0;
     return (av<bv?-1:1)*sortDir;
   });
-  document.getElementById('row-ct').textContent=`${filteredDB.length} of ${DB.length} rows`;
+  
+  const rc=document.getElementById('row-ct');
+  if(rc) rc.textContent=`${filteredDB.length} of ${DB.length} rows`;
   renderDBTable();
 }
 
@@ -534,12 +635,17 @@ function sortBy(col){
 
 function renderDBTable(){
   const tb=document.getElementById('db-tbody');
+  if(!tb) return;
   tb.innerHTML='';
   filteredDB.forEach((r,i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td>${r.approx_diameter_m||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_SSN_best||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.hoax_flag?'⚠':'—'}</td><td>${r.data_quality_score||'—'}</td><td>${r.soil_moisture_pct||'—'}</td>`;
+    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td>${r.approx_diameter_m||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_SSN_best||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.hoax_flag?'⚠':'—'}</td><td>${r.data_quality_score||'—'}</td><td>${r.soil_moisture_pct||'—'}</td><td>${r.image_url?'✓':'—'}</td><td><button class="btn btn-ghost sm" onclick="alert('Edit: '+${i})">Edit</button></td>`;
     tb.appendChild(tr);
   });
+}
+
+function showForm(){
+  alert('Form: Coming soon');
 }
 
 function exportCSV(){
@@ -550,11 +656,19 @@ function exportCSV(){
   a.click();
 }
 
+function doPush(){
+  alert('GitHub push: Not implemented');
+}
+
+function renderCatalog(){
+  dlog('Catalog rendering...');
+}
+
 // ════════════════════════════════════
 // ANALYSIS
-// ════════════════════════════════════
+// ════════════���═══════════════════════
 function runAnalysis(){
-  // 1. Gather inputs (replace these variable names with the ones your UI actually uses)
+  // Gather inputs
   let input_q_xray = parseFloat(document.getElementById('input_xray')?.value) || 0;
   let input_q_cme = parseFloat(document.getElementById('input_cme')?.value) || 0;
   let input_q_kp = parseFloat(document.getElementById('input_kp')?.value) || 0;
@@ -562,33 +676,34 @@ function runAnalysis(){
   let input_q_ch_hss = parseFloat(document.getElementById('input_ch_hss')?.value) || 0;
   let input_q_dst = parseFloat(document.getElementById('input_dst')?.value) || 0;
   
-  // 2. Route inputs to compartments
   let dQ_f = input_q_xray + input_q_cme;
   let dQ_s = input_q_kp + input_q_bz + input_q_ch_hss + input_q_dst;
   
-  // 3. Define Site Constants (e.g., Avebury chalk site)
   let c_site = 1.8;
   let r_site = 1.4;
   
-  // 4. Call the new Dual-Compartment Model
   let result = calculateDualBatteryJS(dQ_f, dQ_s, 0, 0, c_site, r_site);
   
-  // 5. Update the HTML DOM with the results
-  document.getElementById('out_qf').innerText = result.Q_f.toFixed(4);
-  document.getElementById('out_qs').innerText = result.Q_s.toFixed(4);
-  document.getElementById('out_qtotal').innerText = result.total_Q.toFixed(4);
-  document.getElementById('out_hw').innerText = result.hw;
-  document.getElementById('out_nrci').innerText = result.nrci.toFixed(4);
-  document.getElementById('out_trajectory').innerText = result.trajectory;
+  // Update outputs
+  const out_qf=document.getElementById('out_qf');
+  const out_qs=document.getElementById('out_qs');
+  const out_qtotal=document.getElementById('out_qtotal');
+  const out_hw=document.getElementById('out_hw');
+  const out_nrci=document.getElementById('out_nrci');
+  const out_trajectory=document.getElementById('out_trajectory');
   
-  if (result.discharged) {
-      document.getElementById('out_trajectory').style.color = 'red';
-  } else {
-      document.getElementById('out_trajectory').style.color = 'blue';
+  if(out_qf) out_qf.innerText = result.Q_f.toFixed(4);
+  if(out_qs) out_qs.innerText = result.Q_s.toFixed(4);
+  if(out_qtotal) out_qtotal.innerText = result.total_Q.toFixed(4);
+  if(out_hw) out_hw.innerText = result.hw;
+  if(out_nrci) out_nrci.innerText = result.nrci.toFixed(4);
+  if(out_trajectory) {
+    out_trajectory.innerText = result.trajectory;
+    out_trajectory.style.color = result.discharged ? 'red' : 'blue';
   }
 
-  // Compute correlation metrics
-  const ds=document.getElementById('an-ds').value;
+  // Correlation metrics
+  const ds=document.getElementById('an-ds')?.value || 'usable';
   let data=DB;
   if(ds==='usable') data=DB.filter(r=>r.usable_for_analysis==='True');
   else if(ds==='nohox') data=DB.filter(r=>r.hoax_flag!=='1'&&r.hoax_flag!==1);
@@ -602,23 +717,25 @@ function runAnalysis(){
   
   const mean=(arr)=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
   
-  document.getElementById('a-n').textContent=n;
-  document.getElementById('a-g1pct').textContent=n?(g1c*100/n).toFixed(1)+'%':'—';
-  document.getElementById('a-kp-mean').textContent=mean(kpv).toFixed(2);
-  document.getElementById('a-kp7-mean').textContent=mean(kp7v).toFixed(2);
-  document.getElementById('a-dec-mean').textContent=mean(decv).toFixed(2);
-  document.getElementById('a-dst-mean').textContent=mean(dstv).toFixed(2);
+  if(document.getElementById('a-n')) document.getElementById('a-n').textContent=n;
+  if(document.getElementById('a-g1pct')) document.getElementById('a-g1pct').textContent=n?(g1c*100/n).toFixed(1)+'%':'—';
+  if(document.getElementById('a-kp-mean')) document.getElementById('a-kp-mean').textContent=mean(kpv).toFixed(2);
+  if(document.getElementById('a-kp7-mean')) document.getElementById('a-kp7-mean').textContent=mean(kp7v).toFixed(2);
+  if(document.getElementById('a-dec-mean')) document.getElementById('a-dec-mean').textContent=mean(decv).toFixed(2);
+  if(document.getElementById('a-dst-mean')) document.getElementById('a-dst-mean').textContent=mean(dstv).toFixed(2);
   
   const corrKV=document.getElementById('corr-kv');
-  corrKV.innerHTML=`<div class="kv"><span class="kv-k">Total Records:</span><span class="kv-v">${n}</span></div><div class="kv"><span class="kv-k">G1+ Cases:</span><span class="kv-v">${g1c} (${n?(g1c*100/n).toFixed(1):'0'}%)</span></div>`;
+  if(corrKV) corrKV.innerHTML=`<div class="kv"><span class="kv-k">Total Records:</span><span class="kv-v">${n}</span></div><div class="kv"><span class="kv-k">G1+ Cases:</span><span class="kv-v">${g1c} (${n?(g1c*100/n).toFixed(1):'0'}%)</span></div>`;
   
   const sigtb=document.getElementById('sig-tb');
-  sigtb.innerHTML='';
-  data.filter(r=>r.solar_in_G2_window_3d==='True'&&r.hoax_flag!=='1'&&r.hoax_flag!==1).forEach(r=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.solar_SSN_best||'—'}</td>`;
-    sigtb.appendChild(tr);
-  });
+  if(sigtb){
+    sigtb.innerHTML='';
+    data.filter(r=>r.solar_in_G2_window_3d==='True'&&r.hoax_flag!=='1'&&r.hoax_flag!==1).forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.solar_SSN_best||'—'}</td>`;
+      sigtb.appendChild(tr);
+    });
+  }
 }
 
 </script>
