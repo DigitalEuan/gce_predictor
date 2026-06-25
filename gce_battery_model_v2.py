@@ -7,11 +7,13 @@ class DualSolarDay:
     # Fast store inputs (Flares, CMEs)
     q_xray: float
     q_cme: float
+    earth_directed: bool = True  # NEW: CAL-02 Resolution Flag
+    
     # Slow store inputs (CH HSS, Dst, Kp)
-    q_kp: float
-    q_bz: float
-    q_ch_hss: float
-    q_dst: float
+    q_kp: float = 0.0
+    q_bz: float = 0.0
+    q_ch_hss: float = 0.0
+    q_dst: float = 0.0
 
 class DualBatteryState:
     def __init__(self, site_key: str, c_site: float, r_site: float):
@@ -30,7 +32,13 @@ class DualBatteryState:
         
     def step(self, day: DualSolarDay):
         # 1. Add daily charge
-        dQ_f = day.q_xray + day.q_cme
+        # CAL-02 Resolution: Apply Earth-directedness penalty to X-ray input
+        if not day.earth_directed:
+            effective_q_xray = day.q_xray * 0.15  # 15% coupling for limb events
+        else:
+            effective_q_xray = day.q_xray
+            
+        dQ_f = effective_q_xray + day.q_cme
         dQ_s = day.q_kp + day.q_bz + day.q_ch_hss + day.q_dst
         
         # 2. RC Evolution
