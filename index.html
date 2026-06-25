@@ -155,39 +155,6 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 .log-err{color:var(--null);}
 .log-dim{color:var(--tx3);}
 
-.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;}
-.img-card{background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);overflow:hidden;cursor:pointer;transition:border-color .2s;}
-.img-card:hover{border-color:var(--solar);}
-.img-card img{width:100%;height:140px;object-fit:cover;background:var(--bg3);}
-.img-card-body{padding:9px;}
-.img-card-id{font-family:var(--mono);font-size:8px;color:var(--solar);letter-spacing:1px;text-transform:uppercase;}
-.img-card-loc{font-size:11px;color:var(--text);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.img-card-date{font-family:var(--mono);font-size:9px;color:var(--tx3);}
-.img-card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
-.img-ph{width:100%;height:140px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:1px;}
-
-#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;}
-#lb.on{display:flex;}
-#lb-img{max-width:90vw;max-height:70vh;object-fit:contain;border:1px solid var(--b2);}
-#lb-info{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:16px 20px;max-width:700px;width:90vw;margin-top:12px;}
-#lb-close{position:absolute;top:16px;right:20px;background:none;border:1px solid var(--b2);color:var(--tx2);font-family:var(--mono);font-size:10px;padding:5px 10px;cursor:pointer;border-radius:var(--rad);}
-#lb-close:hover{border-color:var(--null);color:var(--null);}
-#lb-nav{position:absolute;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;width:100%;padding:0 12px;pointer-events:none;}
-.lb-arr{background:var(--bg2);border:1px solid var(--b2);color:var(--tx2);font-family:var(--mono);font-size:16px;padding:8px 14px;cursor:pointer;border-radius:var(--rad);pointer-events:all;}
-.lb-arr:hover{border-color:var(--solar);color:var(--solar);}
-.lb-meta-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;}
-.lb-meta{font-family:var(--mono);font-size:9px;color:var(--tx3);}
-.lb-meta span{color:var(--text);}
-
-.pred-card{background:var(--bg2);border:2px solid var(--solar);border-radius:var(--rad);padding:20px;position:relative;overflow:hidden;}
-.pred-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(240,165,0,.07) 0%,transparent 70%);pointer-events:none;}
-.pred-geo{font-family:var(--mono);font-size:22px;color:var(--white);margin:8px 0;}
-.pred-row{display:flex;gap:10px;margin:3px 0;}
-.pred-k{font-family:var(--mono);font-size:9px;color:var(--tx3);min-width:170px;}
-.pred-v{font-family:var(--mono);font-size:9px;color:var(--text);}
-
-.report-out{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;font-family:var(--mono);font-size:10.5px;white-space:pre-wrap;line-height:1.85;min-height:360px;overflow-y:auto;}
-
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
 .filter-bar select,.filter-bar input{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;}
 .filter-bar select:focus,.filter-bar input:focus{border-color:var(--solar);}
@@ -200,94 +167,9 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 
 hr.div{border:none;border-top:1px solid var(--b1);margin:16px 0;}
 code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);padding:1px 5px;border-radius:2px;font-size:10px;color:var(--golay);}
-
-/* ── CHARGE MONITOR ── */
-.sci-site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:16px 0;}
-.sci-card{background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;position:relative;overflow:hidden;transition:border-color .3s;}
-.sci-card.charging{border-color:var(--sol4);}
-.sci-card.high{border-color:var(--war2);}
-.sci-card.critical{border-color:var(--null);animation:border-pulse 1.5s ease-in-out infinite;}
-.sci-card.discharged{border-color:var(--gol2);}
-@keyframes border-pulse{0%,100%{border-color:var(--null);}50%{border-color:rgba(224,80,80,.2);}}
-.sci-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-.sci-site-name{font-family:var(--mono);font-size:10px;color:var(--white);line-height:1.4;}
-.sci-site-geo{font-family:var(--mono);font-size:8px;color:var(--tx3);margin-top:2px;}
-.sci-pct{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1;}
-.sci-pct.low{color:var(--ok);}
-.sci-pct.mid{color:var(--warn);}
-.sci-pct.high{color:var(--solar);}
-.sci-pct.critical{color:var(--null);}
-/* Battery bar */
-.sci-bar-wrap{position:relative;height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;margin:10px 0 6px;}
-.sci-bar{height:100%;border-radius:6px;transition:width .8s ease,background .3s;}
-.sci-bar.low{background:linear-gradient(90deg,var(--ok2),var(--ok));}
-.sci-bar.mid{background:linear-gradient(90deg,var(--war2),var(--warn));}
-.sci-bar.high{background:linear-gradient(90deg,var(--sol3),var(--solar));}
-.sci-bar.critical{background:linear-gradient(90deg,var(--nul2),var(--null));animation:bar-glow 1.2s ease-in-out infinite;}
-@keyframes bar-glow{0%,100%{opacity:1;}50%{opacity:.6;}}
-.sci-bar-thresh{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.3);}
-.sci-kv{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;padding:2px 0;}
-.sci-kv-k{color:var(--tx3);}
-.sci-kv-v{color:var(--text);}
-.sci-verdict{font-family:var(--mono);font-size:9px;padding:6px 8px;border-radius:2px;margin-top:8px;line-height:1.5;}
-.sci-verdict.safe{background:var(--ok2);color:var(--ok);}
-.sci-verdict.watch{background:var(--war2);color:var(--warn);}
-.sci-verdict.alert{background:var(--sol3);color:var(--solar);}
-.sci-verdict.imminent{background:var(--nul2);color:var(--null);}
-.sci-verdict.discharged{background:var(--gol3);color:var(--golay);}
-/* Dominant channel pill */
-.sci-channel{display:inline-block;font-family:var(--mono);font-size:7.5px;letter-spacing:.5px;padding:2px 6px;border-radius:2px;background:var(--bg3);border:1px solid var(--b2);color:var(--tx2);margin-right:4px;}
-/* Live indicator */
-.sci-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px;color:var(--tx3);}
-.sci-live-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);animation:pulse 2s infinite;}
-/* Trend sparkline */
-.sci-spark{width:100%;height:36px;margin-top:8px;}
-/* Global readiness strip */
-.sci-global{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
-.sci-global-item{text-align:center;}
-.sci-global-val{font-family:var(--mono);font-size:18px;font-weight:700;}
-.sci-global-lbl{font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-/* Auto-refresh */
-.sci-refresh-bar{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:8px 14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;font-family:var(--mono);font-size:9px;color:var(--tx3);}
-.sci-progress{flex:1;height:3px;background:var(--b1);border-radius:2px;overflow:hidden;}
-.sci-progress-bar{height:100%;background:var(--solar);transition:width .5s linear;}
-
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:var(--bg2);}
-::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
-::-webkit-scrollbar-thumb:hover{background:var(--b3);}
-
-/* ─── Highlight rows ─── */
-.tr-solstice td{background:rgba(240,165,0,.04)!important;}
-.tr-g4 td{background:rgba(224,80,80,.04)!important;}
-.tr-2025 td{background:rgba(0,200,180,.025)!important;}
 </style>
 </head>
 <body>
-
-<!-- LIGHTBOX -->
-<div id="lb">
-  <button id="lb-close" onclick="closeLB()">✕ Close</button>
-  <div id="lb-nav">
-    <button class="lb-arr" onclick="lbNav(-1)">‹</button>
-    <button class="lb-arr" onclick="lbNav(1)">›</button>
-  </div>
-  <img id="lb-img" src="" alt="">
-  <div id="lb-info">
-    <div style="font-family:var(--mono);font-size:11px;color:var(--white);" id="lb-title">—</div>
-    <div class="lb-meta-row">
-      <div class="lb-meta">Date: <span id="lb-date">—</span></div>
-      <div class="lb-meta">County: <span id="lb-county">—</span></div>
-      <div class="lb-meta">Crop: <span id="lb-crop">—</span></div>
-      <div class="lb-meta">Kp: <span id="lb-kp">—</span></div>
-      <div class="lb-meta">G1+ 3d: <span id="lb-g">—</span></div>
-      <div class="lb-meta">Dec°: <span id="lb-dec">—</span></div>
-      <div class="lb-meta">SSN: <span id="lb-ssn">—</span></div>
-    </div>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--tx3);margin-top:8px;line-height:1.7;max-height:80px;overflow-y:auto;" id="lb-note">—</div>
-    <a id="lb-src" href="#" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--golay);display:block;margin-top:6px;">View source ↗</a>
-  </div>
-</div>
 
 <!-- HEADER -->
 <div class="hdr">
@@ -310,15 +192,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 <!-- TABS -->
 <div class="tabs">
   <button class="tab on" onclick="sw('db',this)">① Database</button>
-  <button class="tab" onclick="sw('catalog',this)">② Images</button>
-  <button class="tab" onclick="sw('solar',this)">③ Solar Fetch</button>
-  <button class="tab" onclick="sw('analysis',this)">④ Analysis</button>
-  <button class="tab" onclick="sw('window',this)">⑤ 3-Day Window</button>
-  <button class="tab" onclick="sw('angle',this)">⑥ Solar Angle</button>
-  <button class="tab" onclick="sw('predict',this)">⑦ Predictions</button>
-  <button class="tab" onclick="sw('report',this)">⑧ Reports</button>
-  <button class="tab" onclick="sw('docs',this)">⑨ Documentation</button>
-  <button class="tab" onclick="sw('sci',this)">⑩ Charge Monitor</button>
+  <button class="tab" onclick="sw('analysis',this)">② Analysis</button>
 </div>
 
 <div class="body">
@@ -337,7 +211,6 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <button class="btn btn-ghost" onclick="document.getElementById('csv-upload').click()">↑ Local CSV</button>
     <input id="csv-upload" type="file" accept=".csv" style="display:none" onchange="loadLocal(event)">
     <button class="btn btn-ghost" onclick="exportCSV()">↓ Export CSV</button>
-    <button class="btn btn-ghost" onclick="doPush()">↑ Push to GitHub</button>
     <label>Token:</label>
     <input type="password" id="gh-token" placeholder="ghp_... (for push)" oninput="saveToken()" style="width:180px;">
   </div>
@@ -353,49 +226,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 
   <div class="callout cal-sol" style="margin-bottom:14px;">
     <div class="cl">2025–2026 Data Status</div>
-    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system as <code>new_records_2025_2026.csv</code>. Keep your local CSV updated or reload from GitHub.
-  </div>
-
-  <!-- Add/Edit Form -->
-  <div id="db-form" style="display:none;background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;margin-bottom:14px;">
-    <div style="font-family:var(--mono);font-size:9px;color:var(--solar);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;" id="form-lbl">NEW GCE RECORD</div>
-    <div class="fg c4">
-      <div class="ff"><label>Year</label><input id="f-year" type="number" placeholder="2025"></div>
-      <div class="ff"><label>Date (YYYY-MM-DD)</label><input id="f-date" type="date"></div>
-      <div class="ff"><label>Date Confidence</label><select id="f-dconf"><option>exact</option><option>approximate</option><option>unknown</option></select></div>
-      <div class="ff"><label>Country</label><input id="f-country" value="UK"></div>
-      <div class="ff span2"><label>Location</label><input id="f-loc" placeholder="Hackpen Hill, Nr Winterbourne Bassett, Wiltshire"></div>
-      <div class="ff"><label>County</label><input id="f-county" placeholder="Wiltshire"></div>
-      <div class="ff"><label>Crop Type</label><select id="f-crop"><option>OSR (Canola)</option><option>Barley</option><option>Wheat</option><option>Maize</option><option>Grass</option><option>Unknown</option></select></div>
-      <div class="ff"><label>Diameter (m)</label><input id="f-diam" type="number" placeholder="75"></div>
-      <div class="ff"><label>Formation Type</label><select id="f-ftype"><option>unknown</option><option>simple_circle</option><option>geometric</option><option>pictogram</option><option>fractal</option><option>multi_feature</option></select></div>
-      <div class="ff"><label>Lat</label><input id="f-lat" type="number" step="0.001" placeholder="51.521"></div>
-      <div class="ff"><label>Lon</label><input id="f-lon" type="number" step="0.001" placeholder="-1.782"></div>
-      <div class="ff span4"><label>Description</label><textarea id="f-desc"></textarea></div>
-      <div class="ff span2"><label>Image URL</label><input id="f-imgurl" placeholder="https://..."></div>
-      <div class="ff span2"><label>Source URL</label><input id="f-srcurl" placeholder="https://temporarytemples.co.uk/..."></div>
-      <!-- Solar -->
-      <div class="ff"><label>Kp Max (day-of)</label><input id="f-kp" type="number" step="0.33" placeholder="4.0"></div>
-      <div class="ff"><label>Kp Max (pre-7d)</label><input id="f-kp7" type="number" step="0.33" placeholder="8.0"></div>
-      <div class="ff"><label>G1+ in 3d</label><select id="f-g1"><option value="False">False</option><option value="True">True</option></select></div>
-      <div class="ff"><label>G2+ in 3d</label><select id="f-g2"><option value="False">False</option><option value="True">True</option></select></div>
-      <div class="ff"><label>G3+ in 3d</label><select id="f-g3"><option value="False">False</option><option value="True">True</option></select></div>
-      <div class="ff"><label>Solar Dec (°)</label><input id="f-sdec" type="number" step="0.01" placeholder="23.45"></div>
-      <div class="ff"><label>SSN (day-of)</label><input id="f-ssn" type="number" placeholder="145"></div>
-      <div class="ff"><label>Dst Min (nT)</label><input id="f-dst" type="number" placeholder="-45"></div>
-      <div class="ff"><label>Solar Wind km/s</label><input id="f-sw" type="number" placeholder="520"></div>
-      <div class="ff"><label>Soil Moisture % (vol.)</label><input id="f-sm" type="number" step="0.1" min="0" max="60" placeholder="32.5"></div>
-      <div class="ff"><label>SM Source</label><select id="f-sm-src"><option>COSMOS-UK</option><option>NERC-EIDC-2km</option><option>Met Office UKV</option><option>Estimated</option><option>Unknown</option></select></div>
-      <div class="ff"><label>Hoax Flag</label><select id="f-hoax"><option value="0">No</option><option value="1">Yes</option></select></div>
-      <div class="ff"><label>DQ Score (0-100)</label><input id="f-dq" type="number" min="0" max="100" placeholder="75"></div>
-      <div class="ff"><label>Usable</label><select id="f-usable"><option value="True">True</option><option value="False">False</option></select></div>
-      <div class="ff span4"><label>Notes</label><textarea id="f-notes" style="min-height:70px;"></textarea></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
-      <button class="btn btn-sol" onclick="saveRec()">Save Record</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('db-form').style.display='none'">Cancel</button>
-      <span id="form-msg" style="font-family:var(--mono);font-size:9px;color:var(--ok);margin-left:8px;"></span>
-    </div>
+    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system. Keep your local CSV updated or reload from GitHub.
   </div>
 
   <div class="filter-bar">
@@ -407,9 +238,6 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <select id="f-hxf" onchange="filterDB()"><option value="">All</option><option value="0">Not hoax</option><option value="1">Hoax</option></select>
     <select id="f-usf" onchange="filterDB()"><option value="">All</option><option value="True">Usable only</option></select>
     <span id="row-ct" style="font-family:var(--mono);font-size:8px;color:var(--tx3);"></span>
-    <div style="margin-left:auto;display:flex;gap:6px;">
-      <button class="btn btn-sol sm" onclick="showForm()">+ Add Record</button>
-    </div>
   </div>
 
   <div class="tw scroll">
@@ -432,7 +260,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
         <th onclick="sortBy('solar_Dst_min')">Dst</th>
         <th onclick="sortBy('hoax_flag')">Hoax</th>
         <th onclick="sortBy('data_quality_score')">DQ</th>
-        <th onclick="sortBy('soil_moisture_pct')">SM%</th><th>Img</th><th>Actions</th>
+        <th onclick="sortBy('soil_moisture_pct')">SM%</th>
       </tr></thead>
       <tbody id="db-tbody"></tbody>
     </table>
@@ -440,9 +268,9 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
   <div class="log" id="db-log" style="margin-top:10px;"><span class="log-dim">[GCE Console] Ready. Click "Load from GitHub" or upload a local CSV.</span></div>
 </div>
 
-<!-- ④ ANALYSIS -->
+<!-- ② ANALYSIS -->
 <div id="pane-analysis" class="pane">
-  <div class="sec-lbl">Section 04</div>
+  <div class="sec-lbl">Section 02</div>
   <div class="sec-ttl">UBP-NC4 Correlation Analysis</div>
   <div class="toolbar">
     <button class="btn btn-sol" onclick="runAnalysis()">▶ Run Full Analysis</button>
@@ -461,28 +289,42 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <div class="stat lee"><div class="stat-v" id="a-dec-mean">—</div><div class="stat-l">Mean Solar Dec °</div></div>
     <div class="stat nul"><div class="stat-v" id="a-dst-mean">—</div><div class="stat-l">Mean Dst Min (nT)</div></div>
   </div>
-  <div class="g2">
-    <div class="cw"><div class="cw-ttl">G-STORM PRESENCE IN 3-DAY WINDOW</div><canvas id="g-ch" height="220"></canvas></div>
-    <div class="cw"><div class="cw-ttl">KP DISTRIBUTION — FORMATION DAYS</div><canvas id="kp-ch" height="220"></canvas></div>
-  </div>
-  <div class="g2">
-    <div class="cw"><div class="cw-ttl">FORMATION COUNT BY YEAR vs SSN</div><canvas id="yr-ch" height="220"></canvas></div>
-    <div class="cw"><div class="cw-ttl">FORMATION MONTH DISTRIBUTION</div><canvas id="mo-ch" height="220"></canvas></div>
-  </div>
+  
   <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Correlation Metrics</div><div id="corr-kv"></div></div>
   
   <!-- STEP 2: NEW Dual Compartment Output UI -->
-  <div id="dual-battery-output" style="margin-top: 15px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 3px;">
-    <h4 style="color: #333; margin-bottom: 10px;">Dual-Compartment Battery State (UBP v2)</h4>
-    <p><strong>Fast Store (Q_f):</strong> <span id="out_qf">0.00</span> units</p>
-    <p><strong>Slow Store (Q_s):</strong> <span id="out_qs">0.00</span> units</p>
-    <p><strong>Total Charge:</strong> <span id="out_qtotal">0.00</span> units</p>
-    <p><strong>Hamming Weight (HW):</strong> <span id="out_hw">0</span></p>
-    <p><strong>NRCI:</strong> <span id="out_nrci">1.00</span></p>
-    <p><strong>Predicted Geometry Trajectory:</strong> <span id="out_trajectory" style="font-weight:bold; color:blue;">Identity (Rest)</span></p>
+  <div id="dual-battery-output" style="margin-top: 15px; padding: 15px; border: 1px solid var(--b1); background: var(--panel); border-radius: 3px;">
+    <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Dual-Compartment Battery State (UBP v2)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <div style="font-size:10px;color:var(--tx2);">Fast Store (Q_f)</div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--solar);" id="out_qf">0.00</div>
+        <div style="font-size:9px;color:var(--tx3);">units</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--tx2);">Slow Store (Q_s)</div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--golay);" id="out_qs">0.00</div>
+        <div style="font-size:9px;color:var(--tx3);">units</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--tx2);">Total Charge</div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--white);" id="out_qtotal">0.00</div>
+        <div style="font-size:9px;color:var(--tx3);">Q_f + Q_s</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--tx2);">Hamming Weight</div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--warn);" id="out_hw">0</div>
+        <div style="font-size:9px;color:var(--tx3);">bits set</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--b1);">
+      <div style="font-size:10px;color:var(--tx2);">Predicted Geometry Trajectory</div>
+      <div style="font-family:var(--mono);font-size:11px;margin-top:6px;" id="out_trajectory" style="font-weight:bold; color:blue;">Identity (Rest)</div>
+      <div style="font-size:9px;color:var(--tx3);margin-top:6px;">NRCI: <span style="color:var(--text);" id="out_nrci">1.00</span></div>
+    </div>
   </div>
   
-  <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
+  <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;margin-top:16px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
   <div class="tw scroll" style="max-height:320px;">
     <table>
       <thead><tr><th>Year</th><th>Date</th><th>Location</th><th>County</th><th>Crop</th><th>Kp Day</th><th>Kp 7d↑</th><th>G1</th><th>G2</th><th>G3</th><th>Dec°</th><th>Dst</th><th>SSN</th></tr></thead>
@@ -518,7 +360,6 @@ function p2(n){return String(n).padStart(2,'0');}
 window.onload=()=>{
   const t=localStorage.getItem('gh_tok');
   if(t) document.getElementById('gh-token').value=t;
-  renderPredLog();
 };
 function saveToken(){localStorage.setItem('gh_tok',document.getElementById('gh-token').value);}
 
@@ -580,6 +421,7 @@ function calculateDualBatteryJS(dQ_f, dQ_s, Q_f_prev, Q_s_prev, c_site, r_site) 
 // ════════════════════════════════════
 function dlog(m,c=''){
   const el=document.getElementById('db-log');
+  if(!el) return;
   const d=document.createElement('div');
   if(c) d.className='log-'+c;
   d.textContent=`[${new Date().toISOString().substr(11,8)}] ${m}`;
@@ -646,14 +488,18 @@ function updateHeader(){
 function buildFilters(){
   const yrs=[...new Set(DB.map(r=>r.year).filter(Boolean))].sort();
   const cos=[...new Set(DB.map(r=>r.county).filter(Boolean))].sort();
-  ['f-yr','img-yr'].forEach(id=>{
-    const sel=document.getElementById(id);
-    while(sel.options.length>1) sel.remove(1);
-    yrs.forEach(y=>{const opt=document.createElement('option'); opt.value=y; opt.text=y; sel.appendChild(opt);});
-  });
+  
+  const fyr=document.getElementById('f-yr');
+  if(fyr){
+    while(fyr.options.length>1) fyr.remove(1);
+    yrs.forEach(y=>{const opt=document.createElement('option'); opt.value=y; opt.text=y; fyr.appendChild(opt);});
+  }
+  
   const fco=document.getElementById('f-co');
-  while(fco.options.length>1) fco.remove(1);
-  cos.forEach(c=>{const opt=document.createElement('option'); opt.value=c; opt.text=c; fco.appendChild(opt);});
+  if(fco){
+    while(fco.options.length>1) fco.remove(1);
+    cos.forEach(c=>{const opt=document.createElement('option'); opt.value=c; opt.text=c; fco.appendChild(opt);});
+  }
 }
 
 function filterDB(){
@@ -691,40 +537,9 @@ function renderDBTable(){
   tb.innerHTML='';
   filteredDB.forEach((r,i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td>${r.approx_diameter_m||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_SSN_best||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.hoax_flag?'⚠':'—'}</td><td>${r.data_quality_score||'—'}</td><td>${r.soil_moisture_pct||'—'}</td><td>${r.image_url?'✓':'—'}</td><td><button class="btn btn-ghost sm" onclick="editRec(${i})">Edit</button></td>`;
+    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td>${r.approx_diameter_m||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_SSN_best||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.hoax_flag?'⚠':'—'}</td><td>${r.data_quality_score||'—'}</td><td>${r.soil_moisture_pct||'—'}</td>`;
     tb.appendChild(tr);
   });
-}
-
-function showForm(){
-  editIdx=null;
-  ['f-year','f-date','f-dconf','f-country','f-loc','f-county','f-crop','f-diam','f-ftype','f-lat','f-lon','f-desc','f-imgurl','f-srcurl','f-kp','f-kp7','f-g1','f-g2','f-g3','f-sdec','f-ssn','f-dst','f-sw','f-sm','f-sm-src','f-hoax','f-dq','f-usable','f-notes'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el.type==='number') el.value='';
-    else if(el.type==='date') el.value='';
-    else el.value=el.type==='select-one'?(el.options[0]?.value||''):'';
-  });
-  document.getElementById('form-lbl').textContent='NEW GCE RECORD';
-  document.getElementById('db-form').style.display='block';
-}
-
-function editRec(idx){
-  editIdx=idx;
-  const r=filteredDB[idx];
-  ['year','date','dconf','country','loc','county','crop','diam','ftype','lat','lon','desc','imgurl','srcurl','kp','kp7','g1','g2','g3','sdec','ssn','dst','sw','sm','sm-src','hoax','dq','usable','notes'].forEach(f=>{
-    const k='f'+f.substr(0,1).toUpperCase()+f.substr(1);
-    const id='f-'+f;
-    const el=document.getElementById(id);
-    if(r[k]) el.value=r[k];
-  });
-  document.getElementById('form-lbl').textContent='EDIT RECORD';
-  document.getElementById('db-form').style.display='block';
-}
-
-function saveRec(){
-  const rec={year:document.getElementById('f-year').value,date_parsed:document.getElementById('f-date').value};
-  document.getElementById('form-msg').textContent='✓ Saved (demo)';
-  setTimeout(()=>document.getElementById('db-form').style.display='none',500);
 }
 
 function exportCSV(){
@@ -735,12 +550,8 @@ function exportCSV(){
   a.click();
 }
 
-function doPush(){
-  alert('GitHub push not implemented in demo');
-}
-
 // ════════════════════════════════════
-// STEP 3: WIRE THE BUTTON CLICK
+// ANALYSIS
 // ════════════════════════════════════
 function runAnalysis(){
   // 1. Gather inputs (replace these variable names with the ones your UI actually uses)
@@ -776,7 +587,7 @@ function runAnalysis(){
       document.getElementById('out_trajectory').style.color = 'blue';
   }
 
-  // Compute correlation metrics (existing code)
+  // Compute correlation metrics
   const ds=document.getElementById('an-ds').value;
   let data=DB;
   if(ds==='usable') data=DB.filter(r=>r.usable_for_analysis==='True');
@@ -807,17 +618,6 @@ function runAnalysis(){
     const tr=document.createElement('tr');
     tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.solar_SSN_best||'—'}</td>`;
     sigtb.appendChild(tr);
-  });
-}
-
-function renderPredLog(){
-  const tb=document.getElementById('pred-tb');
-  if(!tb) return;
-  tb.innerHTML='';
-  preds.forEach(p=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${p.utc||'—'}</td><td>${p.ar||'—'}</td><td>${p.smw||'—'}</td><td>${p.geom||'—'}</td><td>${p.pg||'—'}</td><td>${p.site||'—'}</td><td>${p.win||'—'}</td><td>${p.dec||'—'}</td><td>${p.outcome||'—'}</td>`;
-    tb.appendChild(tr);
   });
 }
 
