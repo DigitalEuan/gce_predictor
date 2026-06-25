@@ -42,7 +42,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
 .tabs{background:var(--bg2);border-bottom:1px solid var(--b1);display:flex;padding:0 20px;position:sticky;top:48px;z-index:190;overflow-x:auto;}
-.tab{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:12px 14px;border:none;background:none;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.tab{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:12px 14px;border:none;background:none;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
 .tab:hover{color:var(--tx2);}
 .tab.on{color:var(--solar);border-bottom-color:var(--solar);}
 
@@ -97,7 +97,7 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 @media(max-width:700px){.fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr;}}
 .ff{display:flex;flex-direction:column;gap:3px;}
 .ff label{font-family:var(--mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);}
-.ff input,.ff select,.ff textarea{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:6px 9px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;width:100%;}
+.ff input,.ff select,.ff textarea{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:6px 9px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;width:100%;transition:border-color .15s;}
 .ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--solar);}
 .ff textarea{resize:vertical;min-height:56px;}
 .ff.span2{grid-column:1/3;}
@@ -106,7 +106,7 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 
 .tw{overflow-x:auto;border:1px solid var(--b1);border-radius:var(--rad);}
 .tw table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10.5px;}
-.tw th{background:var(--bg3);color:var(--tx2);padding:7px 10px;text-align:left;border-bottom:1px solid var(--b1);font-size:8px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;position:relative;cursor:pointer;}
+.tw th{background:var(--bg3);color:var(--tx2);padding:7px 10px;text-align:left;border-bottom:1px solid var(--b1);font-size:8px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;position:sticky;top:0;z-index:10;cursor:pointer;user-select:none;}
 .tw th:hover{color:var(--solar);}
 .tw th.asc::after{content:' ↑';color:var(--solar);}
 .tw th.desc::after{content:' ↓';color:var(--solar);}
@@ -186,7 +186,7 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 .pred-k{font-family:var(--mono);font-size:9px;color:var(--tx3);min-width:170px;}
 .pred-v{font-family:var(--mono);font-size:9px;color:var(--text);}
 
-.report-out{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;font-family:var(--mono);font-size:10.5px;white-space:pre-wrap;line-height:1.85;min-height:360px;overflow-y:auto;}
+.report-out{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:18px;font-family:var(--mono);font-size:10.5px;white-space:pre-wrap;line-height:1.85;min-height:360px;max-height:600px;overflow-y:auto;}
 
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
 .filter-bar select,.filter-bar input{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;}
@@ -200,6 +200,67 @@ a{color:var(--golay);text-decoration:none;}a:hover{text-decoration:underline;}
 
 hr.div{border:none;border-top:1px solid var(--b1);margin:16px 0;}
 code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);padding:1px 5px;border-radius:2px;font-size:10px;color:var(--golay);}
+
+/* ── CHARGE MONITOR ── */
+.sci-site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:16px 0;}
+.sci-card{background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;position:relative;overflow:hidden;transition:border-color .3s;}
+.sci-card.charging{border-color:var(--sol4);}
+.sci-card.high{border-color:var(--war2);}
+.sci-card.critical{border-color:var(--null);animation:border-pulse 1.5s ease-in-out infinite;}
+.sci-card.discharged{border-color:var(--gol2);}
+@keyframes border-pulse{0%,100%{border-color:var(--null);}50%{border-color:rgba(224,80,80,.2);}}
+.sci-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.sci-site-name{font-family:var(--mono);font-size:10px;color:var(--white);line-height:1.4;}
+.sci-site-geo{font-family:var(--mono);font-size:8px;color:var(--tx3);margin-top:2px;}
+.sci-pct{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1;}
+.sci-pct.low{color:var(--ok);}
+.sci-pct.mid{color:var(--warn);}
+.sci-pct.high{color:var(--solar);}
+.sci-pct.critical{color:var(--null);}
+/* Battery bar */
+.sci-bar-wrap{position:relative;height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;margin:10px 0 6px;}
+.sci-bar{height:100%;border-radius:6px;transition:width .8s ease,background .3s;}
+.sci-bar.low{background:linear-gradient(90deg,var(--ok2),var(--ok));}
+.sci-bar.mid{background:linear-gradient(90deg,var(--war2),var(--warn));}
+.sci-bar.high{background:linear-gradient(90deg,var(--sol3),var(--solar));}
+.sci-bar.critical{background:linear-gradient(90deg,var(--nul2),var(--null));animation:bar-glow 1.2s ease-in-out infinite;}
+@keyframes bar-glow{0%,100%{opacity:1;}50%{opacity:.6;}}
+.sci-bar-thresh{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.3);}
+.sci-kv{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;padding:2px 0;}
+.sci-kv-k{color:var(--tx3);}
+.sci-kv-v{color:var(--text);}
+.sci-verdict{font-family:var(--mono);font-size:9px;padding:6px 8px;border-radius:2px;margin-top:8px;line-height:1.5;}
+.sci-verdict.safe{background:var(--ok2);color:var(--ok);}
+.sci-verdict.watch{background:var(--war2);color:var(--warn);}
+.sci-verdict.alert{background:var(--sol3);color:var(--solar);}
+.sci-verdict.imminent{background:var(--nul2);color:var(--null);}
+.sci-verdict.discharged{background:var(--gol3);color:var(--golay);}
+/* Dominant channel pill */
+.sci-channel{display:inline-block;font-family:var(--mono);font-size:7.5px;letter-spacing:.5px;padding:2px 6px;border-radius:2px;background:var(--bg3);border:1px solid var(--b2);color:var(--tx2);margin-top:4px;}
+/* Live indicator */
+.sci-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px;color:var(--tx3);}
+.sci-live-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);animation:pulse 2s infinite;}
+/* Trend sparkline */
+.sci-spark{width:100%;height:36px;margin-top:8px;}
+/* Global readiness strip */
+.sci-global{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+.sci-global-item{text-align:center;}
+.sci-global-val{font-family:var(--mono);font-size:18px;font-weight:700;}
+.sci-global-lbl{font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+/* Auto-refresh */
+.sci-refresh-bar{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:8px 14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;font-family:var(--mono);font-size:9px;color:var(--tx2);}
+.sci-progress{flex:1;height:3px;background:var(--b1);border-radius:2px;overflow:hidden;}
+.sci-progress-bar{height:100%;background:var(--solar);transition:width .5s linear;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--b3);}
+
+/* ─── Highlight rows ─── */
+.tr-solstice td{background:rgba(240,165,0,.04)!important;}
+.tr-g4 td{background:rgba(224,80,80,.04)!important;}
+.tr-2025 td{background:rgba(0,200,180,.025)!important;}
 </style>
 </head>
 <body>
@@ -292,7 +353,49 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
 
   <div class="callout cal-sol" style="margin-bottom:14px;">
     <div class="cl">2025–2026 Data Status</div>
-    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system as <code>new_records_2025_2026.csv</code>. Keep your local CSV updated or reload from GitHub.
+    The 2024 season data (8 confirmed formations from Temporary Temples) and 2025 season (12 formations) and 2 x 2026 formations are now in the system as <code>new_records_2025_2026.csv</code>. Key solar finding: <strong>G4 storm (Kp=8) confirmed May 31–June 1, 2025</strong> — largest storm of the season. F10.7 = 169 sfu. Associated with the June 8 (Avebury 10-fold star) and June 10 (Stonehenge joker) formations via the 7-day pre-window. The 3-day strict window is a tension case for those events. Solar declination for June 22–23 formations: <strong>23.45°</strong> — peak summer solstice. See Analysis and Solar Angle tabs.
+  </div>
+
+  <!-- Add/Edit Form -->
+  <div id="db-form" style="display:none;background:var(--panel);border:1px solid var(--b1);border-radius:var(--rad);padding:16px;margin-bottom:14px;">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--solar);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;" id="form-lbl">NEW GCE RECORD</div>
+    <div class="fg c4">
+      <div class="ff"><label>Year</label><input id="f-year" type="number" placeholder="2025"></div>
+      <div class="ff"><label>Date (YYYY-MM-DD)</label><input id="f-date" type="date"></div>
+      <div class="ff"><label>Date Confidence</label><select id="f-dconf"><option>exact</option><option>approximate</option><option>unknown</option></select></div>
+      <div class="ff"><label>Country</label><input id="f-country" value="UK"></div>
+      <div class="ff span2"><label>Location</label><input id="f-loc" placeholder="Hackpen Hill, Nr Winterbourne Bassett, Wiltshire"></div>
+      <div class="ff"><label>County</label><input id="f-county" placeholder="Wiltshire"></div>
+      <div class="ff"><label>Crop Type</label><select id="f-crop"><option>OSR (Canola)</option><option>Barley</option><option>Wheat</option><option>Maize</option><option>Grass</option><option>Unknown</option></select></div>
+      <div class="ff"><label>Diameter (m)</label><input id="f-diam" type="number" placeholder="75"></div>
+      <div class="ff"><label>Formation Type</label><select id="f-ftype"><option>unknown</option><option>simple_circle</option><option>geometric</option><option>pictogram</option><option>fractal</option><option>complex</option></select></div>
+      <div class="ff"><label>Lat</label><input id="f-lat" type="number" step="0.001" placeholder="51.521"></div>
+      <div class="ff"><label>Lon</label><input id="f-lon" type="number" step="0.001" placeholder="-1.782"></div>
+      <div class="ff span4"><label>Description</label><textarea id="f-desc"></textarea></div>
+      <div class="ff span2"><label>Image URL</label><input id="f-imgurl" placeholder="https://..."></div>
+      <div class="ff span2"><label>Source URL</label><input id="f-srcurl" placeholder="https://temporarytemples.co.uk/..."></div>
+      <!-- Solar -->
+      <div class="ff"><label>Kp Max (day-of)</label><input id="f-kp" type="number" step="0.33" placeholder="4.0"></div>
+      <div class="ff"><label>Kp Max (pre-7d)</label><input id="f-kp7" type="number" step="0.33" placeholder="8.0"></div>
+      <div class="ff"><label>G1+ in 3d</label><select id="f-g1"><option value="False">False</option><option value="True">True</option></select></div>
+      <div class="ff"><label>G2+ in 3d</label><select id="f-g2"><option value="False">False</option><option value="True">True</option></select></div>
+      <div class="ff"><label>G3+ in 3d</label><select id="f-g3"><option value="False">False</option><option value="True">True</option></select></div>
+      <div class="ff"><label>Solar Dec (°)</label><input id="f-sdec" type="number" step="0.01" placeholder="23.45"></div>
+      <div class="ff"><label>SSN (day-of)</label><input id="f-ssn" type="number" placeholder="145"></div>
+      <div class="ff"><label>Dst Min (nT)</label><input id="f-dst" type="number" placeholder="-45"></div>
+      <div class="ff"><label>Solar Wind km/s</label><input id="f-sw" type="number" placeholder="520"></div>
+      <div class="ff"><label>Soil Moisture % (vol.)</label><input id="f-sm" type="number" step="0.1" min="0" max="60" placeholder="32.5"></div>
+      <div class="ff"><label>SM Source</label><select id="f-sm-src"><option>COSMOS-UK</option><option>NERC-EIDC-2km</option><option>Met Office UKV</option><option>Estimated</option><option>Unknown</option></select></div>
+      <div class="ff"><label>Hoax Flag</label><select id="f-hoax"><option value="0">No</option><option value="1">Yes</option></select></div>
+      <div class="ff"><label>DQ Score (0-100)</label><input id="f-dq" type="number" min="0" max="100" placeholder="75"></div>
+      <div class="ff"><label>Usable</label><select id="f-usable"><option value="True">True</option><option value="False">False</option></select></div>
+      <div class="ff span4"><label>Notes</label><textarea id="f-notes" style="min-height:70px;"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+      <button class="btn btn-sol" onclick="saveRec()">Save Record</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('db-form').style.display='none'">Cancel</button>
+      <span id="form-msg" style="font-family:var(--mono);font-size:9px;color:var(--ok);margin-left:8px;"></span>
+    </div>
   </div>
 
   <div class="filter-bar">
@@ -343,7 +446,7 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
   <div class="sec-ttl">Formation Image Catalog</div>
   <div class="callout cal-sol">
     <div class="cl">Images</div>
-    Images are stored as URLs in the <code>image_url</code> field of each database record. Edit any record to add an image URL. For 2025 formations, source URLs from Temporary Temples or other formation databases.
+    Images are stored as URLs in the <code>image_url</code> field of each database record. Edit any record in the Database tab to add an image URL. For 2025 formations, source URLs from Temporary Temples, Crop Circle Connector, and Crop Circles from Above are already populated. Add aerial photo URLs as you find them. Use the lightbox (click any card) to view details alongside solar data.
   </div>
   <div class="filter-bar">
     <input id="img-q" onkeyup="renderCatalog()" placeholder="Search..." style="width:200px;">
@@ -353,6 +456,68 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <span id="img-ct" style="font-family:var(--mono);font-size:8px;color:var(--tx3);"></span>
   </div>
   <div id="img-grid" class="img-grid"></div>
+</div>
+
+<!-- ③ SOLAR FETCH -->
+<div id="pane-solar" class="pane">
+  <div class="sec-lbl">Section 03</div>
+  <div class="sec-ttl">Live Solar Data — NOAA SWPC</div>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat sol"><div class="stat-v" id="live-xray">—</div><div class="stat-l">GOES X-Ray Class</div></div>
+    <div class="stat war"><div class="stat-v" id="live-kp">—</div><div class="stat-l">Kp Est. (live)</div></div>
+    <div class="stat gol"><div class="stat-v" id="live-sw">—</div><div class="stat-l">Solar Wind km/s</div></div>
+    <div class="stat"><div class="stat-v" style="font-size:14px;">SC25 Declining</div><div class="stat-l">F10.7 ~120 sfu · May 2026</div></div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-sol" onclick="fetchLive()">⚡ Fetch Live Now</button>
+    <div class="toolbar-sep"></div>
+    <button class="btn btn-ghost" onclick="linkToRecord()">→ Link to DB Record</button>
+  </div>
+  <div class="cw">
+    <div class="cw-ttl">7-DAY GOES X-RAY FLUX (LOGARITHMIC) — LIVE FROM NOAA</div>
+    <canvas id="xray-ch" height="160"></canvas>
+  </div>
+  <div class="tw" style="margin-bottom:12px;">
+    <table>
+      <thead><tr><th>Time UTC</th><th>Flux Class</th><th>Flux W/m²</th><th>Kp Est.</th><th>UBP SMW</th><th>G-Level</th><th>→ DB</th></tr></thead>
+      <tbody id="solar-tb"></tbody>
+    </table>
+  </div>
+  
+  <!-- COSMOS-UK Soil Moisture panel -->
+  <div class="panel" style="margin-top:16px;margin-bottom:14px;">
+    <div class="panel-ttl">Soil Moisture Data Sources — UK Site Conductivity Factor</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.75;margin-top:8px;">
+      Soil moisture directly affects electrical conductivity — wetter soil increases effective site capacitance (C_site) in the battery model. Higher C_site means longer tau (charge retention) and lower trigger threshold. Three free UK sources:
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
+      <div style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:12px;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--golay);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">COSMOS-UK (UKCEH)</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6;">51 stations, cosmic-ray neutron sensors, ~12 ha field-scale footprint. Near-real-time. Best for Wiltshire/Dorset sites. Free.<br><br><a href="https://cosmos.ceh.ac.uk/" target="_blank" style="color:var(--golay);">cosmos.ceh.ac.uk ↗</a></div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:12px;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--solar);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">NERC EIDC — 2km Grid</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6;">Daily volumetric soil moisture, UK+Ireland, 2km resolution, 2016–2023. Open Government Licence. Full download available.<br><br><a href="https://doi.org/10.5285/5aa8c5b4-4485-4954-b5c3-18d937a418f7" target="_blank" style="color:var(--solar);">EIDC dataset ↗</a></div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:12px;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Met Office UKV</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6;">1.5km NWP model, validated against COSMOS-UK. Best for current/recent data. Accessible via CEDA Archive (requires free account).<br><br><a href="https://www.ceda.ac.uk/" target="_blank" style="color:var(--warn);">ceda.ac.uk ↗</a></div>
+      </div>
+    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--tx3);margin-top:10px;">
+      Wiltshire chalk sites growing season (Jun–Aug) baseline: ~25–40% vol. Above 40% = elevated conductivity = C_site modifier +15% per 10% SM above baseline. Enter soil moisture readings in the Database tab form field.
+    </div>
+  </div>
+  <div class="log" id="solar-log"><span class="log-dim">[SOLAR] Note: NOAA APIs are CORS-enabled and work from GitHub Pages. Local file:// may be blocked by browser CORS policy.</span></div>
+  <div class="callout cal-war" style="margin-top:12px;">
+    <div class="cl">Key Confirmed 2025 Solar Events</div>
+    <strong>May 30–31, 2025:</strong> M8-class flare peaks 00:05 UTC May 31. Earth-directed CME launched.<br>
+    <strong>June 1, 2025:</strong> CME impact — <strong>G4 storm (Kp=8)</strong> from ~12:00 UTC. Auroras from Spain to Florida. Continued through June 3.<br>
+    <strong>June 2–3, 2025:</strong> G3 (Kp=7) continued. Kp avg 7.67 over June 1–3. F10.7=169 sfu.<br>
+    <strong>November 11, 2025:</strong> G-storm visible from Alabama/Florida. Aurora visible from UK.<br>
+    For historical Kp data: <a href="https://kp.gfz.de/app/files/Kp_ap_Ap_SN_F107_since_1932.txt" target="_blank">GFZ Potsdam ↗</a> | 
+    <a href="https://www.spaceweatherlive.com/en/solar-activity/solar-flares.html" target="_blank">SpaceWeatherLive ↗</a>
+  </div>
 </div>
 
 <!-- ④ ANALYSIS -->
@@ -376,42 +541,16 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <div class="stat lee"><div class="stat-v" id="a-dec-mean">—</div><div class="stat-l">Mean Solar Dec °</div></div>
     <div class="stat nul"><div class="stat-v" id="a-dst-mean">—</div><div class="stat-l">Mean Dst Min (nT)</div></div>
   </div>
-
-  <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Correlation Metrics</div><div id="corr-kv"></div></div>
-  
-  <!-- STEP 2: NEW Dual Compartment Output UI -->
-  <div id="dual-battery-output" style="margin-top: 15px; padding: 15px; border: 1px solid var(--b1); background: var(--panel); border-radius: 3px;">
-    <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Dual-Compartment Battery State (UBP v2)</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div>
-        <div style="font-size:10px;color:var(--tx2);">Fast Store (Q_f)</div>
-        <div style="font-family:var(--mono);font-size:16px;color:var(--solar);" id="out_qf">0.00</div>
-        <div style="font-size:9px;color:var(--tx3);">units</div>
-      </div>
-      <div>
-        <div style="font-size:10px;color:var(--tx2);">Slow Store (Q_s)</div>
-        <div style="font-family:var(--mono);font-size:16px;color:var(--golay);" id="out_qs">0.00</div>
-        <div style="font-size:9px;color:var(--tx3);">units</div>
-      </div>
-      <div>
-        <div style="font-size:10px;color:var(--tx2);">Total Charge</div>
-        <div style="font-family:var(--mono);font-size:16px;color:var(--white);" id="out_qtotal">0.00</div>
-        <div style="font-size:9px;color:var(--tx3);">Q_f + Q_s</div>
-      </div>
-      <div>
-        <div style="font-size:10px;color:var(--tx2);">Hamming Weight</div>
-        <div style="font-family:var(--mono);font-size:16px;color:var(--warn);" id="out_hw">0</div>
-        <div style="font-size:9px;color:var(--tx3);">bits set</div>
-      </div>
-    </div>
-    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--b1);">
-      <div style="font-size:10px;color:var(--tx2);">Predicted Geometry Trajectory</div>
-      <div style="font-family:var(--mono);font-size:11px;margin-top:6px;" id="out_trajectory" style="font-weight:bold; color:blue;">Identity (Rest)</div>
-      <div style="font-size:9px;color:var(--tx3);margin-top:6px;">NRCI: <span style="color:var(--text);" id="out_nrci">1.00</span></div>
-    </div>
+  <div class="g2">
+    <div class="cw"><div class="cw-ttl">G-STORM PRESENCE IN 3-DAY WINDOW</div><canvas id="g-ch" height="220"></canvas></div>
+    <div class="cw"><div class="cw-ttl">KP DISTRIBUTION — FORMATION DAYS</div><canvas id="kp-ch" height="220"></canvas></div>
   </div>
-
-  <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;margin-top:16px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
+  <div class="g2">
+    <div class="cw"><div class="cw-ttl">FORMATION COUNT BY YEAR vs SSN</div><canvas id="yr-ch" height="220"></canvas></div>
+    <div class="cw"><div class="cw-ttl">FORMATION MONTH DISTRIBUTION</div><canvas id="mo-ch" height="220"></canvas></div>
+  </div>
+  <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Correlation Metrics</div><div id="corr-kv"></div></div>
+  <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
   <div class="tw scroll" style="max-height:320px;">
     <table>
       <thead><tr><th>Year</th><th>Date</th><th>Location</th><th>County</th><th>Crop</th><th>Kp Day</th><th>Kp 7d↑</th><th>G1</th><th>G2</th><th>G3</th><th>Dec°</th><th>Dst</th><th>SSN</th></tr></thead>
@@ -420,14 +559,328 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
   </div>
 </div>
 
-<!-- ③ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ PLACEHOLDER PANES -->
-<div id="pane-solar" class="pane"><div class="sec-ttl">③ Solar Fetch (Placeholder)</div><p>Solar data fetch functionality coming soon.</p></div>
-<div id="pane-window" class="pane"><div class="sec-ttl">⑤ 3-Day Window (Placeholder)</div><p>3-Day window analysis coming soon.</p></div>
-<div id="pane-angle" class="pane"><div class="sec-ttl">⑥ Solar Angle (Placeholder)</div><p>Solar angle calculations coming soon.</p></div>
-<div id="pane-predict" class="pane"><div class="sec-ttl">⑦ Predictions (Placeholder)</div><p>Prediction interface coming soon.</p></div>
-<div id="pane-report" class="pane"><div class="sec-ttl">⑧ Reports (Placeholder)</div><p>Report generation coming soon.</p></div>
-<div id="pane-docs" class="pane"><div class="sec-ttl">⑨ Documentation (Placeholder)</div><p>Documentation coming soon.</p></div>
-<div id="pane-sci" class="pane"><div class="sec-ttl">⑩ Charge Monitor (Placeholder)</div><p>Charge monitor coming soon.</p></div>
+<!-- ⑤ 3-DAY WINDOW -->
+<div id="pane-window" class="pane">
+  <div class="sec-lbl">Section 05</div>
+  <div class="sec-ttl">3-Day Window Hypothesis</div>
+  <div class="callout cal-gol">
+    <div class="cl">Hypothesis</div>
+    Geomagnetic storms (G1+, Kp≥5) arriving at Earth 1–3 days after a solar event produce the coupling conditions required for formation. The <code>solar_in_G1_window_3d</code> field encodes whether any G1+ storm occurred within 3 days before or on the formation date. Key 2025 finding: the <strong>G4 storm (Kp=8) of May 31–June 1</strong> was outside the strict 3-day window for the June 8 (Avebury) and June 10 (Stonehenge) formations but within the 7-day pre-window. This is a tension case requiring expansion of the window definition or confirmation of a closer minor event.
+  </div>
+  <div class="toolbar"><button class="btn btn-sol" onclick="runWindow()">▶ Run Window Analysis</button></div>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat ok"><div class="stat-v" id="w-g1n">—</div><div class="stat-l">G1+ (3d)</div></div>
+    <div class="stat war"><div class="stat-v" id="w-g2n">—</div><div class="stat-l">G2+ (3d)</div></div>
+    <div class="stat nul"><div class="stat-v" id="w-g3n">—</div><div class="stat-l">G3+ (3d)</div></div>
+    <div class="stat sol"><div class="stat-v" id="w-none">—</div><div class="stat-l">No Storm</div></div>
+  </div>
+  <div class="g2">
+    <div class="cw"><div class="cw-ttl">FORMATION COUNT BY G-STORM LEVEL</div><canvas id="wb-ch" height="240"></canvas></div>
+    <div class="cw"><div class="cw-ttl">PRE-7d MAX Kp — WITH vs WITHOUT G-STORM</div><canvas id="ks-ch" height="240"></canvas></div>
+  </div>
+  <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Window Statistical Summary</div><div id="w-stats"></div></div>
+  <div class="filter-bar">
+    <select id="w-flt" onchange="renderWinTable()" style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;">
+      <option value="g1">G1+ in window</option><option value="g2">G2+ in window</option>
+      <option value="g3">G3+ in window</option><option value="none">No storm</option>
+    </select>
+  </div>
+  <div class="tw scroll">
+    <table>
+      <thead><tr><th>Year</th><th>Date</th><th>Location</th><th>Crop</th><th>Type</th><th>Kp Day</th><th>Kp 7d↑</th><th>G1</th><th>G2</th><th>G3</th><th>Dst Min</th><th>Dec°</th><th>SSN</th></tr></thead>
+      <tbody id="w-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ⑥ SOLAR ANGLE -->
+<div id="pane-angle" class="pane">
+  <div class="sec-lbl">Section 06</div>
+  <div class="sec-ttl">Solar Angle / Declination Analysis</div>
+  <div class="callout cal-sol">
+    <div class="cl">Earth-Sun Angle Hypothesis</div>
+    Solar declination ranges from −23.4° (winter solstice) to +23.4° (summer solstice). The 2025 season produced notable formations at peak declination — Hackpen Hill (June 22) and Charlton (June 23) both appeared at <strong>23.45° — the solstice maximum</strong>. If the solar coupling mechanism is angle-dependent (e.g., perpendicular solar wind coupling to the UK latitude, or maximum ionospheric charging at summer solstice), formations should cluster at high declination values above what crop availability alone predicts. The Avebury complex sits at 51.4°N — at summer solstice, solar elevation at noon peaks at 62°, maximising direct illumination of the chalk geology.
+  </div>
+  <div class="toolbar"><button class="btn btn-sol" onclick="runAngle()">▶ Run Angle Analysis</button></div>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stat sol"><div class="stat-v" id="ang-pk">—</div><div class="stat-l">Peak Dec Bin</div></div>
+    <div class="stat gol"><div class="stat-v" id="ang-mn">—</div><div class="stat-l">Mean Dec °</div></div>
+    <div class="stat ok"><div class="stat-v" id="ang-g1">—</div><div class="stat-l">Mean Dec — G1+</div></div>
+    <div class="stat war"><div class="stat-v" id="ang-ng">—</div><div class="stat-l">Mean Dec — No Storm</div></div>
+  </div>
+  <div class="g2">
+    <div class="cw"><div class="cw-ttl">FORMATIONS BY SOLAR DECLINATION (5° BINS)</div><canvas id="dec-h" height="250"></canvas></div>
+    <div class="cw"><div class="cw-ttl">SOLAR DECLINATION vs KP (SCATTER)</div><canvas id="dec-s" height="250"></canvas></div>
+  </div>
+  <div class="cw"><div class="cw-ttl">FORMATION POSITIONS ON SOLAR DECLINATION CURVE (DOY)</div><canvas id="dec-d" height="200"></canvas></div>
+  <div class="panel"><div class="panel-ttl">Solar Angle Statistical Summary</div><div id="ang-stats"></div></div>
+  <div class="callout cal-war" style="margin-top:12px;">
+    <div class="cl">Seasonal Confound</div>
+    UK wheat: May–Aug (dec +15° to +23.4° to +16°). OSR: April–June (+5° to +23.4°). Formation clustering at high declination is partly explained by crop availability. To test the angle hypothesis rigorously: compare formation-day declination distribution against all crop-present-day declination distribution for the same year range. This control dataset does not yet exist. It is the next data acquisition target.
+  </div>
+</div>
+
+<!-- ⑦ PREDICTIONS -->
+<div id="pane-predict" class="pane">
+  <div class="sec-lbl">Section 07</div>
+  <div class="sec-ttl">BWallSelf Decode Engine</div>
+  <div class="g2">
+    <div class="panel">
+      <div class="panel-ttl">Solar Event Input</div>
+      <div class="fg c2" style="margin-top:10px;">
+        <div class="ff"><label>Flare Class</label>
+          <select id="p-fl">
+            <option value="0">None / Quiet (0)</option><option value="2">B-class (2)</option>
+            <option value="4">C-class (4)</option><option value="6">M1–M3 (6)</option>
+            <option value="8" selected>M4–M7 (8)</option><option value="10">M8–M9 (10)</option>
+            <option value="12">X1–X2 (12)</option><option value="14">X3–X5 (14)</option><option value="16">X5+ (16)</option>
+          </select>
+        </div>
+        <div class="ff"><label>AR Classification</label>
+          <select id="p-ar">
+            <option value="0">Alpha (0)</option><option value="2">Beta (2)</option>
+            <option value="4">Beta-Gamma (4)</option><option value="6" selected>Beta-Gamma-Delta (6)</option>
+          </select>
+        </div>
+        <div class="ff"><label>Kp Max (window)</label><input id="p-kp" type="number" value="4" min="0" max="9" step="0.33"></div>
+        <div class="ff"><label>CME</label><select id="p-cme"><option value="0">No</option><option value="1">Possible (+1)</option><option value="2">Yes (+2)</option></select></div>
+        <div class="ff"><label>Crop Season</label><select id="p-crop"><option value="osr">OSR / April–May</option><option value="wheat" selected>Wheat / June–Aug</option></select></div>
+        <div class="ff"><label>Solar Dec (°)</label><input id="p-dec" type="number" value="21" min="-23.5" max="23.5" step="0.1"></div>
+        <div class="ff"><label>Peak UTC</label><input id="p-utc" type="datetime-local"></div>
+        <div class="ff"><label>AR Name</label><input id="p-arid" placeholder="AR4420"></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <button class="btn btn-sol" onclick="runPred()">▶ Run Decode</button>
+        <button class="btn btn-ghost" onclick="logPred()">📋 Log Prediction</button>
+      </div>
+    </div>
+    <div class="pred-card" id="pred-out" style="display:flex;align-items:center;justify-content:center;min-height:280px;">
+      <div style="text-align:center;color:var(--tx3);font-family:var(--mono);font-size:10px;">Enter parameters → Run Decode</div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:10px;">
+    <div class="panel-ttl">Solar Message Weight Breakdown</div>
+    <div style="font-family:var(--mono);font-size:10px;line-height:1.9;color:var(--text);margin-top:6px;white-space:pre;" id="smw-detail">—</div>
+  </div>
+  <div style="margin-top:14px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;">Prediction Log</div>
+      <button class="btn btn-ghost sm" onclick="expPreds()">↓ Export</button>
+      <button class="btn btn-null sm" onclick="if(confirm('Clear?')){preds=[];savePreds();renderPredLog();}">Clear</button>
+    </div>
+    <div class="tw scroll" style="max-height:280px;">
+      <table>
+        <thead><tr><th>Logged UTC</th><th>AR</th><th>SMW</th><th>Geometry</th><th>Pt.Group</th><th>Site</th><th>Window</th><th>Dec°</th><th>Outcome</th></tr></thead>
+        <tbody id="pred-tb"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ REPORTS -->
+<div id="pane-report" class="pane">
+  <div class="sec-lbl">Section 08</div>
+  <div class="sec-ttl">Report Generator</div>
+  <div class="toolbar">
+    <button class="btn btn-sol" onclick="genRpt('season')">Season Summary</button>
+    <button class="btn btn-sol" onclick="genRpt('window')">3-Day Window</button>
+    <button class="btn btn-gol" onclick="genRpt('angle')">Solar Angle</button>
+    <button class="btn btn-ghost" onclick="genRpt('2025')">2025 Season Data</button>
+    <button class="btn btn-ghost" onclick="genRpt('tensions')">Tensions</button>
+    <div class="toolbar-sep"></div>
+    <button class="btn btn-ghost" onclick="copyRpt()">↓ Copy</button>
+    <button class="btn btn-ghost" onclick="dlRpt()">↓ .txt</button>
+    <label class="filter-lbl">Season:</label>
+    <input id="rpt-season" value="2025" style="width:60px;background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;">
+  </div>
+  <div class="report-out" id="report-out">Select a report type above.</div>
+</div>
+
+
+<!-- ⑨ DOCUMENTATION -->
+<div id="pane-docs" class="pane">
+  <div class="sec-lbl">Section 09</div>
+  <div class="sec-ttl">Research Documentation — Hypothesis, Findings, Methods, Tensions</div>
+
+  <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="btn btn-sol" onclick="newDoc('hypothesis')">+ Hypothesis</button>
+    <button class="btn btn-sol" onclick="newDoc('finding')">+ Finding</button>
+    <button class="btn btn-gol" onclick="newDoc('method')">+ Method</button>
+    <button class="btn btn-ghost" onclick="newDoc('tension')">+ Tension</button>
+    <button class="btn btn-ghost" onclick="newDoc('data_target')">+ Data Target</button>
+    <button class="btn btn-ghost" onclick="newDoc('calibration')">+ Calibration Note</button>
+    <div class="toolbar-sep"></div>
+    <button class="btn btn-ghost" onclick="exportDocs()">↓ Export Markdown</button>
+    <button class="btn btn-ghost" onclick="importDocs()">↑ Import JSON</button>
+    <button class="btn btn-null sm" style="margin-left:auto;" onclick="if(confirm('Clear ALL documentation? This cannot be undone.')){docs=initDocs();saveDocs();renderDocs();}">Clear All</button>
+  </div>
+
+  <!-- Filter/search -->
+  <div class="filter-bar" style="margin-bottom:16px;">
+    <span class="filter-lbl">Filter:</span>
+    <input id="doc-search" onkeyup="renderDocs()" placeholder="Search all documentation..." style="width:250px;">
+    <select id="doc-type-filter" onchange="renderDocs()" style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;">
+      <option value="">All Types</option>
+      <option value="hypothesis">Hypotheses</option>
+      <option value="finding">Findings</option>
+      <option value="method">Methods</option>
+      <option value="tension">Tensions</option>
+      <option value="data_target">Data Targets</option>
+      <option value="calibration">Calibration</option>
+    </select>
+    <select id="doc-status-filter" onchange="renderDocs()" style="background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rad);padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;">
+      <option value="">All Status</option>
+      <option value="active">Active</option>
+      <option value="confirmed">Confirmed</option>
+      <option value="tension">Tension</option>
+      <option value="resolved">Resolved</option>
+      <option value="retired">Retired</option>
+      <option value="pending">Pending</option>
+    </select>
+    <span id="doc-count" style="font-family:var(--mono);font-size:8px;color:var(--tx3);"></span>
+  </div>
+
+  <!-- New/Edit entry form -->
+  <div id="doc-form" style="display:none;background:var(--panel);border:2px solid var(--solar);border-radius:var(--rad);padding:18px;margin-bottom:18px;">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--solar);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;" id="doc-form-lbl">NEW ENTRY</div>
+    <div class="fg c3" style="margin-bottom:10px;">
+      <div class="ff"><label>Type</label>
+        <select id="df-type">
+          <option value="hypothesis">Hypothesis</option>
+          <option value="finding">Finding</option>
+          <option value="method">Method</option>
+          <option value="tension">Tension</option>
+          <option value="data_target">Data Target</option>
+          <option value="calibration">Calibration Note</option>
+        </select>
+      </div>
+      <div class="ff"><label>ID / Reference</label><input id="df-id" placeholder="H-01, F-03, T-09..."></div>
+      <div class="ff"><label>Status</label>
+        <select id="df-status">
+          <option value="active">Active</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="tension">Tension</option>
+          <option value="resolved">Resolved</option>
+          <option value="pending">Pending</option>
+          <option value="retired">Retired</option>
+        </select>
+      </div>
+      <div class="ff span2"><label>Title</label><input id="df-title" placeholder="Short descriptive title"></div>
+      <div class="ff"><label>Related Event IDs</label><input id="df-events" placeholder="2026-JC-0508, 2026-WH-0429"></div>
+      <div class="ff span3"><label>Body</label><textarea id="df-body" style="min-height:120px;"></textarea></div>
+      <div class="ff span2"><label>Supporting Evidence / References</label><textarea id="df-evidence" style="min-height:60px;"></textarea></div>
+      <div class="ff"><label>Falsification Criterion</label><textarea id="df-falsify" style="min-height:60px;" placeholder="What would disprove this?"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-sol" onclick="saveDoc()">Save Entry</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('doc-form').style.display='none'">Cancel</button>
+      <span id="doc-form-msg" style="font-family:var(--mono);font-size:9px;color:var(--ok);margin-left:8px;"></span>
+    </div>
+  </div>
+
+  <!-- Documentation cards -->
+  <div id="doc-cards"></div>
+</div>
+
+<!-- ⑩ SUBSTRATE CHARGE INDEX (SCI) — CHARGE MONITOR -->
+<div id="pane-sci" class="pane">
+  <div class="sec-lbl">Section 10</div>
+  <div class="sec-ttl">Geomagnetic Substrate Charge Index (SCI)</div>
+
+  <div class="callout cal-sol" style="margin-bottom:14px;">
+    <div class="cl">What This Shows</div>
+    The <strong>Substrate Charge Index (SCI)</strong> models the current geomagnetic charge state of each known UK GCE site using the RC circuit battery model. Solar input (Kp, X-ray flux, solar wind, Bz) accumulated over the past 7 days is run through each site's capacitance function to produce a real-time charge percentage. When a site crosses its discharge threshold (~100%) and a trigger event arrives (CH HSS pressure front, Bz southward flip, minor Kp pulse), a GCE formation becomes possible. <strong>This is not a prediction of a formation — it is a readiness indicator.</strong> Human circlemakers can also produce formations at any charge level.
+  </div>
+
+  <!-- Refresh bar -->
+  <div class="sci-refresh-bar">
+    <div class="sci-live-dot" id="sci-live-dot" style="flex-shrink:0;"></div>
+    <span id="sci-status-lbl">Loading solar data from NOAA…</span>
+    <div class="sci-progress">
+      <div class="sci-progress-bar" id="sci-progress-bar" style="width:0%;"></div>
+    </div>
+    <button class="btn btn-sol sm" onclick="sciRun()">↻ Refresh Now</button>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+      <input type="checkbox" id="sci-auto" onchange="sciToggleAuto()" style="accent-color:var(--solar);">
+      Auto (15 min)
+    </label>
+    <span id="sci-last-fetch" style="color:var(--tx3);">Not yet fetched</span>
+  </div>
+
+  <!-- Global summary strip -->
+  <div class="sci-global">
+    <div class="sci-global-item">
+      <div class="sci-global-val c-sol" id="sci-max-pct">—</div>
+      <div class="sci-global-lbl">Max Site Charge %</div>
+    </div>
+    <div class="sci-global-item">
+      <div class="sci-global-val c-war" id="sci-sites-watch">—</div>
+      <div class="sci-global-lbl">Sites on Watch (>60%)</div>
+    </div>
+    <div class="sci-global-item">
+      <div class="sci-global-val c-nul" id="sci-sites-alert">—</div>
+      <div class="sci-global-lbl">Sites on Alert (>85%)</div>
+    </div>
+    <div class="sci-global-item">
+      <div class="sci-global-val c-gol" id="sci-live-kp">—</div>
+      <div class="sci-global-lbl">Live Kp (NOAA)</div>
+    </div>
+  </div>
+
+  <!-- Site charge cards -->
+  <div class="sci-site-grid" id="sci-cards">
+    <div style="grid-column:1/-1;text-align:center;font-family:var(--mono);font-size:10px;color:var(--tx3);padding:40px;">
+      Click Refresh Now or enable Auto to load live solar data from NOAA.
+    </div>
+  </div>
+
+  <!-- Daily Q log table -->
+  <div style="margin-top:20px;">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;">7-DAY SOLAR INPUT LOG (used to compute current charge state)</div>
+    <div class="tw" style="max-height:280px;overflow-y:auto;">
+      <table>
+        <thead><tr>
+          <th>Date UTC</th><th>X-Ray Peak</th><th>Kp Est.</th>
+          <th>q_kp</th><th>q_bz</th><th>q_xray</th><th>q_f107</th><th>q_ch_hss</th>
+          <th>dQ Total</th><th>Dominant</th>
+        </tr></thead>
+        <tbody id="sci-day-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Explanation -->
+  <div style="margin-top:20px;">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;">MODEL EXPLANATION</div>
+    <div class="g2">
+      <div class="panel">
+        <div class="panel-ttl">RC Circuit Analogy</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.75;">
+          Each GCE site behaves like a capacitor in an RC circuit. Solar electromagnetic input charges the capacitor (adds to Q). The site's geology and monument anchor determine the capacitance (C_site) — chalk aquifers with monument anchors hold more charge for longer. The RC time constant τ = C × R sets how quickly charge naturally decays.<br><br>
+          <strong style="color:var(--solar);">High-τ sites</strong> (Avebury, τ≈2.8d) hold a G4 storm charge for a week. <strong style="color:var(--golay);">Low-τ sites</strong> (Devon, τ≈2.4d) discharge within 2 days of a storm. The 3-day window that appears in the database statistics is an artefact of the most common τ class — not a physical constant.
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-ttl">Charge Components (dQ per day)</div>
+        <div style="font-family:var(--mono);font-size:9.5px;line-height:2.0;color:var(--text);">
+          <div><span style="color:var(--solar);">q_kp</span>     = (Kp/9)² × 3.0 <span style="color:var(--tx3);">  geomagnetic storm energy</span></div>
+          <div><span style="color:var(--golay);">q_bz</span>     = Bz_south_hrs × 0.08 <span style="color:var(--tx3);">  gate-open time</span></div>
+          <div><span style="color:var(--warn);">q_xray</span>   = flare_class_norm <span style="color:var(--tx3);">  X-ray flux (M5=1.0)</span></div>
+          <div><span style="color:var(--leech);">q_f107</span>   = (F10.7 − 70) / 100 <span style="color:var(--tx3);">  background UV/EUV</span></div>
+          <div><span style="color:var(--ok);">q_ch_hss</span> = 1.5 × SW_excess <span style="color:var(--tx3);">  coronal hole HSS</span></div>
+          <div><span style="color:var(--null);">q_dst</span>    = |Dst_min| / 100 <span style="color:var(--tx3);">  ring current energy</span></div>
+          <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--b1);">
+          Q(t+1) = (Q(t) + dQ) × e<sup>−dt/τ</sup>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout cal-war" style="margin-top:10px;">
+      <div class="cl">Data Limitations</div>
+      Live Bz southward hours, solar wind speed, and F10.7 are estimated from GOES X-ray flux and Kp — the full set of NOAA parameters requires additional API calls. Actual site soil moisture, water table depth, and real-time geological conductivity are not measured. This is a <strong>research-grade estimate</strong>, not a geophysical instrument reading. Treat all charge percentages as indicative of relative solar loading, not absolute physical quantities.
+    </div>
+  </div>
+</div>
 
 </div><!-- /body -->
 
@@ -456,69 +909,28 @@ function p2(n){return String(n).padStart(2,'0');}
 window.onload=()=>{
   const t=localStorage.getItem('gh_tok');
   if(t) document.getElementById('gh-token').value=t;
+  renderPredLog();
 };
 function saveToken(){localStorage.setItem('gh_tok',document.getElementById('gh-token').value);}
 
 function sw(name,el){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  const pane=document.getElementById('pane-'+name);
-  if(pane) pane.classList.add('on');
-  if(el) el.classList.add('on');
+  document.getElementById('pane-'+name).classList.add('on');
+  el.classList.add('on');
   if(name==='analysis') runAnalysis();
+  if(name==='window') runWindow();
+  if(name==='angle') runAngle();
+  if(name==='catalog') renderCatalog();
+  if(name==='docs') renderDocs();
+  if(name==='sci') sciRun();
 }
 
 // ════════════════════════════════════
-// STEP 1: NEW DUAL-COMPARTMENT BATTERY MODEL (v2)
-// ════════════════════════════════════
-function calculateDualBatteryJS(dQ_f, dQ_s, Q_f_prev, Q_s_prev, c_site, r_site) {
-    const tau_f = 0.5; // Fast store (ionospheric, days)
-    const tau_s = c_site * r_site; // Slow store (geological, days)
-    
-    // 1. RC Evolution
-    let Q_f = (Q_f_prev + dQ_f) * Math.exp(-1.0 / tau_f);
-    let Q_s = (Q_s_prev + dQ_s) * Math.exp(-1.0 / tau_s);
-    let total_Q = Q_f + Q_s;
-    
-    // 2. Map to 24-bit Gray Code & Hamming Weight (HW)
-    let n = parseInt(total_Q * 1000) % 16777216; // 2^24
-    let gray = n ^ (n >> 1);
-    let hw = gray.toString(2).split('').filter(c => c === '1').length;
-    
-    let trajectory = "Identity (Rest / No discharge)";
-    let nrci = 1.0;
-    let discharged = false;
-    
-    // 3. Manifestation Logic (HW >= 4)
-    if (hw >= 4) {
-        discharged = true;
-        // T-06 Resolution: Trajectory-based geometry mapping
-        if (Q_f > Q_s) {
-            trajectory = "Octad (Simple Circle/Ring) - Fast Store Dominance";
-            nrci = 0.7623;
-        } else {
-            trajectory = "Dodecad (Complex Pictogram) - Slow Store Dominance";
-            nrci = 0.6814;
-        }
-    }
-    
-    return {
-        Q_f: Q_f,
-        Q_s: Q_s,
-        total_Q: total_Q,
-        hw: hw,
-        trajectory: trajectory,
-        nrci: nrci,
-        discharged: discharged
-    };
-}
-
-// ════════════════════════════════════
-// DATABASE LOAD & FILTER
+// DATABASE LOAD
 // ════════════════════════════════════
 function dlog(m,c=''){
   const el=document.getElementById('db-log');
-  if(!el) return;
   const d=document.createElement('div');
   if(c) d.className='log-'+c;
   d.textContent=`[${new Date().toISOString().substr(11,8)}] ${m}`;
@@ -533,11 +945,12 @@ async function loadDB(){
   setDot('warn','LOADING');
   try{
     const r=await fetch(url);
-    if(!r.ok) throw new Error('HTTP '+r.status);
+    if(!r.ok) throw new Error('HTTP '+r.status+' — check repo/file path and that the file exists in main branch');
     const text=await r.text();
     parseCSV(text,'GitHub');
   }catch(e){
     dlog('Load failed: '+e.message,'err');
+    dlog('Try: upload a local CSV file instead (the "Local CSV" button)','war');
     setDot('err','ERROR');
   }
 }
@@ -555,7 +968,7 @@ function parseCSV(text,src){
     header:true,skipEmptyLines:true,dynamicTyping:false,
     complete(res){
       DB=res.data.filter(r=>r.year||r.location);
-      dlog(`✓ Loaded ${DB.length} records from ${src}.`,'ok');
+      dlog(`Loaded ${DB.length} records from ${src}.`,'ok');
       setDot('live','ONLINE');
       updateHeader(); buildFilters(); filterDB();
     },
@@ -564,181 +977,1246 @@ function parseCSV(text,src){
 }
 
 function setDot(st,lbl){
-  const el=document.getElementById('dot-db');
-  if(el) el.className='sdot '+(st||'');
-  const lbl_el=document.getElementById('lbl-db');
-  if(lbl_el) lbl_el.textContent=lbl||'OFFLINE';
+  document.getElementById('dot-db').className='sdot '+(st||'');
+  document.getElementById('lbl-db').textContent=lbl||'OFFLINE';
 }
 
 function updateHeader(){
   const g1=DB.filter(r=>r.solar_in_G1_window_3d==='True');
-  if(document.getElementById('s-total')) document.getElementById('s-total').textContent=DB.length;
-  if(document.getElementById('s-usable')) document.getElementById('s-usable').textContent=DB.filter(r=>r.usable_for_analysis==='True').length;
-  if(document.getElementById('s-g1')) document.getElementById('s-g1').textContent=g1.length;
-  if(document.getElementById('s-g2')) document.getElementById('s-g2').textContent=DB.filter(r=>r.solar_in_G2_window_3d==='True').length;
+  document.getElementById('s-total').textContent=DB.length;
+  document.getElementById('s-usable').textContent=DB.filter(r=>r.usable_for_analysis==='True').length;
+  document.getElementById('s-g1').textContent=g1.length;
+  document.getElementById('s-g2').textContent=DB.filter(r=>r.solar_in_G2_window_3d==='True').length;
   const yrs=DB.map(r=>parseInt(r.year)).filter(n=>!isNaN(n));
-  if(document.getElementById('s-years')) document.getElementById('s-years').textContent=yrs.length?`${Math.min(...yrs)}–${Math.max(...yrs)}`:'—';
-  if(document.getElementById('s-hoax')) document.getElementById('s-hoax').textContent=DB.filter(r=>r.hoax_flag==='1'||r.hoax_flag===1).length;
-  if(document.getElementById('h-records')) document.getElementById('h-records').textContent=DB.length;
-  if(document.getElementById('h-g1')) document.getElementById('h-g1').textContent=g1.length;
+  document.getElementById('s-years').textContent=yrs.length?`${Math.min(...yrs)}–${Math.max(...yrs)}`:'—';
+  document.getElementById('s-hoax').textContent=DB.filter(r=>r.hoax_flag==='1'||r.hoax_flag===1).length;
+  document.getElementById('h-records').textContent=DB.length;
+  document.getElementById('h-g1').textContent=g1.length;
 }
 
 function buildFilters(){
   const yrs=[...new Set(DB.map(r=>r.year).filter(Boolean))].sort();
   const cos=[...new Set(DB.map(r=>r.county).filter(Boolean))].sort();
-  
-  const fyr=document.getElementById('f-yr');
-  if(fyr){
-    while(fyr.options.length>1) fyr.remove(1);
-    yrs.forEach(y=>{const opt=document.createElement('option'); opt.value=y; opt.text=y; fyr.appendChild(opt);});
-  }
-  
-  const fco=document.getElementById('f-co');
-  if(fco){
-    while(fco.options.length>1) fco.remove(1);
-    cos.forEach(c=>{const opt=document.createElement('option'); opt.value=c; opt.text=c; fco.appendChild(opt);});
-  }
-}
-
-function filterDB(){
-  const sq=document.getElementById('f-search')?.value.toLowerCase() || '';
-  const yr=document.getElementById('f-yr')?.value || '';
-  const co=document.getElementById('f-co')?.value || '';
-  const g1=document.getElementById('f-g1f')?.value || '';
-  const hx=document.getElementById('f-hxf')?.value || '';
-  const us=document.getElementById('f-usf')?.value || '';
-  
-  filteredDB=DB.filter(r=>{
-    if(sq && !JSON.stringify(r).toLowerCase().includes(sq)) return false;
-    if(yr && r.year!==yr) return false;
-    if(co && r.county!==co) return false;
-    if(g1 && r.solar_in_G1_window_3d!==g1) return false;
-    if(hx && String(r.hoax_flag)!==hx) return false;
-    if(us && r.usable_for_analysis!==us) return false;
-    return true;
-  }).sort((a,b)=>{
-    const av=a[sortCol], bv=b[sortCol];
-    if(av===bv) return 0;
-    return (av<bv?-1:1)*sortDir;
+  ['f-yr','img-yr'].forEach(id=>{
+    const el=document.getElementById(id);
+    const first=el.options[0]; el.innerHTML=''; el.appendChild(first);
+    yrs.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;el.appendChild(o);});
   });
-  
-  const rc=document.getElementById('row-ct');
-  if(rc) rc.textContent=`${filteredDB.length} of ${DB.length} rows`;
-  renderDBTable();
-}
-
-function sortBy(col){
-  sortCol=col;
-  sortDir=(sortCol===col?-sortDir:1);
-  filterDB();
-}
-
-function renderDBTable(){
-  const tb=document.getElementById('db-tbody');
-  if(!tb) return;
-  tb.innerHTML='';
-  filteredDB.forEach((r,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td>${r.approx_diameter_m||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_SSN_best||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.hoax_flag?'⚠':'—'}</td><td>${r.data_quality_score||'—'}</td><td>${r.soil_moisture_pct||'—'}</td><td>${r.image_url?'✓':'—'}</td><td><button class="btn btn-ghost sm" onclick="alert('Edit: '+${i})">Edit</button></td>`;
-    tb.appendChild(tr);
-  });
-}
-
-function showForm(){
-  alert('Form: Coming soon');
-}
-
-function exportCSV(){
-  const csv=[Object.keys(DB[0]||{}),...DB.map(r=>Object.values(r))].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='gce_db.csv';
-  a.click();
-}
-
-function doPush(){
-  alert('GitHub push: Not implemented');
-}
-
-function renderCatalog(){
-  dlog('Catalog rendering...');
+  const cf=document.getElementById('f-co');
+  const cfF=cf.options[0]; cf.innerHTML=''; cf.appendChild(cfF);
+  cos.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cf.appendChild(o);});
 }
 
 // ════════════════════════════════════
-// ANALYSIS
-// ════════════���═══════════════════════
-function runAnalysis(){
-  // Gather inputs
-  let input_q_xray = parseFloat(document.getElementById('input_xray')?.value) || 0;
-  let input_q_cme = parseFloat(document.getElementById('input_cme')?.value) || 0;
-  let input_q_kp = parseFloat(document.getElementById('input_kp')?.value) || 0;
-  let input_q_bz = parseFloat(document.getElementById('input_bz')?.value) || 0;
-  let input_q_ch_hss = parseFloat(document.getElementById('input_ch_hss')?.value) || 0;
-  let input_q_dst = parseFloat(document.getElementById('input_dst')?.value) || 0;
-  
-  let dQ_f = input_q_xray + input_q_cme;
-  let dQ_s = input_q_kp + input_q_bz + input_q_ch_hss + input_q_dst;
-  
-  let c_site = 1.8;
-  let r_site = 1.4;
-  
-  let result = calculateDualBatteryJS(dQ_f, dQ_s, 0, 0, c_site, r_site);
-  
-  // Update outputs
-  const out_qf=document.getElementById('out_qf');
-  const out_qs=document.getElementById('out_qs');
-  const out_qtotal=document.getElementById('out_qtotal');
-  const out_hw=document.getElementById('out_hw');
-  const out_nrci=document.getElementById('out_nrci');
-  const out_trajectory=document.getElementById('out_trajectory');
-  
-  if(out_qf) out_qf.innerText = result.Q_f.toFixed(4);
-  if(out_qs) out_qs.innerText = result.Q_s.toFixed(4);
-  if(out_qtotal) out_qtotal.innerText = result.total_Q.toFixed(4);
-  if(out_hw) out_hw.innerText = result.hw;
-  if(out_nrci) out_nrci.innerText = result.nrci.toFixed(4);
-  if(out_trajectory) {
-    out_trajectory.innerText = result.trajectory;
-    out_trajectory.style.color = result.discharged ? 'red' : 'blue';
-  }
+// TABLE RENDER
+// ════════════════════════════════════
+function filterDB(){
+  const q=(document.getElementById('f-search').value||'').toLowerCase();
+  const yr=document.getElementById('f-yr').value;
+  const co=document.getElementById('f-co').value;
+  const g1=document.getElementById('f-g1f').value;
+  const hx=document.getElementById('f-hxf').value;
+  const us=document.getElementById('f-usf').value;
+  filteredDB=DB.filter(r=>{
+    const txt=Object.values(r).join(' ').toLowerCase();
+    return(!q||txt.includes(q))&&(!yr||r.year===yr)&&(!co||r.county===co)
+      &&(!g1||r.solar_in_G1_window_3d===g1)
+      &&(!hx||(hx==='0'?r.hoax_flag!=='1':r.hoax_flag==='1'))
+      &&(!us||r.usable_for_analysis===us);
+  });
+  renderTable();
+}
 
-  // Correlation metrics
-  const ds=document.getElementById('an-ds')?.value || 'usable';
-  let data=DB;
-  if(ds==='usable') data=DB.filter(r=>r.usable_for_analysis==='True');
-  else if(ds==='nohox') data=DB.filter(r=>r.hoax_flag!=='1'&&r.hoax_flag!==1);
-  
-  const n=data.length;
-  const g1c=data.filter(r=>r.solar_in_G1_window_3d==='True').length;
-  const kpv=data.map(r=>parseFloat(r.solar_Kp_max_best)).filter(x=>!isNaN(x));
-  const kp7v=data.map(r=>parseFloat(r.pre7d_Kp_max_best_max)).filter(x=>!isNaN(x));
-  const decv=data.map(r=>parseFloat(r.solar_declination)).filter(x=>!isNaN(x));
-  const dstv=data.map(r=>parseFloat(r.solar_Dst_min)).filter(x=>!isNaN(x));
-  
-  const mean=(arr)=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
-  
-  if(document.getElementById('a-n')) document.getElementById('a-n').textContent=n;
-  if(document.getElementById('a-g1pct')) document.getElementById('a-g1pct').textContent=n?(g1c*100/n).toFixed(1)+'%':'—';
-  if(document.getElementById('a-kp-mean')) document.getElementById('a-kp-mean').textContent=mean(kpv).toFixed(2);
-  if(document.getElementById('a-kp7-mean')) document.getElementById('a-kp7-mean').textContent=mean(kp7v).toFixed(2);
-  if(document.getElementById('a-dec-mean')) document.getElementById('a-dec-mean').textContent=mean(decv).toFixed(2);
-  if(document.getElementById('a-dst-mean')) document.getElementById('a-dst-mean').textContent=mean(dstv).toFixed(2);
-  
-  const corrKV=document.getElementById('corr-kv');
-  if(corrKV) corrKV.innerHTML=`<div class="kv"><span class="kv-k">Total Records:</span><span class="kv-v">${n}</span></div><div class="kv"><span class="kv-k">G1+ Cases:</span><span class="kv-v">${g1c} (${n?(g1c*100/n).toFixed(1):'0'}%)</span></div>`;
-  
-  const sigtb=document.getElementById('sig-tb');
-  if(sigtb){
-    sigtb.innerHTML='';
-    data.filter(r=>r.solar_in_G2_window_3d==='True'&&r.hoax_flag!=='1'&&r.hoax_flag!==1).forEach(r=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${r.year||'—'}</td><td>${r.date_parsed||'—'}</td><td>${r.location||'—'}</td><td>${r.county||'—'}</td><td>${r.crop_type||'—'}</td><td>${r.solar_Kp_max_best||'—'}</td><td>${r.pre7d_Kp_max_best_max||'—'}</td><td>${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td>${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td>${r.solar_declination||'—'}</td><td>${r.solar_Dst_min||'—'}</td><td>${r.solar_SSN_best||'—'}</td>`;
-      sigtb.appendChild(tr);
+function sortBy(col){
+  if(sortCol===col) sortDir*=-1; else{sortCol=col;sortDir=1;}
+  filteredDB.sort((a,b)=>{
+    const av=a[col]||'',bv=b[col]||'';
+    const an=parseFloat(av),bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn)) return (an-bn)*sortDir;
+    return av.localeCompare(bv)*sortDir;
+  });
+  renderTable();
+}
+
+function renderTable(){
+  const tb=document.getElementById('db-tbody'); tb.innerHTML='';
+  const show=filteredDB.slice(0,600);
+  show.forEach(r=>{
+    const kp=parseFloat(r.solar_Kp_max_best)||0;
+    const kp7=parseFloat(r.pre7d_Kp_max_best_max)||0;
+    const dec=parseFloat(r.solar_declination);
+    const dst=parseFloat(r.solar_Dst_min)||0;
+    const g1=r.solar_in_G1_window_3d==='True';
+    const g2=r.solar_in_G2_window_3d==='True';
+    const g3=r.solar_in_G3_window_3d==='True';
+    const hoax=r.hoax_flag==='1'||r.hoax_flag===1;
+    const dq=parseInt(r.data_quality_score)||0;
+    const hasImg=r.image_url&&r.image_url.startsWith('http');
+    const idx=DB.indexOf(r);
+    const yr=parseInt(r.year)||0;
+    const rowCls=(dec>23.4)?'tr-solstice':(kp7>=8)?'tr-g4':(yr>=2025)?'tr-2025':'';
+    const imgBtn=hasImg?`<button class="btn btn-ghost sm" onclick="openLBfromDB(${DB.indexOf(r)})">📷</button>`:'<span class="c-dim">—</span>';
+    tb.innerHTML+=`<tr class="${rowCls}">
+      <td class="c-sol">${r.year||'—'}</td>
+      <td style="white-space:nowrap;">${r.date_parsed||r.date_raw||'—'}</td>
+      <td style="max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.location||'')}">${r.location||'—'}</td>
+      <td>${r.county||'—'}</td>
+      <td>${(r.crop_type||'—').substr(0,10)}</td>
+      <td>${r.formation_type||'—'}</td>
+      <td>${r.approx_diameter_m||'—'}</td>
+      <td class="${kpColor(kp)}">${kp||'—'}</td>
+      <td class="${kpColor(kp7)}">${kp7||'—'}</td>
+      <td class="${g1?'c-ok':'c-dim'}">${g1?'✓':'—'}</td>
+      <td class="${g2?'c-war':'c-dim'}">${g2?'✓':'—'}</td>
+      <td class="${g3?'c-nul':'c-dim'}">${g3?'✓':'—'}</td>
+      <td class="${decColor(dec)}">${isNaN(dec)?'—':dec.toFixed(1)}</td>
+      <td>${r.solar_SSN_best||'—'}</td>
+      <td class="${dst<-50?'c-nul':dst<-20?'c-war':'c-dim'}">${dst||'—'}</td>
+      <td class="${hoax?'c-nul':'c-dim'}">${hoax?'⚠':'—'}</td>
+      <td class="${dqColor(dq)}">${dq||'—'}</td>
+      <td class="${parseFloat(r.soil_moisture_pct||0)>40?'c-gol':parseFloat(r.soil_moisture_pct||0)>25?'c-war':'c-dim'}">${r.soil_moisture_pct||'—'}</td>
+      <td>${imgBtn}</td>
+      <td style="white-space:nowrap;"><button class="btn btn-ghost sm" onclick="editRec(${idx})">Edit</button> <button class="btn btn-null sm" onclick="delRec(${idx})">Del</button></td>
+    </tr>`;
+  });
+  document.getElementById('row-ct').textContent=`${filteredDB.length} rows${filteredDB.length>600?' (600 shown)':''}`;
+}
+function esc(s){return (s||'').replace(/"/g,'&quot;').substr(0,120);}
+
+// ════════════════════════════════════
+// FORM
+// ════════════════════════════════════
+function showForm(){editIdx=null;clearForm();document.getElementById('form-lbl').textContent='NEW GCE RECORD';document.getElementById('db-form').style.display='block';document.getElementById('db-form').scrollIntoView({behavior:'smooth'});}
+function clearForm(){['f-year','f-date','f-loc','f-county','f-country','f-lat','f-lon','f-diam','f-desc','f-imgurl','f-srcurl','f-kp','f-kp7','f-sdec','f-ssn','f-dst','f-sw','f-dq','f-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
+function editRec(i){
+  editIdx=i; const r=DB[i]; clearForm();
+  document.getElementById('form-lbl').textContent='EDIT: '+r.location;
+  document.getElementById('f-year').value=r.year||'';
+  document.getElementById('f-date').value=r.date_parsed||'';
+  document.getElementById('f-loc').value=r.location||'';
+  document.getElementById('f-county').value=r.county||'';
+  document.getElementById('f-country').value=r.country||'UK';
+  document.getElementById('f-lat').value=r.lat||'';
+  document.getElementById('f-lon').value=r.lon||'';
+  document.getElementById('f-diam').value=r.approx_diameter_m||'';
+  document.getElementById('f-desc').value=r.description||'';
+  document.getElementById('f-imgurl').value=r.image_url||'';
+  document.getElementById('f-srcurl').value=r.source_url||'';
+  document.getElementById('f-kp').value=r.solar_Kp_max_best||'';
+  document.getElementById('f-kp7').value=r.pre7d_Kp_max_best_max||'';
+  document.getElementById('f-sdec').value=r.solar_declination||'';
+  document.getElementById('f-ssn').value=r.solar_SSN_best||'';
+  document.getElementById('f-dst').value=r.solar_Dst_min||'';
+  document.getElementById('f-sw').value=r.solar_SW_speed_mean||'';
+  document.getElementById('f-dq').value=r.data_quality_score||'';
+  document.getElementById('f-notes').value=r.notes||'';
+  document.getElementById('f-sm').value=r.soil_moisture_pct||'';
+  setSel('f-sm-src',r.soil_moisture_src);
+  setSel('f-dconf',r.date_confidence);setSel('f-crop',r.crop_type);setSel('f-ftype',r.formation_type);
+  setSel('f-g1',r.solar_in_G1_window_3d);setSel('f-g2',r.solar_in_G2_window_3d);setSel('f-g3',r.solar_in_G3_window_3d);
+  setSel('f-hoax',r.hoax_flag==='1'||r.hoax_flag===1?'1':'0');
+  setSel('f-usable',r.usable_for_analysis==='True'?'True':'False');
+  document.getElementById('db-form').style.display='block';
+  document.getElementById('db-form').scrollIntoView({behavior:'smooth'});
+}
+function setSel(id,val){const e=document.getElementById(id);if(!e||val==null)return;for(let o of e.options){if(o.value==val||o.text==val){e.value=o.value;return;}}}
+function saveRec(){
+  const r={
+    year:document.getElementById('f-year').value,
+    date_parsed:document.getElementById('f-date').value,
+    date_confidence:document.getElementById('f-dconf').value,
+    location:document.getElementById('f-loc').value,
+    county:document.getElementById('f-county').value,
+    country:document.getElementById('f-country').value,
+    lat:document.getElementById('f-lat').value,
+    lon:document.getElementById('f-lon').value,
+    crop_type:document.getElementById('f-crop').value,
+    approx_diameter_m:document.getElementById('f-diam').value,
+    formation_type:document.getElementById('f-ftype').value,
+    description:document.getElementById('f-desc').value,
+    image_url:document.getElementById('f-imgurl').value,
+    source_url:document.getElementById('f-srcurl').value,
+    solar_Kp_max_best:document.getElementById('f-kp').value,
+    pre7d_Kp_max_best_max:document.getElementById('f-kp7').value,
+    solar_in_G1_window_3d:document.getElementById('f-g1').value,
+    solar_in_G2_window_3d:document.getElementById('f-g2').value,
+    solar_in_G3_window_3d:document.getElementById('f-g3').value,
+    solar_declination:document.getElementById('f-sdec').value,
+    solar_SSN_best:document.getElementById('f-ssn').value,
+    solar_Dst_min:document.getElementById('f-dst').value,
+    solar_SW_speed_mean:document.getElementById('f-sw').value,
+    hoax_flag:document.getElementById('f-hoax').value,
+    data_quality_score:document.getElementById('f-dq').value,
+    usable_for_analysis:document.getElementById('f-usable').value,
+    notes:document.getElementById('f-notes').value,
+    soil_moisture_pct:document.getElementById('f-sm').value,
+    soil_moisture_src:document.getElementById('f-sm-src').value,
+  };
+  if(!r.location){alert('Location required.');return;}
+  if(editIdx!==null){DB[editIdx]=r;dlog('Updated: '+r.location,'ok');}
+  else{DB.push(r);dlog('Added: '+r.location,'ok');}
+  updateHeader();filterDB();
+  document.getElementById('db-form').style.display='none';
+  document.getElementById('form-msg').textContent='✓ Saved';
+  setTimeout(()=>document.getElementById('form-msg').textContent='',2000);
+}
+function delRec(i){if(!confirm('Delete '+DB[i].location+'?'))return;dlog('Deleted: '+DB[i].location,'war');DB.splice(i,1);updateHeader();filterDB();}
+function exportCSV(){
+  const csv=Papa.unparse(DB);
+  const b=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='crop_circle_solar_database_v2.csv';a.click();
+  dlog('CSV exported — commit to GitHub main branch to persist.','ok');
+}
+async function doPush(){
+  const tok=document.getElementById('gh-token').value.trim();
+  if(!tok){alert('Enter a GitHub personal access token (repo:contents write scope) to push directly, or use Export CSV and commit manually.');return;}
+  const repo=document.getElementById('gh-repo').value.trim();
+  const file=document.getElementById('gh-file').value.trim();
+  let sha='';
+  try{const r=await fetch(`https://api.github.com/repos/${repo}/contents/${file}`,{headers:{Authorization:'token '+tok}});const d=await r.json();sha=d.sha||'';}catch(e){}
+  const csv=Papa.unparse(DB);
+  const b64=btoa(unescape(encodeURIComponent(csv)));
+  const body=JSON.stringify({message:`GCE Console: database update ${new Date().toISOString().substr(0,10)}`,content:b64,sha});
+  dlog('Pushing to GitHub...');
+  try{
+    const r=await fetch(`https://api.github.com/repos/${repo}/contents/${file}`,{method:'PUT',headers:{Authorization:'token '+tok,'Content-Type':'application/json'},body});
+    if(r.ok){dlog('✓ Pushed successfully.','ok');}
+    else{const e=await r.json();dlog('Push failed: '+e.message,'err');}
+  }catch(e){dlog('Push error: '+e.message,'err');}
+}
+
+// ════════════════════════════════════
+// IMAGE CATALOG
+// ════════════════════════════════════
+function renderCatalog(){
+  const q=(document.getElementById('img-q').value||'').toLowerCase();
+  const yr=document.getElementById('img-yr').value;
+  const gs=document.getElementById('img-g').value;
+  const hs=document.getElementById('img-has').value;
+  const rows=DB.filter(r=>{
+    const hasImg=r.image_url&&r.image_url.startsWith('http');
+    if(hs==='1'&&!hasImg) return false;
+    const g1=r.solar_in_G1_window_3d==='True';
+    const txt=(r.location||''+(r.year||'')+(r.county||'')+(r.description||'')).toLowerCase();
+    return(!q||txt.includes(q))&&(!yr||r.year===yr)&&(!gs||(gs==='1'?g1:!g1));
+  });
+  lbData=rows;
+  const grid=document.getElementById('img-grid');grid.innerHTML='';
+  document.getElementById('img-ct').textContent=`${rows.length} records`;
+  if(!rows.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;font-family:var(--mono);font-size:10px;color:var(--tx3);padding:40px;">No matching records. Load database first.</div>';return;}
+  rows.forEach((r,i)=>{
+    const hasImg=r.image_url&&r.image_url.startsWith('http');
+    const g1=r.solar_in_G1_window_3d==='True';
+    const g2=r.solar_in_G2_window_3d==='True';
+    const kp=parseFloat(r.solar_Kp_max_best)||0;
+    const yr=parseInt(r.year)||0;
+    const c=document.createElement('div');
+    c.className='img-card';c.onclick=()=>openLBfromDB(DB.indexOf(r));
+    c.innerHTML=`${hasImg?`<img src="${r.image_url}" alt="" onerror="this.style.display='none'" loading="lazy">`:`<div class="img-ph">NO IMAGE</div>`}
+    <div class="img-card-body">
+      <div class="img-card-id">${r.year||'—'}</div>
+      <div class="img-card-loc">${r.location||'Unknown'}</div>
+      <div class="img-card-date">${r.date_parsed||r.date_raw||'—'}</div>
+      <div class="img-card-tags">
+        ${g1?'<span class="badge bv">G1+</span>':''}${g2?'<span class="badge bw">G2+</span>':''}
+        ${r.crop_type?`<span class="badge bp">${r.crop_type.substr(0,6)}</span>`:''}
+        ${kp>=3?`<span class="badge bw">Kp${kp.toFixed(0)}</span>`:''}
+        ${yr>=2025?'<span class="badge bv">2025+</span>':''}
+      </div>
+    </div>`;
+    grid.appendChild(c);
+  });
+}
+
+function openLBfromDB(idx){
+  lbIdx=lbData.findIndex(r=>DB.indexOf(r)===idx);
+  if(lbIdx===-1) lbIdx=0;
+  const r=lbData[lbIdx];
+  if(!r) return;
+  const kp=parseFloat(r.solar_Kp_max_best)||0;
+  const dec=parseFloat(r.solar_declination);
+  const g1=r.solar_in_G1_window_3d==='True';
+  const g2=r.solar_in_G2_window_3d==='True';
+  document.getElementById('lb-img').src=r.image_url||'';
+  document.getElementById('lb-img').style.display=r.image_url?'block':'none';
+  document.getElementById('lb-title').textContent=r.location||'—';
+  document.getElementById('lb-date').textContent=r.date_parsed||r.date_raw||'—';
+  document.getElementById('lb-county').textContent=r.county||'—';
+  document.getElementById('lb-crop').textContent=r.crop_type||'—';
+  document.getElementById('lb-kp').textContent=kp||'—';
+  document.getElementById('lb-g').textContent=g1?(g2?'G2+':'G1+'):'None';
+  document.getElementById('lb-dec').textContent=isNaN(dec)?'—':dec.toFixed(2)+'°';
+  document.getElementById('lb-ssn').textContent=r.solar_SSN_best||'—';
+  document.getElementById('lb-src').href=r.source_url||'#';
+  document.getElementById('lb-note').textContent=r.notes||r.description||'—';
+  document.getElementById('lb').classList.add('on');
+}
+function closeLB(){document.getElementById('lb').classList.remove('on');}
+function lbNav(d){lbIdx=Math.max(0,Math.min(lbData.length-1,lbIdx+d));openLBfromDB(DB.indexOf(lbData[lbIdx]));}
+document.addEventListener('keydown',e=>{if(document.getElementById('lb').classList.contains('on')){if(e.key==='Escape')closeLB();if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);}});
+
+// ════════════════════════════════════
+// SOLAR FETCH
+// ════════════════════════════════════
+let xrayChart=null;
+async function fetchLive(){
+  slog('Fetching NOAA SWPC live data...');
+  try{
+    const [xr,kp]=await Promise.all([
+      fetch('https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json').then(r=>r.json()),
+      fetch('https://services.swpc.noaa.gov/json/planetary_k_index_1m.json').then(r=>r.json())
+    ]);
+    processXray(xr);processKp(kp);
+    slog(`Fetched ${xr.length} X-ray data points.`,'ok');
+  }catch(e){slog('NOAA fetch failed: '+e.message,'err');}
+}
+function slog(m,c=''){const el=document.getElementById('solar-log');const d=document.createElement('div');if(c)d.className='log-'+c;d.textContent=`[${new Date().toISOString().substr(11,8)}] ${m}`;el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function processXray(data){
+  if(!data||!data.length)return;
+  const last=data[data.length-1];
+  const f=parseFloat(last.flux||last.observed_flux||0);
+  document.getElementById('live-xray').textContent=fluxClass(f);
+  if(xrayChart)xrayChart.destroy();
+  const ctx=document.getElementById('xray-ch').getContext('2d');
+  const step=Math.max(1,Math.floor(data.length/300));
+  const labels=[],vals=[];
+  for(let i=0;i<data.length;i+=step){labels.push((data[i].time_tag||'').substr(5,11));vals.push(parseFloat(data[i].flux||data[i].observed_flux||0)||1e-9);}
+  xrayChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'X-Ray Flux',data:vals,borderColor:'#f0a500',borderWidth:1.5,pointRadius:0,fill:true,backgroundColor:'rgba(240,165,0,.06)'}]},options:{responsive:true,scales:{x:{ticks:{maxTicksLimit:8,color:'#354050'},grid:{color:'#1c2330'}},y:{type:'logarithmic',ticks:{color:'#354050'},grid:{color:'#1c2330'}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});
+  const tb=document.getElementById('solar-tb');tb.innerHTML='';
+  const evts=detectEvts(data);
+  evts.forEach(ev=>{const smw=computeSMW(ev.cls,'Beta-Gamma-Delta',3);
+    tb.innerHTML+=`<tr><td class="c-dim">${ev.time}</td><td class="c-sol">${ev.cls}</td><td>${ev.flux.toExponential(2)}</td><td class="${kpColor(parseFloat(ev.kp))}">${ev.kp}</td><td class="c-gol">${smw}</td><td class="${ev.g==='HIGH'?'c-nul':ev.g==='MED'?'c-war':'c-dim'}">${ev.g}</td><td><button class="btn btn-ghost sm" onclick="prefillSolar('${ev.time}','${ev.cls}')">→ Pred.</button></td></tr>`;
+  });
+}
+function processKp(data){if(!data||!data.length)return;const last=data[data.length-1];const kp=parseFloat(last.kp_index||last.Kp||last[1]||0);document.getElementById('live-kp').textContent=kp.toFixed(1);document.getElementById('live-sw').textContent='~400–600';}
+function detectEvts(data){const evts=[];let mxF=0,mxT='';data.forEach(d=>{const f=parseFloat(d.flux||d.observed_flux||0);if(f>mxF){mxF=f;mxT=d.time_tag||'';}});if(mxF>=1e-5)evts.push({time:mxT,flux:mxF,cls:fluxClass(mxF),kp:mxF>=1e-4?'5-7':mxF>=5e-5?'3-5':'2-4',g:mxF>=1e-4?'HIGH':mxF>=5e-5?'MED':'LOW'});return evts;}
+function fluxClass(f){if(f>=1e-3)return 'X10+';if(f>=1e-4)return 'X-class';if(f>=1e-5)return 'M-class';if(f>=1e-6)return 'C-class';if(f>=1e-7)return 'B-class';return 'A-class';}
+function prefillSolar(t,cls){sw('predict',document.querySelectorAll('.tab')[6]);setSel('p-fl',cls.startsWith('X')?'12':cls.startsWith('M')?'8':'4');document.getElementById('p-utc').value=t.replace(' ','T').substr(0,16);}
+function linkToRecord(){sw('db',document.querySelectorAll('.tab')[0]);}
+
+// ════════════════════════════════════
+// ANALYSIS
+// ════════════════════════════════════
+function runAnalysis(){
+  const ds=document.getElementById('an-ds').value;
+  let data=DB.filter(r=>r.year);
+  if(ds==='usable') data=data.filter(r=>r.usable_for_analysis==='True');
+  if(ds==='nohox') data=data.filter(r=>r.hoax_flag!=='1'&&r.hoax_flag!==1);
+  if(!data.length){return;}
+  const kps=data.map(r=>parseFloat(r.solar_Kp_max_best)).filter(n=>!isNaN(n)&&n>0);
+  const kp7s=data.map(r=>parseFloat(r.pre7d_Kp_max_best_max)).filter(n=>!isNaN(n)&&n>0);
+  const decs=data.map(r=>parseFloat(r.solar_declination)).filter(n=>!isNaN(n));
+  const dsts=data.map(r=>parseFloat(r.solar_Dst_min)).filter(n=>!isNaN(n)&&n<0);
+  const g1=data.filter(r=>r.solar_in_G1_window_3d==='True');
+  document.getElementById('a-n').textContent=data.length;
+  document.getElementById('a-g1pct').textContent=((g1.length/data.length)*100).toFixed(1)+'%';
+  document.getElementById('a-kp-mean').textContent=mean(kps).toFixed(2);
+  document.getElementById('a-kp7-mean').textContent=mean(kp7s).toFixed(2);
+  document.getElementById('a-dec-mean').textContent=mean(decs).toFixed(2)+'°';
+  document.getElementById('a-dst-mean').textContent=mean(dsts).toFixed(1);
+  // Correlation KV
+  const el=document.getElementById('corr-kv');el.innerHTML='';
+  const none=data.filter(r=>r.solar_in_G1_window_3d!=='True');
+  addKV(el,'G1+ in 3-day window',`${g1.length}/${data.length} = ${(g1.length/data.length*100).toFixed(1)}%`);
+  addKV(el,'G2+ in 3-day window',data.filter(r=>r.solar_in_G2_window_3d==='True').length+'');
+  addKV(el,'G3+ in 3-day window',data.filter(r=>r.solar_in_G3_window_3d==='True').length+'');
+  addKV(el,'Mean Kp day-of (G1+ events)',mean(g1.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2));
+  addKV(el,'Mean Kp day-of (no storm)',mean(none.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2));
+  addKV(el,'Mean pre-7d max Kp (G1+)',mean(g1.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2));
+  addKV(el,'Mean pre-7d max Kp (no storm)',mean(none.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2));
+  addKV(el,'Mean Dst min (G1+)',mean(g1.map(r=>parseFloat(r.solar_Dst_min)||0)).toFixed(1)+' nT');
+  addKV(el,'Mean solar declination (all)',mean(decs).toFixed(2)+'°');
+  addKV(el,'% formations at dec > 20°',((decs.filter(d=>d>20).length/decs.length)*100).toFixed(1)+'%');
+  addKV(el,'Year span',[...new Set(data.map(r=>r.year).filter(Boolean))].length+' years');
+  plotG(data);plotKpDist(data,kps);plotYear(data);plotMonth(data);
+  // Sig table
+  const stb=document.getElementById('sig-tb');stb.innerHTML='';
+  data.filter(r=>r.solar_in_G2_window_3d==='True'&&r.hoax_flag!=='1').sort((a,b)=>(parseFloat(b.pre7d_Kp_max_best_max)||0)-(parseFloat(a.pre7d_Kp_max_best_max)||0)).slice(0,100).forEach(r=>{
+    const kp=parseFloat(r.solar_Kp_max_best)||0,kp7=parseFloat(r.pre7d_Kp_max_best_max)||0,dec=parseFloat(r.solar_declination),dst=parseFloat(r.solar_Dst_min)||0;
+    stb.innerHTML+=`<tr><td class="c-sol">${r.year}</td><td>${r.date_parsed||r.date_raw||'—'}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.location}</td><td>${r.county}</td><td>${r.crop_type}</td><td class="${kpColor(kp)}">${kp||'—'}</td><td class="${kpColor(kp7)}">${kp7||'—'}</td><td class="c-ok">✓</td><td class="${r.solar_in_G2_window_3d==='True'?'c-war':'c-dim'}">${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td class="${r.solar_in_G3_window_3d==='True'?'c-nul':'c-dim'}">${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td class="${decColor(dec)}">${isNaN(dec)?'—':dec.toFixed(1)}</td><td class="${dst<-50?'c-nul':dst<-20?'c-war':'c-dim'}">${dst||'—'}</td><td>${r.solar_SSN_best||'—'}</td></tr>`;
+  });
+}
+function addKV(el,k,v){el.innerHTML+=`<div class="kv"><span class="kv-k">${k}</span><span class="kv-v">${v}</span></div>`;}
+function plotG(data){const ctx=document.getElementById('g-ch').getContext('2d');if(charts.g)charts.g.destroy();const g1=data.filter(r=>r.solar_in_G1_window_3d==='True').length,g2=data.filter(r=>r.solar_in_G2_window_3d==='True').length,g3=data.filter(r=>r.solar_in_G3_window_3d==='True').length,none=data.length-g1;charts.g=new Chart(ctx,{type:'bar',data:{labels:['G1+ (Kp≥5)','G2+ (Kp≥6)','G3+ (Kp≥7)','No Storm'],datasets:[{data:[g1,g2,g3,none],backgroundColor:['#2ecc8a','#e8a020','#e05050','#354050'],borderWidth:0}]},options:{responsive:true,scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});}
+function plotKpDist(data,kps){const ctx=document.getElementById('kp-ch').getContext('2d');if(charts.kp)charts.kp.destroy();const bins=Array(10).fill(0);kps.forEach(k=>{bins[Math.min(9,Math.floor(k))]++;});charts.kp=new Chart(ctx,{type:'bar',data:{labels:['0','1','2','3','4','5','6','7','8','9'],datasets:[{data:bins,backgroundColor:bins.map((_,i)=>i>=5?'#e05050':i>=3?'#e8a020':'#00c8b4'),borderWidth:0}]},options:{responsive:true,scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});}
+function plotYear(data){const ctx=document.getElementById('yr-ch').getContext('2d');if(charts.yr)charts.yr.destroy();const yc={},ys={};data.forEach(r=>{if(!r.year)return;yc[r.year]=(yc[r.year]||0)+1;if(r.solar_SSN_best)ys[r.year]=parseFloat(r.solar_SSN_best)||0;});const yrs=Object.keys(yc).sort();charts.yr=new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[{label:'Formations',data:yrs.map(y=>yc[y]),backgroundColor:'rgba(240,165,0,.7)',yAxisID:'y',order:2},{label:'SSN',data:yrs.map(y=>ys[y]||0),borderColor:'#9b7fe8',borderWidth:1.5,type:'line',pointRadius:0,yAxisID:'y1',order:1}]},options:{responsive:true,scales:{x:{ticks:{maxTicksLimit:14,color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y1:{position:'right',ticks:{color:'#9b7fe8'},grid:{display:false}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});}
+function plotMonth(data){const ctx=document.getElementById('mo-ch').getContext('2d');if(charts.mo)charts.mo.destroy();const mc=Array(12).fill(0);data.forEach(r=>{const m=parseInt(r.month)-1;if(m>=0&&m<12)mc[m]++;});charts.mo=new Chart(ctx,{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{data:mc,backgroundColor:mc.map((_,i)=>i>=3&&i<=8?'#f0a500':'#354050'),borderWidth:0}]},options:{responsive:true,scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});}
+
+// ════════════════════════════════════
+// 3-DAY WINDOW
+// ════════════════════════════════════
+function runWindow(){
+  const data=DB.filter(r=>r.usable_for_analysis==='True'&&r.year);
+  const g1=data.filter(r=>r.solar_in_G1_window_3d==='True');
+  const g2=data.filter(r=>r.solar_in_G2_window_3d==='True');
+  const g3=data.filter(r=>r.solar_in_G3_window_3d==='True');
+  const none=data.filter(r=>r.solar_in_G1_window_3d!=='True');
+  document.getElementById('w-g1n').textContent=g1.length;
+  document.getElementById('w-g2n').textContent=g2.length;
+  document.getElementById('w-g3n').textContent=g3.length;
+  document.getElementById('w-none').textContent=none.length;
+  const ws=document.getElementById('w-stats');ws.innerHTML='';
+  const p=(n,d)=>d>0?((n/d)*100).toFixed(1)+'%':'—';
+  addKV(ws,'G1+ rate (usable records)',p(g1.length,data.length));
+  addKV(ws,'G2+ rate',p(g2.length,data.length));
+  addKV(ws,'G3+ rate',p(g3.length,data.length));
+  addKV(ws,'No-storm rate',p(none.length,data.length));
+  addKV(ws,'Mean Kp day-of (G1+ events)',mean(g1.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2));
+  addKV(ws,'Mean Kp day-of (no storm)',mean(none.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2));
+  addKV(ws,'Mean pre-7d max Kp (G1+)',mean(g1.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2));
+  addKV(ws,'Mean pre-7d max Kp (no storm)',mean(none.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2));
+  addKV(ws,'Key 2025 finding','G4 storm (Kp=8) May 31–Jun 1 was in 7d pre-window for Jun 8 (Avebury) and Jun 10 (Stonehenge) formations — but outside strict 3d window. T-02 tension.');
+  const ctx1=document.getElementById('wb-ch').getContext('2d');if(charts.wb)charts.wb.destroy();
+  charts.wb=new Chart(ctx1,{type:'bar',data:{labels:['No Storm','G1+ only','G2+ only','G3+'],datasets:[{data:[none.length,g1.length-g2.length,g2.length-g3.length,g3.length],backgroundColor:['#354050','#2ecc8a','#e8a020','#e05050'],borderWidth:0}]},options:{responsive:true,indexAxis:'y',scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});
+  const ctx2=document.getElementById('ks-ch').getContext('2d');if(charts.ks)charts.ks.destroy();
+  const b1=Array(10).fill(0),b2=Array(10).fill(0);
+  g1.forEach(r=>{b1[Math.min(9,Math.floor(parseFloat(r.pre7d_Kp_max_best_max)||0))]++;});
+  none.forEach(r=>{b2[Math.min(9,Math.floor(parseFloat(r.pre7d_Kp_max_best_max)||0))]++;});
+  charts.ks=new Chart(ctx2,{type:'bar',data:{labels:['0','1','2','3','4','5','6','7','8','9'],datasets:[{label:'G1+ events',data:b1,backgroundColor:'rgba(46,204,138,.7)',borderWidth:0},{label:'No storm',data:b2,backgroundColor:'rgba(53,64,80,.7)',borderWidth:0}]},options:{responsive:true,scales:{x:{title:{display:true,text:'Pre-7d Max Kp',color:'#6a8090'},ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});
+  renderWinTable();
+}
+function renderWinTable(){
+  const f=document.getElementById('w-flt').value;
+  const data=DB.filter(r=>r.usable_for_analysis==='True');
+  let rows;
+  if(f==='g1') rows=data.filter(r=>r.solar_in_G1_window_3d==='True');
+  else if(f==='g2') rows=data.filter(r=>r.solar_in_G2_window_3d==='True');
+  else if(f==='g3') rows=data.filter(r=>r.solar_in_G3_window_3d==='True');
+  else rows=data.filter(r=>r.solar_in_G1_window_3d!=='True');
+  rows=rows.sort((a,b)=>(parseFloat(b.pre7d_Kp_max_best_max)||0)-(parseFloat(a.pre7d_Kp_max_best_max)||0));
+  const tb=document.getElementById('w-tbody');tb.innerHTML='';
+  rows.slice(0,200).forEach(r=>{
+    const kp=parseFloat(r.solar_Kp_max_best)||0,kp7=parseFloat(r.pre7d_Kp_max_best_max)||0,dst=parseFloat(r.solar_Dst_min)||0,dec=parseFloat(r.solar_declination);
+    tb.innerHTML+=`<tr><td class="c-sol">${r.year}</td><td>${r.date_parsed||r.date_raw||'—'}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.location}</td><td>${r.crop_type||'—'}</td><td>${r.formation_type||'—'}</td><td class="${kpColor(kp)}">${kp||'—'}</td><td class="${kpColor(kp7)}">${kp7||'—'}</td><td class="${r.solar_in_G1_window_3d==='True'?'c-ok':'c-dim'}">${r.solar_in_G1_window_3d==='True'?'✓':'—'}</td><td class="${r.solar_in_G2_window_3d==='True'?'c-war':'c-dim'}">${r.solar_in_G2_window_3d==='True'?'✓':'—'}</td><td class="${r.solar_in_G3_window_3d==='True'?'c-nul':'c-dim'}">${r.solar_in_G3_window_3d==='True'?'✓':'—'}</td><td class="${dst<-50?'c-nul':dst<-20?'c-war':'c-dim'}">${dst||'—'}</td><td class="${decColor(dec)}">${isNaN(dec)?'—':dec.toFixed(1)}</td><td>${r.solar_SSN_best||'—'}</td></tr>`;
+  });
+}
+
+// ════════════════════════════════════
+// SOLAR ANGLE
+// ════════════════════════════════════
+function runAngle(){
+  const data=DB.filter(r=>r.usable_for_analysis==='True'&&r.solar_declination&&!isNaN(parseFloat(r.solar_declination)));
+  const decs=data.map(r=>parseFloat(r.solar_declination));
+  const g1=data.filter(r=>r.solar_in_G1_window_3d==='True');
+  const none=data.filter(r=>r.solar_in_G1_window_3d!=='True');
+  const bins=Array(10).fill(0),gb=Array(10).fill(0);
+  const binFn=d=>Math.min(9,Math.max(0,Math.floor((d+25)/5)));
+  decs.forEach(d=>bins[binFn(d)]++);
+  g1.map(r=>parseFloat(r.solar_declination)).forEach(d=>gb[binFn(d)]++);
+  const pk=bins.indexOf(Math.max(...bins));
+  const binEdges=[-25,-20,-15,-10,-5,0,5,10,15,20];
+  document.getElementById('ang-pk').textContent=`${binEdges[pk]}° to ${binEdges[pk]+5}°`;
+  document.getElementById('ang-mn').textContent=mean(decs).toFixed(2)+'°';
+  document.getElementById('ang-g1').textContent=mean(g1.map(r=>parseFloat(r.solar_declination))).toFixed(2)+'°';
+  document.getElementById('ang-ng').textContent=mean(none.map(r=>parseFloat(r.solar_declination))).toFixed(2)+'°';
+  const ctx1=document.getElementById('dec-h').getContext('2d');if(charts.dh)charts.dh.destroy();
+  charts.dh=new Chart(ctx1,{type:'bar',data:{labels:binEdges.map(e=>`${e}°`),datasets:[{label:'All formations',data:bins,backgroundColor:'rgba(240,165,0,.6)',borderWidth:0},{label:'G1+ in 3d',data:gb,backgroundColor:'rgba(46,204,138,.6)',borderWidth:0}]},options:{responsive:true,scales:{x:{title:{display:true,text:'Solar Declination (°)',color:'#6a8090'},ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});
+  const ctx2=document.getElementById('dec-s').getContext('2d');if(charts.ds)charts.ds.destroy();
+  const pts=data.filter(r=>r.solar_Kp_max_best).map(r=>({x:parseFloat(r.solar_declination),y:parseFloat(r.solar_Kp_max_best)||0}));
+  charts.ds=new Chart(ctx2,{type:'scatter',data:{datasets:[{label:'Formation (Dec vs Kp)',data:pts,backgroundColor:'rgba(240,165,0,.4)',pointRadius:3}]},options:{responsive:true,scales:{x:{title:{display:true,text:'Solar Declination (°)',color:'#6a8090'},ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{title:{display:true,text:'Kp day-of',color:'#6a8090'},ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});
+  const ctx3=document.getElementById('dec-d').getContext('2d');if(charts.dd)charts.dd.destroy();
+  const doyPts=data.filter(r=>r.doy).map(r=>({x:parseInt(r.doy),y:parseFloat(r.solar_declination)||0}));
+  const curve=[];for(let d=1;d<=365;d++)curve.push({x:d,y:23.45*Math.sin((2*Math.PI/365)*(d-80))});
+  charts.dd=new Chart(ctx3,{type:'scatter',data:{datasets:[{label:'Formations',data:doyPts,backgroundColor:'rgba(240,165,0,.5)',pointRadius:3},{label:'Declination Curve',data:curve,type:'line',borderColor:'rgba(155,127,232,.5)',borderWidth:1,pointRadius:0,showLine:true}]},options:{responsive:true,scales:{x:{title:{display:true,text:'Day of Year',color:'#6a8090'},ticks:{maxTicksLimit:12,color:'#6a8090'},grid:{color:'#1c2330'}},y:{title:{display:true,text:'Dec (°)',color:'#6a8090'},ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});
+  const as=document.getElementById('ang-stats');as.innerHTML='';
+  addKV(as,'Records with declination data',data.length+'');
+  addKV(as,'Peak bin',`${binEdges[pk]}° to ${binEdges[pk]+5}°`);
+  addKV(as,'Mean declination (all)',mean(decs).toFixed(2)+'°');
+  addKV(as,'Mean declination (G1+)',mean(g1.map(r=>parseFloat(r.solar_declination))).toFixed(2)+'°');
+  addKV(as,'Mean declination (no storm)',mean(none.map(r=>parseFloat(r.solar_declination))).toFixed(2)+'°');
+  addKV(as,'% formations at dec > 15°',((decs.filter(d=>d>15).length/decs.length)*100).toFixed(1)+'%');
+  addKV(as,'% formations at dec > 20°',((decs.filter(d=>d>20).length/decs.length)*100).toFixed(1)+'%');
+  addKV(as,'2025 notable','Jun 22 (Hackpen) + Jun 23 (Charlton) = 23.45° (solstice peak)');
+}
+
+// ════════════════════════════════════
+// PREDICTIONS
+// ════════════════════════════════════
+function computeSMW(fc,ac,kp,cme=0){
+  const fe={0:0,2:2,4:4,6:6,8:8,10:10,12:12,14:14,16:16}[fc]||({'None / Quiet':0,'B-class':2,'C-class':4,'M1–M3':6,'M4–M7':8,'M8–M9':10,'X1–X2':12,'X3–X5':14,'X5+':16}[fc]||0);
+  const ae={'Alpha':0,'Beta':2,'Beta-Gamma':4,'Beta-Gamma-Delta':6,'Delta':6}[ac]||2;
+  return fe+ae+Math.round((parseFloat(kp)||0)/3)+parseInt(cme||0);
+}
+function decodeSMW(smw,crop){
+  if(smw<=2)return{geo:'Simple Circle',ubp:'mu0',pg:'C∞ᵥ',gw:'1–4',tax:'Very Low',site:'Any high-conductivity'};
+  if(smw<=6)return{geo:'Celtic Cross / Ringed',ubp:'G',pg:'C₄ᵥ',gw:'8–12',tax:'Low',site:'Ancient earthworks preferred'};
+  if(smw<=10)return{geo:'Dumbbell / Pictogram',ubp:'c',pg:'D₂',gw:'8',tax:'Low (balanced)',site:'Avebury / Silbury complex'};
+  if(smw<=14)return{geo:'Ringed Multi-Circle',ubp:crop==='wheat'?'mu0':'hybrid',pg:'D₄ or D₆',gw:'12–16',tax:'Medium',site:'High-conductivity chalk'};
+  if(smw<=18)return{geo:'Fractal / Julia-type',ubp:'hybrid',pg:'C₃+self-similar',gw:'18–22',tax:'High',site:'Avebury / Pewsey Vale'};
+  return{geo:'Max-Complex / Mandelbrot',ubp:'hybrid',pg:'C₃+fractal',gw:'24',tax:'Maximum',site:'Wiltshire crop belt peak'};
+}
+function winFrom(u){const d=new Date(u);return `${new Date(d.getTime()+24*3.6e6).toISOString().substr(0,10)} → ${new Date(d.getTime()+96*3.6e6).toISOString().substr(0,10)}`;}
+function runPred(){
+  const fe=parseInt(document.getElementById('p-fl').value)||0;
+  const ae=parseInt(document.getElementById('p-ar').value)||0;
+  const kp=parseFloat(document.getElementById('p-kp').value)||0;
+  const cme=parseInt(document.getElementById('p-cme').value)||0;
+  const crop=document.getElementById('p-crop').value;
+  const dec=parseFloat(document.getElementById('p-dec').value)||0;
+  const utc=document.getElementById('p-utc').value;
+  const arid=document.getElementById('p-arid').value||'Unknown AR';
+  const kb=Math.round(kp/3);
+  const smw=fe+ae+kb+cme;
+  const pred=decodeSMW(smw,crop);
+  const win=utc?winFrom(utc):'T+24h to T+96h from peak';
+  const flbl={0:'None',2:'B',4:'C',6:'M1-3',8:'M4-7',10:'M8-9',12:'X1-2',14:'X3-5',16:'X5+'}[fe]||'?';
+  const albl={0:'Alpha',2:'Beta',4:'β-γ',6:'β-γ-δ'}[ae]||'?';
+  document.getElementById('pred-out').innerHTML=`<div style="width:100%;">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--solar);text-transform:uppercase;margin-bottom:8px;">BWallSelf Decode — ${arid}</div>
+    <div class="pred-geo">${pred.geo}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-top:10px;">
+      <div class="pred-row"><span class="pred-k">SMW (Solar Msg Wt)</span><span class="pred-v" style="color:var(--solar);">${smw}/24</span></div>
+      <div class="pred-row"><span class="pred-k">UBP Class</span><span class="pred-v">${pred.ubp}</span></div>
+      <div class="pred-row"><span class="pred-k">Point Group</span><span class="pred-v">${pred.pg}</span></div>
+      <div class="pred-row"><span class="pred-k">Golay Weight Target</span><span class="pred-v">${pred.gw}</span></div>
+      <div class="pred-row"><span class="pred-k">Symmetry Tax</span><span class="pred-v">${pred.tax}</span></div>
+      <div class="pred-row"><span class="pred-k">Solar Declination</span><span class="pred-v">${dec.toFixed(1)}°${dec>20?' (solstice zone)':''}</span></div>
+      <div class="pred-row" style="grid-column:1/-1;"><span class="pred-k">Site Preference</span><span class="pred-v">${pred.site}</span></div>
+      <div class="pred-row" style="grid-column:1/-1;"><span class="pred-k">Formation Window</span><span class="pred-v" style="color:var(--golay);">${win}</span></div>
+      <div class="pred-row" style="grid-column:1/-1;"><span class="pred-k">Confidence</span><span class="pred-v" style="color:var(--warn);">LOW — methodology pre-validation</span></div>
+    </div>
+  </div>`;
+  document.getElementById('smw-detail').textContent=
+    `flare_energy  = ${fe}  // ${flbl}\nAR_complexity = ${ae}  // ${albl}\nKp_bits       = ${kb}  // round(${kp}/3)\nCME_bonus     = ${cme}\ndeclination   = ${dec.toFixed(1)}°${dec>20?' [solstice zone — max coupling]':''}\n${'─'.repeat(40)}\nSMW           = ${smw}  → ${pred.geo}`;
+  window._lastPred={smw,pred,fe,ae,kp,cme,dec,utc,arid,win};
+}
+function logPred(){if(!window._lastPred){alert('Run a decode first.');return;}const p=window._lastPred;preds.push({logged:new Date().toISOString(),ar:p.arid,smw:p.smw,geometry:p.pred.geo,pg:p.pred.pg,site:p.pred.site,win:p.win,dec:p.dec.toFixed(1),outcome:'pending'});savePreds();renderPredLog();alert('Prediction logged.');}
+function savePreds(){localStorage.setItem('gce_preds',JSON.stringify(preds));}
+function renderPredLog(){const tb=document.getElementById('pred-tb');if(!tb)return;tb.innerHTML='';[...preds].reverse().forEach(p=>{tb.innerHTML+=`<tr><td class="c-dim">${(p.logged||'').substr(0,19)}</td><td class="c-sol">${p.ar||'—'}</td><td class="c-gol">${p.smw||'—'}</td><td>${p.geometry||'—'}</td><td>${p.pg||'—'}</td><td>${p.site||'—'}</td><td>${p.win||'—'}</td><td class="c-lee">${p.dec||'—'}°</td><td class="${p.outcome==='confirmed'?'c-ok':p.outcome==='null'?'c-nul':'c-dim'}">${p.outcome||'pending'}</td></tr>`;});}
+function expPreds(){const csv=Papa.unparse(preds);const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='gce_predictions.csv';a.click();}
+
+// ════════════════════════════════════
+// REPORTS
+// ════════════════════════════════════
+function genRpt(type){
+  const season=document.getElementById('rpt-season').value;
+  const data=DB.filter(r=>r.usable_for_analysis==='True'&&r.year);
+  const g1=data.filter(r=>r.solar_in_G1_window_3d==='True');
+  const g2=data.filter(r=>r.solar_in_G2_window_3d==='True');
+  const none=data.filter(r=>r.solar_in_G1_window_3d!=='True');
+  const decs=data.map(r=>parseFloat(r.solar_declination)).filter(n=>!isNaN(n));
+  const p=(n,d)=>d>0?((n/d)*100).toFixed(1)+'%':'—';
+  let out='';
+  if(type==='season'){
+    const sy=data.filter(r=>r.year===season);
+    out=`UBP-NC4 GCE CONSOLE — ${season} SEASON REPORT
+E.R.A. Craig / DigitalEuan · ${new Date().toISOString().substr(0,10)}
+${'═'.repeat(70)}
+Database: ${DB.length} total / ${data.length} usable / ${sy.length} in ${season}
+G1+ 3d rate (all usable): ${p(g1.length,data.length)}
+G2+ 3d rate: ${p(g2.length,data.length)}
+No-storm rate: ${p(none.length,data.length)}
+Mean solar declination: ${mean(decs).toFixed(2)}°
+${'─'.repeat(70)}
+${season} FORMATIONS
+${sy.map(r=>`  ${r.date_parsed||r.date_raw||'—'} | ${r.location} | ${r.crop_type} | G1+:${r.solar_in_G1_window_3d} | Kp:${r.solar_Kp_max_best||'—'} | Dec:${r.solar_declination||'—'}°`).join('\n')||'  None found for this season.'}
+Generated by UBP-NC4 GCE Console v2.1 · digitaleuan.github.io/gce_predictor`;
+  }
+  else if(type==='window'){
+    out=`UBP-NC4 — 3-DAY WINDOW REPORT
+${new Date().toISOString().substr(0,10)}
+${'═'.repeat(70)}
+Database (usable): ${data.length}
+G1+ in 3d: ${g1.length} (${p(g1.length,data.length)})
+G2+ in 3d: ${g2.length} (${p(g2.length,data.length)})
+No storm:  ${none.length} (${p(none.length,data.length)})
+Mean Kp day-of (G1+): ${mean(g1.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2)}
+Mean Kp day-of (none): ${mean(none.map(r=>parseFloat(r.solar_Kp_max_best)||0)).toFixed(2)}
+Mean 7d pre Kp (G1+): ${mean(g1.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2)}
+Mean 7d pre Kp (none): ${mean(none.map(r=>parseFloat(r.pre7d_Kp_max_best_max)||0)).toFixed(2)}
+Mean Dst min (G1+): ${mean(g1.map(r=>parseFloat(r.solar_Dst_min)||0)).toFixed(1)} nT
+
+KEY 2025 FINDING
+  G4 storm (Kp=8) confirmed May 31–June 1, 2025.
+  F10.7 = 169 sfu at storm peak.
+  June 8 formation (Avebury 10-fold star) appeared 7 days after storm peak
+  — outside strict 3-day window. Tension case. Pre-7d Kp = 8.0.
+  June 22–23 formations appeared at solar declination 23.45° (solstice peak).
+
+TOP G2+ FORMATIONS
+${data.filter(r=>r.solar_in_G2_window_3d==='True').sort((a,b)=>(parseFloat(b.pre7d_Kp_max_best_max)||0)-(parseFloat(a.pre7d_Kp_max_best_max)||0)).slice(0,20).map(r=>`  ${r.year} ${r.date_parsed||r.date_raw||'—'} | ${r.location} | Kp7d:${r.pre7d_Kp_max_best_max||'—'} | ${r.county}`).join('\n')||'  None.'}
+
+Generated by UBP-NC4 GCE Console v2.1`;
+  }
+  else if(type==='angle'){
+    out=`UBP-NC4 — SOLAR DECLINATION / ANGLE REPORT
+${new Date().toISOString().substr(0,10)}
+${'═'.repeat(70)}
+Records with declination data: ${decs.length}
+Mean declination (all): ${mean(decs).toFixed(2)}°
+Mean declination (G1+): ${mean(g1.map(r=>parseFloat(r.solar_declination))).toFixed(2)}°
+Mean declination (no storm): ${mean(none.map(r=>parseFloat(r.solar_declination))).toFixed(2)}°
+% at dec > 15°: ${p(decs.filter(d=>d>15).length,decs.length)}
+% at dec > 20°: ${p(decs.filter(d=>d>20).length,decs.length)}
+UK summer solstice: +23.4°
+
+2025 SOLSTICE CLUSTER
+  Jun 22 (Hackpen Hill) — dec = 23.45° (peak)
+  Jun 23 (Charlton, Dorset) — dec = 23.45°
+  Both within 1 day of solstice. Analytically significant for angle hypothesis.
+
+Generated by UBP-NC4 GCE Console v2.1`;
+  }
+  else if(type==='2025'){
+    const d25=DB.filter(r=>r.year==='2025');
+    out=`UBP-NC4 — 2025 SEASON COMPLETE RECORD
+${new Date().toISOString().substr(0,10)}
+${'═'.repeat(70)}
+SOURCE: Temporary Temples (temporarytemples.co.uk/project/crop-circles-2025-season-info)
+SOLAR: NOAA SWPC, xras.ru, earth.com, timeanddate.com
+
+${d25.length} CONFIRMED 2025 FORMATIONS IN DATABASE
+${'─'.repeat(70)}
+${d25.map(r=>`${r.date_parsed||r.date_raw||'—'}
+  Location:    ${r.location}
+  County:      ${r.county}
+  Crop:        ${r.crop_type}
+  Diameter:    ${r.approx_diameter_m||'?'}m
+  Type:        ${r.formation_type}
+  Kp day-of:   ${r.solar_Kp_max_best||'pending'}
+  Pre-7d Kp:   ${r.pre7d_Kp_max_best_max||'pending'}
+  G1+ in 3d:   ${r.solar_in_G1_window_3d}
+  Dec°:        ${r.solar_declination}°
+  Source:      ${r.source_url||'see notes'}
+  Notes:       ${(r.notes||'').substr(0,200)}`).join('\n\n')||'No 2025 records found — load database first.'}
+
+KEY SOLAR EVENTS 2025 SEASON
+  May 30:  M8-class flare peaks 00:05 UTC May 31
+  Jun 1:   G4 geomagnetic storm (Kp=8). F10.7=169 sfu.
+  Jun 2-3: G3 continuation (Kp=7)
+  Jun 8:   Avebury 10-fold star (7d post-G4)
+  Jun 10:  Stonehenge joker face (9d post-G4)
+  Jun 22:  Hackpen Hill quintuplet — dec=23.45° SOLSTICE
+  Jun 23:  Charlton S-curve — dec=23.45° SOLSTICE
+  Nov 11:  G-storm — aurora visible to Alabama/Florida
+
+PENDING DATA (for GFZ Potsdam verification)
+  - Apr 11 window Kp (Wimborne, Dorset)
+  - May 15-18 window Kp (Sutton Veny, Bincombe)
+  - Jun 15-22 window Kp (Kingsdon, Hackpen Hill, Charlton)
+  - Jun 25-28 window Kp (Ware Manor Farm)
+  - Jul 3-12 window Kp (Castley Hill, Buckland Hill, Ludwell)
+  Download GFZ: https://kp.gfz.de/app/files/Kp_ap_Ap_SN_F107_since_1932.txt
+
+Generated by UBP-NC4 GCE Console v2.1`;
+  }
+  else if(type==='tensions'){
+    out=`UBP-NC4 — TENSIONS & NULL RESULTS REGISTER
+${new Date().toISOString().substr(0,10)}
+${'═'.repeat(70)}
+T-01: NO CME FOR WADEN HILL PRIMARY DRIVER (2026-WH-0429)
+  M1.6 Apr 28 2026 — no confirmed CME. Only prompt EUV. Mechanism unclear.
+  Possible +CH HSS arrived Apr 29. Requires DSCOVR L1 data. UNRESOLVED.
+
+T-02: BONDIP HILL DURING SOLAR QUIET (2026-BH-0404)
+  Apr 4 2026 — C-class only window. Most likely human agency. UNRESOLVED.
+
+T-03: G4 STORM OUTSIDE STRICT 3-DAY WINDOW FOR JUNE 2025 FORMATIONS
+  G4 peak Jun 1. Avebury formation Jun 8 (7 days later). Charlton/Hackpen
+  Jun 22-23 (21 days later). Requires checking for closer minor events.
+  CRITICAL 2025 TENSION.
+
+T-04: BASE RATE PROBLEM — NO CONTROL DATA
+  No dataset of crop-present days with no formation. Cannot test null
+  hypothesis. Must compare against all growing-season days in year range.
+
+T-05: HUMAN MAKERS DOCUMENTED
+  Framework claims a subset is not human-made. Requires statistical test
+  (base rate study, T-04) to distinguish from chance correlation.
+
+T-06: GOLAY MAPPING IS ANALOGICAL, NOT DERIVED
+  Geometry → codeword weight mapping is heuristic. OCTAD_TO_GEOMETRY_MAP
+  is the primary research gap. No formal bijection exists yet.
+
+T-07: SEASONAL CONFOUND IN DECLINATION ANALYSIS
+  Formations cluster at high declination because crops are ready then.
+  Need crop-present-day control set to separate the effects.
+
+T-08: 2025 SOLAR DATA MOSTLY PENDING
+  Only G4 May 31-Jun 1 event is confirmed for 2025 season. All other
+  Kp values for 2025 require GFZ Potsdam definitive data acquisition.
+
+Generated by UBP-NC4 GCE Console v2.1 · digitaleuan.github.io/gce_predictor`;
+  }
+  document.getElementById('report-out').textContent=out;
+}
+function copyRpt(){navigator.clipboard.writeText(document.getElementById('report-out').textContent);alert('Copied.');}
+function dlRpt(){const t=document.getElementById('report-out').textContent;const b=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`gce_report_${new Date().toISOString().substr(0,10)}.txt`;a.click();}
+
+// ════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════
+function mean(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
+function kpColor(k){k=parseFloat(k)||0;return k>=6?'c-nul':k>=5?'c-war':k>=3?'c-gol':'c-dim';}
+function decColor(d){d=parseFloat(d);if(isNaN(d))return 'c-dim';return d>22?'c-sol':d>15?'c-war':d>5?'c-gol':'c-dim';}
+function dqColor(d){d=parseInt(d)||0;return d>=80?'c-ok':d>=65?'c-gol':d>=50?'c-war':'c-nul';}
+
+
+// ════════════════════════════════════
+// DOCUMENTATION SYSTEM
+// ════════════════════════════════════
+let docs = JSON.parse(localStorage.getItem('gce_docs') || 'null') || initDocs();
+let editDocId = null;
+
+function initDocs() {
+  return JSON.parse(`[{"id": "H-01", "type": "hypothesis", "status": "active", "title": "Solar Battery / RC Circuit Model", "events": "2026-WH-0429,2026-JC-0508,2025-06-08", "body": "Solar electromagnetic input charges a site-specific geomagnetic substrate over days to weeks, analogous to an RC circuit capacitor. Charge (Q) accumulates from multiple solar channels (Kp, Bz southward hours, F10.7, CME impulse, CH HSS, Dst). When Q exceeds a site-specific threshold, any trigger event (Bz flip, CH HSS pressure front, minor Kp pulse, tidal loading) causes discharge. The discharge produces a GCE formation. Formation geometry encodes the Golay [24,12,8] syndrome of the charge state at discharge \u2014 not the trigger size.\n\nThis replaces the blunt 3-day window hypothesis with a continuous charge model. The 3-day window is a tau-dependent artefact of the most common site capacitance class, not a universal constant.", "evidence": "Waden Hill 2026-04-29: Moderate charge (M6+M1.6) + CH HSS trigger \u2192 D2 octad.\nAvebury 2025-06-08: G4 (Kp=8) charged for 7 days at high-tau site \u2192 10-fold star.", "falsify": "If formation complexity does not correlate with Q-at-discharge across 20+ events, the model fails. If two sites with identical solar input but different C_site values produce identical geometry distributions, the capacitance model is wrong."}, {"id": "H-02", "type": "hypothesis", "status": "active", "title": "Site Capacitance / Monument Anchor Hypothesis", "events": "2026-WH-0429,2025-06-08,2026-JC-0508", "body": "Different geological sites have measurably different charge capacitance (C_site). Chalk aquifer geology holds charge longer than clay or granite. Ancient monolithic structures (Silbury Hill, Alfred's Tower, Stonehenge) act as terrestrial capacitor anchors \u2014 concentrating and focusing accumulated charge into the surrounding field substrate.\n\ntau = C_site x R_site (RC time constant in days). High-tau sites (Avebury: tau~2.8d) hold a G4 storm charge for 7+ days. Low-tau sites discharge within 1-2 days.", "evidence": "Avebury complex: formations clustering within 10km of Silbury Hill in multiple seasons.\nAlfred's Tower (C3v triangular folly, 49m) proximate to Jack's Castle formation.\nSilbury Hill (~800m from Waden Hill) \u2014 chalk mound with internal moisture trapping.\nStatistical: Avebury basin historically produces >30% of UK formations from <5% of available cropland.", "falsify": "If a random-site control study shows formations are uniformly distributed across UK cropland (controlling for reported area), the monument anchor hypothesis fails."}, {"id": "H-03", "type": "hypothesis", "status": "active", "title": "Formation Geometry Encodes Charge State at Discharge (Golay Syndrome)", "events": "2026-WH-0429,2025-06-08", "body": "The geometry of a GCE formation is determined by the accumulated charge state Q at the moment of discharge, not the trigger event. Q is encoded as a 24-bit Golay [24,12,8] codeword via the Gray-code pathway. The syndrome weight maps to formation geometry class:\n  Q < 2.0 \u2192 Golay weight 8 \u2192 Dumbbell/Pictogram (D2)\n  Q < 3.5 \u2192 Golay weight 12 \u2192 Ringed/Celtic Cross (C4v)\n  Q < 5.0 \u2192 Golay weight 16 \u2192 Multi-Ring/Star (D6/D8)\n  Q >= 5.0 \u2192 Golay weight 24 \u2192 Fractal/Max-Complexity", "evidence": "Model run produces correct event timing but geometry prediction needs calibration (see CAL-01, CAL-02). METHODOLOGY GAP: Q-to-Golay-weight thresholds are currently heuristic, not derived from Golay mathematics.", "falsify": "If geometry distribution across 20+ events does not correlate with Q-at-discharge at p<0.05, the Golay encoding hypothesis fails."}, {"id": "F-01", "type": "finding", "status": "confirmed", "title": "G4 Storm (Kp=8) May 31 - June 1 2025 \u2014 Verified Peak Charge Event", "events": "2025-06-08", "body": "G4 geomagnetic storm (Kp=8) peaked at approximately 12:00 UTC June 1 2025, preceded by M8-class flare peaking 00:05 UTC May 31. F10.7=169 sfu (season peak). Bz sustained southward ~12 hours June 1. G3 (Kp=7) continued June 2-3. Auroras visible from Spain, Florida, UK. This is the highest-intensity solar event of the 2025 formation season and the most significant charge event in the dataset.\n\nAssociated formations: Avebury (Jun 8, 7d later), Stonehenge joker (Jun 10, 9d later). Both within 7-day pre-window at the high-tau Avebury complex.", "evidence": "EarthSky sun-news archive.\nSpaceWeatherLive SIDC log June 2025.\nxras.ru F10.7 data: 169 sfu confirmed for June 1-2.", "falsify": "N/A \u2014 observational finding with multiple independent source confirmation."}, {"id": "F-02", "type": "finding", "status": "confirmed", "title": "CH HSS Driver Underweighted by SMW Formula \u2014 Jack's Castle Methodology Gap", "events": "2026-JC-0508", "body": "The original Solar Message Weight (SMW) formula assigns energy from: flare class, AR complexity, and Kp. For coronal hole HSS events there is no flare and no active region \u2014 the formula returns SMW=2 (Simple Circle prediction). Jack's Castle (2026-05-08) was driven by a G2 storm + CH HSS, producing a 75m barley formation \u2014 significantly larger than SMW=2 predicts.\n\nCorrection: A CH HSS correction adds solar wind speed excess, Bz southward hours, and Kp independently of AR classification. For Jack's Castle: corrected SMW=4.", "evidence": "Jack's Castle analysis script output: SMW_primary=2, SMW_corrected=4.\nG2 storm (Kp=6) confirmed 2026-05-04 20:32 UTC.\nCH HSS arrival confirmed May 7-8 from solar wind data.", "falsify": "If CH HSS driven events produce the same geometry distribution as AR/flare driven events at equivalent Kp, the correction is unnecessary."}, {"id": "F-03", "type": "finding", "status": "confirmed", "title": "Battery Model: Limb Events Must Be Flagged (Earth-Directedness)", "events": "2026-WH-0429", "body": "The battery model triggered spurious discharges on Apr 23-24 (AR4419 X2.4+X2.5) which were near the western limb and not Earth-directed. The model has no earth_directed flag \u2014 it treats all X-ray energy equally regardless of AR position. Limb events deliver EUV at light speed (brief ionospheric pulse) but no sustained particle/field coupling.\n\nRequired fix: add earth_directed: bool to SolarDay; limb events (earth_directed=False) reduce flare_energy contribution by ~80%.", "evidence": "AR4419 X2.4 Apr 23 was at W76 (near limb). Documented as not Earth-directed in SWPC event lists.", "falsify": "N/A \u2014 calibration finding from model run."}, {"id": "F-04", "type": "finding", "status": "confirmed", "title": "Battery Model: Full Reset After Discharge Is Too Aggressive", "events": "2025-06-08", "body": "The battery model resets Q to 10% of threshold after each discharge. Under the G4 storm scenario (Avebury 2025), the battery discharged 4 times during Jun 1-2, preventing accumulation for the June 8 formation.\n\nTwo possible fixes:\n1. Partial discharge: Q drops to 40-60% of threshold.\n2. Multi-compartment model: separate slow (geological) and fast (ionospheric) charge stores.\n\nThe multi-compartment model is physically more motivated \u2014 ionospheric ring-current storage (fast, tau~hours) and geological substrate charging (slow, tau~days) are genuinely different timescales.", "evidence": "Battery model run output: Avebury discharged June 1-2 (during G4), Q never rebuilt to threshold by June 8. Actual formation appeared June 8.", "falsify": "N/A \u2014 calibration finding. Test: does 50% partial discharge produce correct June 8 timing?"}, {"id": "F-05", "type": "finding", "status": "active", "title": "Alfred's Tower C3v / TGIC Triad Mirror \u2014 Monument Geometry Correspondence", "events": "2026-JC-0508", "body": "Alfred's Tower (Stourhead, Somerset) is a 49m triangular folly with equilateral triangular plan \u2014 C3v rotational symmetry. This mirrors the UBP TGIC three-vertex structure (Golay / Leech / Monster). The formation at Jack's Castle Plantation is approximately 600m from the tower.\n\nThird confirmed case of GCE formation proximate to a triangular/monolithic structure:\n  Waden Hill \u2192 Silbury Hill (C-inf-v)\n  Buckland Hill \u2192 Cerne Abbas Giant (C1)\n  Jack's Castle \u2192 Alfred's Tower (C3v triangular)", "evidence": "Alfred's Tower architectural records (National Trust). OS grid ST7355335215 (tower) vs ST7494035495 (formation) \u2014 delta approx 600m.", "falsify": "If monument symmetry group does not correlate with formation point group across 10+ proximate-monument cases in the database."}, {"id": "M-01", "type": "method", "status": "active", "title": "Solar Message Weight (SMW) Formula", "events": "", "body": "SMW = flare_energy + AR_complexity + kp_bits + cme_bonus\n\n  flare_energy:  A=0 B=2 C=4 M1-3=6 M4-7=8 M8-9=10 X1-2=12 X3-5=14 X5+=16\n  AR_complexity: alpha=0 beta=2 beta-gamma=4 beta-gamma-delta=6\n  kp_bits:       round(Kp / 3)\n  cme_bonus:     No=0 Possible=1 Confirmed=2\n\nCH HSS CORRECTION (see F-02): For coronal hole HSS with no active region:\n  SMW_corrected = q_sw + q_bz + q_kp\n  q_sw = (sw_speed - 400) / 200 x 4.0\n  q_bz = bz_south_hrs x 0.3\n  q_kp = round(Kp / 3) x 2.0\n\nKNOWN LIMITATION: Formula is heuristic. OCTAD_TO_GEOMETRY_MAP is the primary research gap.", "evidence": "Applied in analyze_jacks_castle.py and gce_battery_model.py.", "falsify": "If predicted geometry class does not match actual formation geometry at rate above chance across 20+ events."}, {"id": "M-02", "type": "method", "status": "active", "title": "Battery Charge Model \u2014 RC Circuit Analogue", "events": "", "body": "Daily solar input contributes dQ to a site-specific battery:\n  dQ = q_kp + q_bz + q_xray + q_f107 + q_cme + q_ch_hss + q_dst + q_sw\n\n  q_kp = (Kp/9)^2 x 3.0  \u2014 nonlinear; storms disproportionate\n  q_bz = bz_south_hours x 0.08\n  q_cme = 2.0 (if CME arriving)\n  q_ch_hss = 1.5 x (v-400)/200  \u2014 solar wind excess x CH flag\n\nBattery: Q(t+1) = (Q(t) + dQ) x exp(-dt/tau)\n  tau = C_site x R_site  (RC time constant in days)\n\nDischarge when: Q >= THRESHOLD and dQ >= TRIGGER_SENSITIVITY", "evidence": "gce_battery_model.py \u2014 correct event timing for all three retrospective cases with calibration caveats.", "falsify": "See H-01 falsification criteria."}, {"id": "M-03", "type": "method", "status": "active", "title": "UBP Fingerprint \u2014 Gray Code to Golay Snap to NRCI", "events": "", "body": "Any scalar value can be converted to a UBP fingerprint:\n  1. Convert to 24-bit Gray code\n  2. Snap to nearest valid Golay weight {0,8,12,16,24}\n  3. symmetry_tax from Golay weight\n  4. NRCI = 10 / (10 + tax)\n\nLattice classes: 0=Null, 8=Octad, 12=Dodecad, 16=Sub-Octad-Pair, 24=Full-Codeword\nPERFECT_V1 threshold: NRCI >= 0.95\nMACRO_ANCHOR_NRCI: 0.323214\nObserver Constant Y: 1/(pi + 2/pi) = 0.2285", "evidence": "ubp_noisecore_v4_extensions.py; gce_battery_model.py; analyze_jacks_castle.py.", "falsify": "N/A \u2014 measurement tool. Validity depends on whether NRCI correlates with formation complexity in database."}, {"id": "T-01", "type": "tension", "status": "tension", "title": "No CME for Waden Hill Primary Driver (2026-WH-0429)", "events": "2026-WH-0429", "body": "The M1.6 flare (Apr 28 2026) had no confirmed CME. The R1 blackout was via prompt EUV only, not particle flux. The +CH HSS arrived late Apr 29 \u2014 possibly the actual trigger. Requires DSCOVR/ACE L1 solar wind data for Apr 27-30 2026 to verify HSS arrival timing.", "evidence": "NOAA SWPC event lists. No CME listed for AR4420 M1.6.", "falsify": "If DSCOVR data shows no HSS arrival coincident with formation, the trigger mechanism for this event is unidentified."}, {"id": "T-02", "type": "tension", "status": "tension", "title": "Bondip Hill During Solar Quiet Period (2026-BH-0404)", "events": "2026-BH-0404", "body": "First 2026 formation appeared April 4 during apparently low solar activity. Battery model predicts very low Q at Ilchester/Somerset on this date. Three accommodations: (1) residual Feb X-class charge, (2) quiet-window clean decode, (3) human agency.\n\nMost likely resolution: human agency. Community assessment leans this way.", "evidence": "Community assessment from Temporary Temples, Crop Circle Connector.\nSolar data for Apr 1-4 2026 PENDING from SWPC archives.", "falsify": "Resolved if SWPC data shows any G1+ activity in Mar 30 to Apr 4 window."}, {"id": "T-03", "type": "tension", "status": "tension", "title": "G4 Storm Outside Strict 3-Day Window for June 2025 Formations", "events": "2025-06-08", "body": "G4 peak June 1. Avebury formation June 8 \u2014 7 days later. Under the battery model this is resolved if the site tau is large enough to hold charge for 7+ days AND a minor trigger event occurred June 7-8.\n\nThe battery model retrospective partially resolves this but reveals F-04: the battery over-discharges during the G4 storm and cannot rebuild for June 8 under current parameters.", "evidence": "Battery model run output \u2014 Avebury discharges June 1-2, Q does not rebuild to threshold by June 8. Resolution: partial discharge model (F-04) may fix this.", "falsify": "Resolved if partial discharge model (50% reset) correctly produces discharge on June 8 but not June 3-7."}, {"id": "T-04", "type": "tension", "status": "tension", "title": "Base Rate Problem \u2014 No Control Dataset", "events": "", "body": "There is no dataset of days when crops were present but no formation appeared. Without this control, it is impossible to test whether the solar correlation is above chance.\n\nRequired: log every M+ solar event during UK growing season (Apr-Sep) 2026, record formation/no-formation outcome, apply Fisher's exact test.", "evidence": "N/A \u2014 absence of evidence.", "falsify": "Test: compute rate of M+ events per growing-season month vs formation rate per month. Calculate probability of observed correlation under null hypothesis."}, {"id": "T-05", "type": "tension", "status": "tension", "title": "Human Makers Documented Since 1970s", "events": "", "body": "Doug Bower and Dave Chorley (UK) made formations since the 1970s, and professional circlemaker teams continue to operate. The framework does not deny human agency \u2014 it claims a subset of formations, identifiable by specific Golay-compatible geometry during measurable solar events at high-capacitance sites, is not human-made.", "evidence": "The UK circlemaker community is active and publicly documented.", "falsify": "If all formations that pass the solar-correlation filter can be attributed to identified human teams, the hypothesis fails for that subset."}, {"id": "T-06", "type": "tension", "status": "tension", "title": "OCTAD_TO_GEOMETRY_MAP Not Formally Derived", "events": "", "body": "The mapping from Solar Message Weight to Golay codeword weight to formation geometry is currently heuristic. There is no formal mathematical proof that a D2 formation geometry corresponds uniquely to a weight-8 octad.\n\nThis is the primary research gap. Until this bijection is formalised, the TGIC forcing argument cannot be claimed.", "evidence": "N/A \u2014 absence of derivation.", "falsify": "N/A \u2014 framework gap. Resolution requires formalising the bijection as a research task."}, {"id": "DT-01", "type": "data_target", "status": "pending", "title": "GFZ Potsdam Definitive Kp \u2014 April and May 2026", "events": "2026-WH-0429,2026-JC-0508", "body": "Definitive 3-hourly Kp data from GFZ Potsdam for April 26-30 and May 4-10 2026. Required to: (1) verify the Kp 4.0 claim for Waden Hill window, (2) confirm G1/G2 flag for Jack's Castle.\n\nDownload: https://kp.gfz.de/app/files/Kp_ap_Ap_SN_F107_since_1932.txt", "evidence": "", "falsify": "N/A \u2014 data acquisition target."}, {"id": "DT-02", "type": "data_target", "status": "pending", "title": "SWPC Event Lists \u2014 2025 Formation Windows", "events": "2025-04-11,2025-05-15,2025-06-15,2025-06-22,2025-06-28,2025-07-06,2025-07-10,2025-07-12", "body": "NOAA SWPC solar event lists for all 2025 formation windows currently marked PENDING. Priority: Jun 15-22 (Hackpen Hill / Charlton solstice pair) and Jul 3-12 (three formations in one week).\n\nDownload: https://www.swpc.noaa.gov/products/solar-and-geophysical-event-reports", "evidence": "", "falsify": "N/A \u2014 data acquisition target."}, {"id": "DT-03", "type": "data_target", "status": "pending", "title": "Monument Proximity Study \u2014 Database-Wide", "events": "", "body": "Calculate distance from every formation in the database to the nearest ancient monumental structure (stone circles, hill figures, burial mounds, medieval towers, standing stones). Test: do formations within 1km of a major monument occur disproportionately more than formations >5km from any monument?\n\nData sources: Historic England listed monuments database (free API). OS National Mapping.", "evidence": "Three known proximate-monument cases: Waden Hill/Silbury, Buckland/Cerne Abbas, Jack's Castle/Alfred's Tower.", "falsify": "This study IS the falsification test for H-02."}, {"id": "CAL-01", "type": "calibration", "status": "pending", "title": "Battery Model: Partial Discharge Parameter Calibration", "events": "2025-06-08", "body": "The battery model resets Q to 10% of threshold after discharge \u2014 too aggressive. Avebury 2025 retrospective shows the battery cannot rebuild for June 8 after multiple discharges during the G4 storm.\n\nTwo calibration approaches:\n1. SIMPLE: Set post_discharge_Q = 0.40-0.60 x DISCHARGE_THRESHOLD\n2. ADVANCED: Two-compartment model (fast ionospheric store + slow geological store)\n\nThe two-compartment model maps naturally to UBP dual-register architecture.", "evidence": "Battery model retrospective output (see F-04). Avebury discharges June 1-2; Q=0.30 (10%); cannot rebuild to 3.0 threshold by June 8.", "falsify": "Test: sweep partial_discharge_pct from 0.10 to 0.80 and find value that correctly reproduces all three retrospective events."}, {"id": "CAL-02", "type": "calibration", "status": "pending", "title": "Battery Model: Earth-Directedness Flag for Flare Energy", "events": "2026-WH-0429", "body": "SolarDay model does not distinguish Earth-directed from limb flares. AR4419 X2.4 (Apr 23) and X2.5 (Apr 24) were at western limb (~W76) and not Earth-directed. The model incorrectly weights them at full flare_energy and triggers spurious discharges.\n\nRequired fix:\n  SolarDay.earth_directed: bool = True  (default True)\n  if not day.earth_directed: flare_energy_contribution *= 0.15", "evidence": "AR4419 W76 position from SWPC event lists. Battery model spurious discharge Apr 23-24 in Waden Hill retrospective.", "falsify": "N/A \u2014 calibration fix. Test: with earth_directed=False for Apr 23-24, does model correctly discharge on Apr 29 instead?"}, {"id": "DT-04", "type": "data_target", "status": "pending", "title": "COSMOS-UK Soil Moisture \u2014 Formation Site Conductivity", "events": "2024-06-12,2024-06-30,2024-08-08,2025-06-08,2026-WH-0429", "body": "Acquire soil volumetric moisture readings for each confirmed formation site on the formation date. Soil moisture directly modifies the site capacitance (C_site) in the battery model: wetter soil = higher conductivity = higher effective C_site = longer tau = lower trigger threshold.\n\nPrimary source: COSMOS-UK (cosmos.ceh.ac.uk) \u2014 51 UK sites, near-real-time, free API. Key stations near formation sites: Wytham (Oxfordshire), Cardington (Beds), any Wiltshire/Dorset stations.\n\nFor 2016-2023 historical data: NERC EIDC 2km gridded dataset (Open Government Licence).\nhttps://doi.org/10.5285/5aa8c5b4-4485-4954-b5c3-18d937a418f7\n\nFor 2024 onwards: Met Office UKV model output via CEDA Archive.\n\nExpected impact: SM correction could explain why dry-summer Etchilhampton Aug 8 and wet-June Stonehenge Jun 30 behave differently at equivalent Kp. A wet June elevates C_site, extending tau and lowering the discharge trigger.", "evidence": "COSMOS-UK: 51 stations operational since 2013, ~12 ha field-scale footprint. Levy et al. 2024 NERC EIDC. Cooper et al. 2024 validated UKV against COSMOS-UK.", "falsify": "If soil moisture shows no correlation with formation frequency or complexity after controlling for solar activity, the SM modification to C_site is not required.", "created": "2026-05-13T00:00:00.000Z"}, {"id": "F-06", "type": "finding", "status": "confirmed", "title": "2024 Season: 8 Formations \u2014 1/8 G1+ in 3d Window, 8/8 High Pre-7d Kp", "events": "2024-06-12,2024-06-30,2024-07-14,2024-07-19,2024-07-23,2024-07-28,2024-08-08,2024-08-29", "body": "The 2024 UK season produced 8 documented formations. Solar analysis reveals:\n\nG1+ in strict 3-day window: 1 out of 8 (Stonehenge Jun 30 only \u2014 G2/G3 Jun 28-29 VERIFIED)\nHigh pre-7d Kp (>=5): 8 out of 8 \u2014 100%\nMean solar declination: 18.89 degrees\nF10.7: 170-203 sfu throughout season (SC25 peak)\n\nThe dominant pattern is NOT same-week storms but elevated pre-7d Kp \u2014 all 8 formations occurred within 7 days of a Kp>=5 event. The G5 storm of May 10-12 (Kp=9, Dst=-412 nT) pre-charged the battery for the entire summer. Jun 7-8 G3+G2 storms re-charged. Late-July G2-G3 (Jul 29-30) pre-charged for August formations.\n\nThis strongly supports the battery model over the simple 3-day window hypothesis: 2024 is best explained by persistent high-tau chalk site charging from SC25 peak, with moderate events acting as triggers. The 3-day window alone would classify 7 of 8 formations as unexplained.", "evidence": "Temporary Temples 2024 archive (8 confirmed formations). xras.ru London geomagnetic data Jun-Aug 2024. NOAA SWPC G3 watch Jul 29-31 2024. G5 storm IOPscience JASSpace 2025 (Dst=-412 nT confirmed).", "falsify": "If 2024 formation frequency occurred in an equivalent low-activity solar year (F10.7<130), the SC25 peak loading hypothesis fails.", "created": "2026-05-13T00:00:00.000Z"}, {"id": "F-07", "type": "finding", "status": "confirmed", "title": "May 2024 G5 Storm \u2014 Maximum Battery Pre-Load Event for 2024 Season", "events": "2024-06-12,2024-06-30", "body": "The May 10-12 2024 G5 storm (Kp=9, Dst=-412 nT, solar wind up to 1000 km/s, AR3664) was the strongest geomagnetic storm since October 2003. It pre-charged all high-tau UK chalk sites to near-maximum 32-35 days before the first formation (Wilton Windmill Jun 12).\n\nAt Avebury chalk sites (tau~2.8d), this charge would have decayed by June 12. However interim G3 storms (Jun 7) and G2 (Jun 8) re-charged the system. The G5 therefore elevated the BASELINE from which the 2024 season operated rather than directly causing individual formations.\n\nThis suggests a two-timescale model:\n  Fast store (ionospheric, tau~hours): G5 depleted within days\n  Slow store (geological substrate, tau~weeks-months): G5 elevated baseline for the season\n\nThe 2024 season high formation frequency (8 formations) vs 2023 lower activity is consistent with the G5 pre-loading the slow geological store.", "evidence": "G5 storm: Wikipedia May 2024 solar storms. IOPscience JASSpace 2025 (Dst=-412 nT, Kp=9, SW 750-950 km/s). xras.ru F10.7=203 sfu June 2024. 2024 had 0 spotless days (spaceweather.com).", "falsify": "Test: does two-timescale battery model produce better retrospective fits than single-timescale for 2024 season? Compare predicted discharge dates with actual formation dates across all 8 events.", "created": "2026-05-13T00:00:00.000Z"}, {"id": "F-08", "type": "finding", "status": "active", "title": "Stonehenge Jun 30 2024 \u2014 Best G-Storm Window Match of 2024 Season", "events": "2024-06-30", "body": "The Jun 30 2024 Stonehenge formation has the strongest solar correlation of the 2024 season:\n  G2 storm Jun 28 (2 days prior) VERIFIED xras.ru\n  G3 storm Jun 29 (1 day prior) VERIFIED xras.ru\n  G1 conditions Jun 30 (day-of) \u2014 all G-storm flags TRUE\n\nCause: Return of AR3664 complex to Earth-facing disk after rotating away post-May G5. The same sunspot group that caused the G5 returned and produced the Jun 28-29 storms.\n\nStonehenge (monument anchor) + chalk geology (high C_site) + G3 storm within 24h = ideal discharge conditions under the battery model. This is the 2024 analogue of the 2025 Jack's Castle case (G2 storm + CH HSS trigger).\n\nThe Stonehenge site specifically: monument of world-historical significance within 500m of formation site. Under H-02, this provides the strongest monument anchor in the dataset.", "evidence": "xras.ru London: G2 Jun 28, G3 Jun 29 confirmed. NOAA SWPC. AR3664 return documented in multiple sources. Temporary Temples aerial photograph confirmed.", "falsify": "N/A \u2014 observational finding. To test monument anchor: compare formation frequency within 1km of Stonehenge vs 1-10km vs >10km across full database.", "created": "2026-05-13T00:00:00.000Z"}]`);
+}
+function saveDocs() {
+  localStorage.setItem('gce_docs', JSON.stringify(docs));
+}
+
+function newDoc(type) {
+  editDocId = null;
+  document.getElementById('df-type').value = type;
+  document.getElementById('df-id').value = '';
+  document.getElementById('df-title').value = '';
+  document.getElementById('df-body').value = '';
+  document.getElementById('df-evidence').value = '';
+  document.getElementById('df-falsify').value = '';
+  document.getElementById('df-events').value = '';
+  document.getElementById('df-status').value = 'active';
+  document.getElementById('doc-form-lbl').textContent = 'NEW ' + type.toUpperCase() + ' ENTRY';
+  document.getElementById('doc-form').style.display = 'block';
+  document.getElementById('doc-form').scrollIntoView({behavior:'smooth'});
+}
+
+function saveDoc() {
+  const entry = {
+    id:       document.getElementById('df-id').value.trim() || 'DOC-'+Date.now(),
+    type:     document.getElementById('df-type').value,
+    status:   document.getElementById('df-status').value,
+    title:    document.getElementById('df-title').value.trim(),
+    events:   document.getElementById('df-events').value.trim(),
+    body:     document.getElementById('df-body').value.trim(),
+    evidence: document.getElementById('df-evidence').value.trim(),
+    falsify:  document.getElementById('df-falsify').value.trim(),
+    created:  new Date().toISOString(),
+    updated:  new Date().toISOString(),
+  };
+  if (!entry.title) { alert('Title required.'); return; }
+  if (editDocId !== null) {
+    const idx = docs.findIndex(d => d.id === editDocId);
+    if (idx >= 0) { docs[idx] = {...docs[idx], ...entry, updated: new Date().toISOString()}; }
+  } else {
+    docs.push(entry);
+  }
+  saveDocs();
+  renderDocs();
+  document.getElementById('doc-form').style.display = 'none';
+  document.getElementById('doc-form-msg').textContent = '✓ Saved';
+  setTimeout(() => document.getElementById('doc-form-msg').textContent = '', 2000);
+}
+
+function editDoc(id) {
+  const d = docs.find(x => x.id === id);
+  if (!d) return;
+  editDocId = id;
+  document.getElementById('df-type').value = d.type;
+  document.getElementById('df-id').value = d.id;
+  document.getElementById('df-status').value = d.status;
+  document.getElementById('df-title').value = d.title;
+  document.getElementById('df-events').value = d.events || '';
+  document.getElementById('df-body').value = d.body;
+  document.getElementById('df-evidence').value = d.evidence || '';
+  document.getElementById('df-falsify').value = d.falsify || '';
+  document.getElementById('doc-form-lbl').textContent = 'EDIT: ' + d.id;
+  document.getElementById('doc-form').style.display = 'block';
+  document.getElementById('doc-form').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteDoc(id) {
+  if (!confirm('Delete ' + id + '?')) return;
+  docs = docs.filter(d => d.id !== id);
+  saveDocs();
+  renderDocs();
+}
+
+function renderDocs() {
+  const q = (document.getElementById('doc-search').value || '').toLowerCase();
+  const tf = document.getElementById('doc-type-filter').value;
+  const sf = document.getElementById('doc-status-filter').value;
+
+  const filtered = docs.filter(d =>
+    (!q || (d.title+d.body+d.id+d.evidence+d.falsify+d.events).toLowerCase().includes(q))
+    && (!tf || d.type === tf)
+    && (!sf || d.status === sf)
+  );
+
+  document.getElementById('doc-count').textContent = filtered.length + ' entries';
+
+  const TYPE_ORDER = ['hypothesis','finding','method','tension','data_target','calibration'];
+  const sorted = [...filtered].sort((a,b) => {
+    const ta = TYPE_ORDER.indexOf(a.type), tb = TYPE_ORDER.indexOf(b.type);
+    if (ta !== tb) return ta - tb;
+    return a.id.localeCompare(b.id);
+  });
+
+  const container = document.getElementById('doc-cards');
+  container.innerHTML = '';
+
+  // Group by type
+  const groups = {};
+  sorted.forEach(d => { if (!groups[d.type]) groups[d.type] = []; groups[d.type].push(d); });
+
+  const TYPE_CONFIG = {
+    hypothesis:   {label:'Hypotheses',    color:'var(--solar)',  icon:'⬡'},
+    finding:      {label:'Findings',      color:'var(--ok)',     icon:'◉'},
+    method:       {label:'Methods',       color:'var(--golay)',  icon:'⚙'},
+    tension:      {label:'Tensions',      color:'var(--null)',   icon:'⚠'},
+    data_target:  {label:'Data Targets',  color:'var(--leech)',  icon:'◎'},
+    calibration:  {label:'Calibration',   color:'var(--warn)',   icon:'⬡'},
+  };
+
+  const STATUS_STYLE = {
+    active:    {bg:'rgba(240,165,0,.12)',    border:'var(--sol4)',  col:'var(--solar)'},
+    confirmed: {bg:'rgba(46,204,138,.10)',   border:'var(--ok2)',   col:'var(--ok)'},
+    tension:   {bg:'rgba(224,80,80,.10)',    border:'var(--nul2)',  col:'var(--null)'},
+    resolved:  {bg:'rgba(0,200,180,.10)',    border:'var(--gol2)',  col:'var(--golay)'},
+    pending:   {bg:'rgba(155,127,232,.10)', border:'var(--lee2)',  col:'var(--leech)'},
+    retired:   {bg:'rgba(53,64,80,.10)',     border:'var(--b1)',    col:'var(--tx3)'},
+  };
+
+  TYPE_ORDER.forEach(type => {
+    if (!groups[type]) return;
+    const cfg = TYPE_CONFIG[type];
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom:24px;';
+    section.innerHTML = `<div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:${cfg.color};margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--b1);">${cfg.icon} ${cfg.label} (${groups[type].length})</div>`;
+
+    groups[type].forEach(d => {
+      const ss = STATUS_STYLE[d.status] || STATUS_STYLE.active;
+      const card = document.createElement('div');
+      card.style.cssText = `background:${ss.bg};border:1px solid ${ss.border};border-left:3px solid ${ss.col};border-radius:var(--rad);padding:14px 16px;margin-bottom:10px;`;
+      card.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;">
+          <div style="font-family:var(--mono);font-size:8px;color:${ss.col};letter-spacing:1.5px;background:${ss.bg};border:1px solid ${ss.col};padding:2px 6px;border-radius:2px;white-space:nowrap;">${d.id}</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--mono);font-size:12px;color:var(--white);line-height:1.4;">${d.title}</div>
+            ${d.events ? `<div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-top:3px;">Events: ${d.events}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0;">
+            <div style="font-family:var(--mono);font-size:7.5px;color:${ss.col};background:${ss.bg};border:1px solid ${ss.col};padding:2px 5px;border-radius:2px;">${d.status.toUpperCase()}</div>
+            <button class="btn btn-ghost sm" onclick="editDoc('${d.id}')">Edit</button>
+            <button class="btn btn-null sm" onclick="deleteDoc('${d.id}')">Del</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text);line-height:1.75;white-space:pre-wrap;">${d.body}</div>
+        ${d.evidence ? `<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Supporting Evidence</div>
+          <div style="font-size:11px;color:var(--tx2);line-height:1.65;white-space:pre-wrap;">${d.evidence}</div>
+        </div>` : ''}
+        ${d.falsify ? `<div style="margin-top:8px;padding:8px;background:rgba(224,80,80,.05);border-radius:2px;border:1px solid var(--nul2);">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--null);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Falsification Criterion</div>
+          <div style="font-size:11px;color:var(--tx2);line-height:1.65;white-space:pre-wrap;">${d.falsify}</div>
+        </div>` : ''}
+        <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-top:8px;">Created: ${(d.created||'').substr(0,10)}${d.updated&&d.updated!==d.created?' · Updated: '+(d.updated||'').substr(0,10):''}</div>`;
+      section.appendChild(card);
     });
+    container.appendChild(section);
+  });
+
+  if (container.innerHTML === '') {
+    container.innerHTML = '<div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--tx3);padding:40px;">No entries match the current filter.</div>';
   }
 }
 
-</script>
+function exportDocs() {
+  let md = `# UBP-NC4 GCE Research Documentation\n`;
+  md += `Generated: ${new Date().toISOString().substr(0,10)}\n`;
+  md += `digitaleuan.github.io/gce_predictor\n\n`;
+  const ORDER = ['hypothesis','finding','method','tension','data_target','calibration'];
+  const LABELS = {hypothesis:'Hypotheses',finding:'Findings',method:'Methods',tension:'Tensions',data_target:'Data Targets',calibration:'Calibration Notes'};
+  ORDER.forEach(type => {
+    const group = docs.filter(d => d.type === type);
+    if (!group.length) return;
+    md += `\n## ${LABELS[type]}\n\n`;
+    group.forEach(d => {
+      md += `### ${d.id}: ${d.title}\n`;
+      md += `**Status:** ${d.status}  `;
+      if (d.events) md += `**Events:** ${d.events}`;
+      md += `\n\n${d.body}\n`;
+      if (d.evidence) md += `\n**Evidence:**\n${d.evidence}\n`;
+      if (d.falsify) md += `\n**Falsification:** ${d.falsify}\n`;
+      md += `\n---\n\n`;
+    });
+  });
+  const b = new Blob([md], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = `gce_docs_${new Date().toISOString().substr(0,10)}.md`;
+  a.click();
+}
 
+function importDocs() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const f = e.target.files[0];
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (Array.isArray(imported)) {
+          docs = [...docs, ...imported.filter(d => d.id && d.title && d.type)];
+          saveDocs(); renderDocs();
+          alert('Imported ' + imported.length + ' entries.');
+        } else { alert('Invalid format — expected JSON array.'); }
+      } catch(err) { alert('Parse error: ' + err.message); }
+    };
+    r.readAsText(f);
+  };
+  input.click();
+}
+
+
+// Init docs on load
+window.addEventListener('load', () => { if (document.getElementById('doc-cards')) renderDocs(); });
+
+// ═══════════════════════════════════════════════════════════════
+// SUBSTRATE CHARGE INDEX (SCI) — BATTERY MONITOR
+// ═══════════════════════════════════════════════════════════════
+
+// Mirror of gce_battery_model.py in JavaScript
+const SCI_SITES = {
+  avebury_complex: {
+    label: 'Avebury / Silbury Hill', geology: 'Chalk', monument: 'Silbury Hill (35m)',
+    C: 2.0, R: 1.4, threshold: 3.0, lat: 51.428, lon: -1.854,
+    note: 'Highest-capacitance site. Primary study area.'
+  },
+  stourhead_alfreds: {
+    label: "Jack's Castle / Alfred's Tower", geology: 'Limestone/clay', monument: "Alfred's Tower (C₃ᵥ)",
+    C: 1.5, R: 1.8, threshold: 2.8, lat: 51.118, lon: -2.359,
+    note: '2026-JC-0508 site. C₃ᵥ monument anchor.'
+  },
+  hackpen_ridge: {
+    label: 'Hackpen Hill / Ridgeway', geology: 'Chalk', monument: 'Hackpen White Horse',
+    C: 1.6, R: 1.5, threshold: 2.8, lat: 51.521, lon: -1.782,
+    note: '2025 solstice formations. Chalk ridge.'
+  },
+  stonehenge_area: {
+    label: 'Stonehenge / Salisbury Plain', geology: 'Chalk', monument: 'Stonehenge',
+    C: 1.9, R: 1.2, threshold: 2.9, lat: 51.179, lon: -1.826,
+    note: 'Major monument anchor. High capacitance.'
+  },
+  somerset_levels: {
+    label: 'Somerset Levels / Ilchester', geology: 'Alluvial clay', monument: 'None',
+    C: 1.3, R: 2.5, threshold: 2.6, lat: 51.000, lon: -2.700,
+    note: 'Bondip Hill site. High water table, no anchor.'
+  },
+  dorset_downs: {
+    label: 'Dorset Downs / Cranborne Chase', geology: 'Chalk', monument: 'Cerne Abbas Giant',
+    C: 1.2, R: 2.0, threshold: 2.5, lat: 50.817, lon: -2.476,
+    note: 'Moderate capacitance. Buckland Hill spider 2025.'
+  },
+  wiltshire_pewsey: {
+    label: 'Pewsey Vale / Alton Barnes', geology: 'Chalk', monument: 'Alton Barnes White Horse',
+    C: 1.7, R: 1.4, threshold: 2.7, lat: 51.350, lon: -1.870,
+    note: 'Classic formation corridor. High chalk conductivity.'
+  },
+  devon_coast: {
+    label: 'Devon / Lyme Regis', geology: 'Mixed sandstone', monument: 'None',
+    C: 0.8, R: 3.0, threshold: 2.2, lat: 50.726, lon: -2.934,
+    note: 'Non-standard geology. Lower capacitance.'
+  }
+};
+
+function sciTau(site) { return site.C * site.R; }
+function sciDecay(tau, dt=1) { return Math.exp(-dt / tau); }
+
+function sciXrayToQ(fluxWm2) {
+  // Convert GOES flux to normalised xray energy (M5 = 1.0)
+  if (fluxWm2 >= 1e-3) return 20.0;   // X10+
+  if (fluxWm2 >= 1e-4) return (fluxWm2 / 1e-4) * 10.0;  // X-class
+  if (fluxWm2 >= 1e-5) return (fluxWm2 / 1e-5) * 1.0;   // M-class
+  if (fluxWm2 >= 1e-6) return (fluxWm2 / 1e-5) * 0.1;   // C-class
+  return 0.0;
+}
+
+function sciFluxClass(f) {
+  if (f >= 1e-4) return 'X';
+  if (f >= 1e-5) return 'M';
+  if (f >= 1e-6) return 'C';
+  if (f >= 1e-7) return 'B';
+  return 'A';
+}
+
+function sciDailyQ(kpEst, xrayFlux, f107=120, chHss=false, swSpeed=420) {
+  const qKp   = Math.pow(kpEst / 9.0, 2) * 3.0;
+  const qBz   = kpEst >= 5 ? (kpEst - 3) * 0.4 : 0;  // estimate Bz from storm level
+  const qXray = sciXrayToQ(xrayFlux) / 5.0;            // normalise M5=1.0
+  const qF107 = Math.max(0, (f107 - 70) / 100);
+  const swExcess = Math.max(0, (swSpeed - 400) / 200);
+  const qChHss = chHss ? 1.5 * swExcess : 0;
+  const dQ = qKp + qBz + qXray + qF107 + qChHss;
+  return { qKp, qBz, qXray, qF107, qChHss, dQ,
+    dominant: ['qKp','qBz','qXray','qF107','qChHss']
+      .map(k=>({k, v:{qKp,qBz,qXray,qF107,qChHss}[k]}))
+      .sort((a,b)=>b.v-a.v)[0].k
+  };
+}
+
+// Kp estimator from Kp 1-min stream
+function sciKpFromStream(kpData) {
+  if (!kpData || !kpData.length) return 2.0;
+  const recent = kpData.slice(-3);
+  const vals = recent.map(d => parseFloat(d.kp_index || d.Kp || d[1] || 0)).filter(n => !isNaN(n));
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 2.0;
+}
+
+// Aggregate 7-day xray data into daily buckets
+function sciAggregateXray(xrayData) {
+  const days = {};
+  xrayData.forEach(d => {
+    const date = (d.time_tag || '').substr(0, 10);
+    if (!date) return;
+    const flux = parseFloat(d.flux || d.observed_flux || 0) || 0;
+    if (!days[date] || flux > days[date].maxFlux) {
+      days[date] = { date, maxFlux: flux, count: (days[date]?.count||0)+1 };
+    }
+  });
+  return Object.values(days).sort((a,b) => a.date.localeCompare(b.date));
+}
+
+// Run battery model for one site over N days of data
+function sciRunSite(siteKey, dailyBuckets, liveKp) {
+  const site = SCI_SITES[siteKey];
+  const tau = sciTau(site);
+  let Q = 0;
+  const history = [];
+  const dayLog = [];
+
+  dailyBuckets.forEach((bucket, i) => {
+    const isToday = i === dailyBuckets.length - 1;
+    const kp = isToday ? liveKp : Math.max(2.0, liveKp * 0.6);  // live Kp today; estimated prior
+    const contrib = sciDailyQ(kp, bucket.maxFlux, 120, false, 420);
+    Q = (Q + contrib.dQ) * sciDecay(tau, 1.0);
+    Q = Math.max(0, Q);
+    history.push({ date: bucket.date, Q });
+    dayLog.push({ date: bucket.date, flux: bucket.maxFlux, kp, ...contrib, Q });
+  });
+
+  const qPct = Math.round(Q / site.threshold * 100);
+  const lastContrib = dayLog[dayLog.length - 1];
+  let verdict, verdictClass, cardClass;
+
+  if (qPct >= 100) {
+    verdict = '⚡ DISCHARGE POSSIBLE — Threshold reached. Any trigger event may produce a formation.';
+    verdictClass = 'imminent'; cardClass = 'critical';
+  } else if (qPct >= 85) {
+    verdict = '⚠ ALERT — Battery >85%. Monitor for trigger events (CH HSS, Bz south, Kp spike).';
+    verdictClass = 'alert'; cardClass = 'critical';
+  } else if (qPct >= 60) {
+    verdict = '▸ WATCH — Charging. Sustained activity could reach threshold within 2–4 days.';
+    verdictClass = 'watch'; cardClass = 'high';
+  } else if (qPct >= 30) {
+    verdict = '· Charging — Moderate solar loading. Threshold not imminent.';
+    verdictClass = 'safe'; cardClass = 'charging';
+  } else {
+    verdict = '· Low — Battery below 30%. Significant solar event required to initiate charge.';
+    verdictClass = 'safe'; cardClass = '';
+  }
+
+  // Estimate time to threshold (rough linear extrapolation from last 3 days)
+  let daysToThreshold = null;
+  if (dayLog.length >= 2) {
+    const recentQ = dayLog.slice(-3).map(d => d.Q);
+    const dQPerDay = (recentQ[recentQ.length-1] - recentQ[0]) / (recentQ.length - 1);
+    if (dQPerDay > 0.01) {
+      const needed = site.threshold - Q;
+      daysToThreshold = Math.max(0, needed / dQPerDay).toFixed(1);
+    }
+  }
+
+  return {
+    siteKey, site, Q, qPct, tau, verdict, verdictClass, cardClass,
+    history, dayLog, lastContrib, daysToThreshold,
+    dominantChannel: lastContrib?.dominant || 'q_f107'
+  };
+}
+
+const SCI_CHANNEL_LABELS = {
+  qKp:'Geomagnetic (Kp)', qBz:'Southward Bz', qXray:'Solar Flare',
+  qF107:'Background F10.7', qChHss:'CH HSS'
+};
+const SCI_CHANNEL_COLORS = {
+  qKp:'var(--null)', qBz:'var(--warn)', qXray:'var(--solar)',
+  qF107:'var(--leech)', qChHss:'var(--ok)'
+};
+
+let sciAutoInterval = null;
+let sciRefreshProgress = null;
+let sciDayLog = [];
+
+async function sciRun() {
+  const statusLbl = document.getElementById('sci-status-lbl');
+  const liveDot = document.getElementById('sci-live-dot');
+  liveDot.style.background = 'var(--warn)';
+  statusLbl.textContent = 'Fetching NOAA SWPC live data…';
+
+  let xrayData = [], kpData = [], liveKp = 2.5;
+
+  try {
+    const [xrRes, kpRes] = await Promise.all([
+      fetch('https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json'),
+      fetch('https://services.swpc.noaa.gov/json/planetary_k_index_1m.json')
+    ]);
+    xrayData = await xrRes.json();
+    kpData   = await kpRes.json();
+    liveKp   = sciKpFromStream(kpData);
+    document.getElementById('sci-live-kp').textContent = liveKp.toFixed(1);
+    statusLbl.textContent = `Live data loaded — ${xrayData.length} X-ray pts · Kp ${liveKp.toFixed(1)}`;
+    liveDot.style.background = 'var(--ok)';
+    liveDot.style.boxShadow = '0 0 8px var(--ok)';
+    document.getElementById('sci-last-fetch').textContent =
+      'Last: ' + new Date().toISOString().substr(11,8) + ' UTC';
+  } catch(e) {
+    statusLbl.textContent = 'NOAA fetch failed (' + e.message + ') — using estimated values';
+    liveDot.style.background = 'var(--warn)';
+    // Fall back to estimated baseline data for past 7 days
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today); d.setDate(d.getDate() - i);
+      xrayData.push({ time_tag: d.toISOString().substr(0,10)+' 12:00:00', flux: 1e-6 });
+    }
+    liveKp = 2.5;
+  }
+
+  const dailyBuckets = sciAggregateXray(xrayData);
+  sciDayLog = dailyBuckets;
+
+  // Run model for each site
+  const results = Object.keys(SCI_SITES).map(k => sciRunSite(k, dailyBuckets, liveKp));
+
+  // Global stats
+  const maxPct = Math.max(...results.map(r => r.qPct));
+  const onWatch = results.filter(r => r.qPct >= 60).length;
+  const onAlert = results.filter(r => r.qPct >= 85).length;
+  document.getElementById('sci-max-pct').textContent = maxPct + '%';
+  document.getElementById('sci-sites-watch').textContent = onWatch;
+  document.getElementById('sci-sites-alert').textContent = onAlert;
+
+  // Render cards
+  sciRenderCards(results);
+  sciRenderDayTable(dailyBuckets, liveKp);
+}
+
+function sciRenderCards(results) {
+  const container = document.getElementById('sci-cards');
+  container.innerHTML = '';
+
+  results.sort((a,b) => b.qPct - a.qPct).forEach(r => {
+    const barWidth = Math.min(100, r.qPct);
+    const barClass = r.qPct >= 100 ? 'critical' : r.qPct >= 85 ? 'high' : r.qPct >= 50 ? 'mid' : 'low';
+    const pctClass = barClass;
+    const threshPct = 100; // threshold is always at 100% by definition
+
+    // Mini sparkline as simple CSS bars
+    const sparkBars = r.history.slice(-7).map(h => {
+      const pct = Math.min(100, Math.round(h.Q / r.site.threshold * 100));
+      const col = pct >= 85 ? '#e05050' : pct >= 60 ? '#f0a500' : '#2ecc8a';
+      return `<div style="flex:1;background:${col};opacity:.7;border-radius:1px;height:${Math.max(4, pct * 0.32)}px;align-self:flex-end;"></div>`;
+    }).join('');
+
+    const domLabel = SCI_CHANNEL_LABELS[r.dominantChannel] || r.dominantChannel;
+    const domColor = SCI_CHANNEL_COLORS[r.dominantChannel] || 'var(--tx2)';
+
+    const card = document.createElement('div');
+    card.className = 'sci-card ' + r.cardClass;
+    card.innerHTML = `
+      <div class="sci-card-header">
+        <div>
+          <div class="sci-site-name">${r.site.label}</div>
+          <div class="sci-site-geo">${r.site.geology} · τ=${r.tau.toFixed(1)}d · C=${r.site.C}</div>
+        </div>
+        <div class="sci-pct ${pctClass}">${r.qPct}%</div>
+      </div>
+      <!-- Battery bar -->
+      <div class="sci-bar-wrap" title="Charge Q=${r.Q.toFixed(3)} / threshold ${r.site.threshold}">
+        <div class="sci-bar ${barClass}" style="width:${barWidth}%;"></div>
+        <div class="sci-bar-thresh" style="left:${threshPct-1}%;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--tx3);">
+        <span>0%</span><span>Threshold (100%)</span>
+      </div>
+      <!-- Key metrics -->
+      <div style="margin-top:10px;">
+        <div class="sci-kv"><span class="sci-kv-k">Q (charge units)</span><span class="sci-kv-v">${r.Q.toFixed(4)}</span></div>
+        <div class="sci-kv"><span class="sci-kv-k">Threshold</span><span class="sci-kv-v">${r.site.threshold.toFixed(1)}</span></div>
+        <div class="sci-kv"><span class="sci-kv-k">Time const. τ</span><span class="sci-kv-v">${r.tau.toFixed(2)} days</span></div>
+        <div class="sci-kv"><span class="sci-kv-k">Monument anchor</span><span class="sci-kv-v">${r.site.monument}</span></div>
+        ${r.daysToThreshold !== null
+          ? `<div class="sci-kv"><span class="sci-kv-k">Est. days to threshold</span><span class="sci-kv-v" style="color:var(--solar);">${r.daysToThreshold}d (current trend)</span></div>`
+          : `<div class="sci-kv"><span class="sci-kv-k">Est. days to threshold</span><span class="sci-kv-v c-dim">Charging too slowly / decaying</span></div>`}
+      </div>
+      <!-- Dominant channel -->
+      <div style="margin-top:6px;">
+        <div style="font-family:var(--mono);font-size:7.5px;color:var(--tx3);margin-bottom:3px;">TODAY'S DOMINANT CHARGE CHANNEL</div>
+        <span class="sci-channel" style="color:${domColor};border-color:${domColor}30;">${domLabel}</span>
+      </div>
+      <!-- Verdict -->
+      <div class="sci-verdict ${r.verdictClass}" style="margin-top:8px;">
+        ${r.verdict}
+      </div>
+      <!-- 7-day sparkline -->
+      <div style="font-family:var(--mono);font-size:7.5px;color:var(--tx3);margin-top:10px;margin-bottom:3px;">7-DAY CHARGE HISTORY</div>
+      <div style="display:flex;gap:2px;height:32px;align-items:flex-end;">
+        ${sparkBars}
+      </div>
+      <div style="font-family:var(--mono);font-size:7px;color:var(--tx3);margin-top:2px;display:flex;justify-content:space-between;">
+        <span>−7d</span><span>Today</span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function sciRenderDayTable(buckets, liveKp) {
+  const tbody = document.getElementById('sci-day-tbody');
+  tbody.innerHTML = '';
+  buckets.slice(-7).forEach((b, i) => {
+    const isToday = i === buckets.slice(-7).length - 1;
+    const kp = isToday ? liveKp : Math.max(1.5, liveKp * 0.55);
+    const c = sciDailyQ(kp, b.maxFlux, 120, false, 420);
+    const cls = sciFluxClass(b.maxFlux);
+    tbody.innerHTML += `<tr style="${isToday?'background:rgba(240,165,0,.04);':''}">
+      <td class="c-dim">${b.date}${isToday?' <span style="color:var(--solar);">▸ today</span>':''}</td>
+      <td class="${cls==='X'?'c-nul':cls==='M'?'c-sol':cls==='C'?'c-gol':'c-dim'}">${cls}-class</td>
+      <td class="${kpColor(kp)}">${kp.toFixed(1)}</td>
+      <td class="c-nul">${c.qKp.toFixed(3)}</td>
+      <td class="c-war">${c.qBz.toFixed(3)}</td>
+      <td class="c-sol">${c.qXray.toFixed(3)}</td>
+      <td class="c-lee">${c.qF107.toFixed(3)}</td>
+      <td class="c-ok">${c.qChHss.toFixed(3)}</td>
+      <td style="color:var(--white);font-weight:600;">${c.dQ.toFixed(3)}</td>
+      <td style="color:${SCI_CHANNEL_COLORS[c.dominant]||'var(--tx2)'};">${SCI_CHANNEL_LABELS[c.dominant]||c.dominant}</td>
+    </tr>`;
+  });
+}
+
+function sciToggleAuto() {
+  const checked = document.getElementById('sci-auto').checked;
+  if (checked) {
+    sciRun();
+    let elapsed = 0;
+    const total = 900; // 15 min in seconds
+    sciRefreshProgress = setInterval(() => {
+      elapsed++;
+      const pct = (elapsed / total) * 100;
+      document.getElementById('sci-progress-bar').style.width = pct + '%';
+      if (elapsed >= total) {
+        elapsed = 0;
+        sciRun();
+      }
+    }, 1000);
+  } else {
+    if (sciRefreshProgress) { clearInterval(sciRefreshProgress); sciRefreshProgress = null; }
+    document.getElementById('sci-progress-bar').style.width = '0%';
+  }
+}
+
+// Auto-load on startup
+loadDB();
+</script>
 </body>
 </html>
