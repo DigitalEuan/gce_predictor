@@ -17,7 +17,7 @@
   --ok:#2ecc8a;--ok2:#0a3d28;
   --warn:#e8a020;--war2:#4a2f00;
   --null:#e05050;--nul2:#4a0f0f;
-  --text:#b8c8d8;--tx2:#6a8090;--tx3:#354050;--tx4:#1e2a36;
+  --text:#c8d8e8;--tx2:#8aaabb;--tx3:#5a7888;--tx4:#2a3a48;
   --white:#e0eef8;
   --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;--rad:3px;
 }
@@ -550,6 +550,23 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <div class="cw"><div class="cw-ttl">FORMATION MONTH DISTRIBUTION</div><canvas id="mo-ch" height="220"></canvas></div>
   </div>
   <div class="panel" style="margin-bottom:14px;"><div class="panel-ttl">Correlation Metrics</div><div id="corr-kv"></div></div>
+
+  <!-- DUAL-COMPARTMENT AGGREGATE ANALYSIS -->
+  <div class="panel" style="margin-bottom:14px;border-color:var(--gol2);">
+    <div class="panel-ttl" style="color:var(--golay);">Dual-Compartment Aggregate — Dataset Trajectory Distribution (CAL-03)</div>
+    <p style="font-size:10px;color:var(--tx2);margin-bottom:8px;">
+      Each record is run through the Dual-Compartment model using day-of Kp/Dst as dQ_slow and 0 dQ_fast (no X-ray/CME in historical records).
+      Trajectory class is inferred from the snapped Golay weight. Avebury site constants used as baseline (C=2.0, R=1.4).
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;">
+      <div class="stat"><div class="stat-v c-ok" id="dca-rest">—</div><div class="stat-l">Identity/Rest</div></div>
+      <div class="stat"><div class="stat-v c-gol" id="dca-octad">—</div><div class="stat-l">Octad (Circles)</div></div>
+      <div class="stat"><div class="stat-v c-sol" id="dca-dodec">—</div><div class="stat-l">Dodecad (Pictograms)</div></div>
+      <div class="stat"><div class="stat-v c-lee" id="dca-full">—</div><div class="stat-l">Full/Complex</div></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--tx2);white-space:pre;" id="dca-detail">Run Full Analysis above to populate.</div>
+  </div>
+
   <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">High-Significance Cases (G2+ in 3d Window, Not Hoax)</div>
   <div class="tw scroll" style="max-height:320px;">
     <table>
@@ -662,6 +679,47 @@ code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);pa
     <div class="panel-ttl">Solar Message Weight Breakdown</div>
     <div style="font-family:var(--mono);font-size:10px;line-height:1.9;color:var(--text);margin-top:6px;white-space:pre;" id="smw-detail">—</div>
   </div>
+
+  <!-- DUAL-COMPARTMENT BATTERY OUTPUT (CAL-03) -->
+  <div class="panel" style="margin-top:10px;border-color:var(--gol2);">
+    <div class="panel-ttl" style="color:var(--golay);">Dual-Compartment Battery Model — UBP Trajectory (CAL-03)</div>
+    <p style="font-size:10px;color:var(--tx2);margin-bottom:10px;">
+      Fast store (τ=0.5d, ionospheric) driven by X-ray/CME inputs · Slow store (τ=C·R, geological) driven by Kp/Bz/CH-HSS/Dst.
+      Input the solar day values below and run the decode above to populate.
+    </p>
+    <div class="fg c3" style="margin-bottom:10px;">
+      <div class="ff"><label>dQ Fast (X-ray + CME)</label><input id="dc-dqf" type="number" step="0.1" value="0" min="0" placeholder="e.g. 2.0 (CME)"></div>
+      <div class="ff"><label>dQ Slow (Kp + Bz + HSS + Dst)</label><input id="dc-dqs" type="number" step="0.1" value="0" min="0" placeholder="e.g. 1.5 (G1)"></div>
+      <div class="ff"><label>Site Preset</label>
+        <select id="dc-site" onchange="dcSiteChange()">
+          <option value="2.0,1.4">Avebury / Silbury (C=2.0, R=1.4)</option>
+          <option value="1.5,1.8">Jack's Castle / Alfred's Tower (C=1.5, R=1.8)</option>
+          <option value="1.9,1.2">Stonehenge (C=1.9, R=1.2)</option>
+          <option value="1.6,1.5">Hackpen Hill (C=1.6, R=1.5)</option>
+          <option value="1.7,1.4">Pewsey Vale (C=1.7, R=1.4)</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="ff"><label>C_site (capacitance)</label><input id="dc-c" type="number" step="0.1" value="2.0" min="0.1"></div>
+      <div class="ff"><label>R_site (resistance)</label><input id="dc-r" type="number" step="0.1" value="1.4" min="0.1"></div>
+      <div class="ff"><label>Prev Q_fast (carry-over)</label><input id="dc-qfp" type="number" step="0.01" value="0" min="0"></div>
+      <div class="ff"><label>Prev Q_slow (carry-over)</label><input id="dc-qsp" type="number" step="0.01" value="0" min="0"></div>
+    </div>
+    <button class="btn btn-gol" onclick="runDualBattery()" style="margin-bottom:12px;">▶ Run Dual-Compartment Decode</button>
+    <div id="dc-output" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+        <div class="stat"><div class="stat-v c-ok" id="dc-qf">—</div><div class="stat-l">Q_fast (ionospheric)</div></div>
+        <div class="stat"><div class="stat-v c-gol" id="dc-qs">—</div><div class="stat-l">Q_slow (geological)</div></div>
+        <div class="stat"><div class="stat-v c-sol" id="dc-qt">—</div><div class="stat-l">Q_total</div></div>
+        <div class="stat"><div class="stat-v c-lee" id="dc-hw">—</div><div class="stat-l">Gray HW (raw)</div></div>
+        <div class="stat"><div class="stat-v c-gol" id="dc-gw">—</div><div class="stat-l">Snapped Golay Wt</div></div>
+        <div class="stat"><div class="stat-v" id="dc-nrci">—</div><div class="stat-l">NRCI</div></div>
+      </div>
+      <div id="dc-trajectory" style="font-family:var(--mono);font-size:14px;padding:12px 16px;border-radius:3px;margin-bottom:8px;border:1px solid;"></div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--tx2);white-space:pre;" id="dc-detail"></div>
+    </div>
+  </div>
+
   <div style="margin-top:14px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
       <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;">Prediction Log</div>
@@ -893,7 +951,8 @@ let editIdx=null;
 let preds=JSON.parse(localStorage.getItem('gce_preds')||'[]');
 let lbData=[], lbIdx=0;
 let charts={};
-Chart.defaults.color='#354050';
+let dbPage=0; const DB_PAGE_SIZE=75;
+Chart.defaults.color='#8aaabb';
 Chart.defaults.borderColor='#1c2330';
 Chart.defaults.font.family='Space Mono';
 Chart.defaults.font.size=10;
@@ -968,6 +1027,16 @@ function parseCSV(text,src){
     header:true,skipEmptyLines:true,dynamicTyping:false,
     complete(res){
       DB=res.data.filter(r=>r.year||r.location);
+      // Normalize all-caps TRUE/FALSE (Python CSV export) to title-case
+      const BOOL_COLS=['usable_for_analysis','solar_in_G1_window_3d','solar_in_G2_window_3d','solar_in_G3_window_3d','chalk_site','high_tau_candidate','blt_sampled'];
+      DB=DB.map(r=>{
+        const nr=Object.assign({},r);
+        BOOL_COLS.forEach(f=>{
+          if(nr[f]==='TRUE')nr[f]='True';
+          else if(nr[f]==='FALSE')nr[f]='False';
+        });
+        return nr;
+      });
       dlog(`Loaded ${DB.length} records from ${src}.`,'ok');
       setDot('live','ONLINE');
       updateHeader(); buildFilters(); filterDB();
@@ -1024,6 +1093,7 @@ function filterDB(){
       &&(!hx||(hx==='0'?r.hoax_flag!=='1':r.hoax_flag==='1'))
       &&(!us||r.usable_for_analysis===us);
   });
+  dbPage=0;
   renderTable();
 }
 
@@ -1040,7 +1110,10 @@ function sortBy(col){
 
 function renderTable(){
   const tb=document.getElementById('db-tbody'); tb.innerHTML='';
-  const show=filteredDB.slice(0,600);
+  const totalPages=Math.max(1,Math.ceil(filteredDB.length/DB_PAGE_SIZE));
+  if(dbPage>=totalPages) dbPage=totalPages-1;
+  const start=dbPage*DB_PAGE_SIZE;
+  const show=filteredDB.slice(start,start+DB_PAGE_SIZE);
   show.forEach(r=>{
     const kp=parseFloat(r.solar_Kp_max_best)||0;
     const kp7=parseFloat(r.pre7d_Kp_max_best_max)||0;
@@ -1079,7 +1152,44 @@ function renderTable(){
       <td style="white-space:nowrap;"><button class="btn btn-ghost sm" onclick="editRec(${idx})">Edit</button> <button class="btn btn-null sm" onclick="delRec(${idx})">Del</button></td>
     </tr>`;
   });
-  document.getElementById('row-ct').textContent=`${filteredDB.length} rows${filteredDB.length>600?' (600 shown)':''}`;
+  // Pagination controls
+  document.getElementById('row-ct').textContent=
+    `${filteredDB.length} rows — showing ${start+1}–${Math.min(start+DB_PAGE_SIZE,filteredDB.length)} of ${filteredDB.length}`;
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  let el=document.getElementById('db-pagination');
+  if(!el){
+    el=document.createElement('div');
+    el.id='db-pagination';
+    el.style.cssText='display:flex;align-items:center;gap:8px;padding:10px 0;flex-wrap:wrap;';
+    const tw=document.querySelector('.tw.scroll');
+    if(tw) tw.parentNode.insertBefore(el,tw.nextSibling);
+  }
+  const totalPages2=Math.max(1,Math.ceil(filteredDB.length/DB_PAGE_SIZE));
+  const pages=[];
+  // Always show first, last, current and neighbours
+  const shown=new Set([0,totalPages2-1,dbPage,dbPage-1,dbPage+1].filter(p=>p>=0&&p<totalPages2));
+  [...shown].sort((a,b)=>a-b).forEach((p,i,arr)=>{
+    if(i>0&&arr[i-1]<p-1) pages.push('…');
+    pages.push(p);
+  });
+  el.innerHTML=`
+    <button class="btn btn-ghost sm" onclick="dbGoPage(${dbPage-1})" ${dbPage===0?'disabled':''}>← Prev</button>
+    ${pages.map(p=>p==='…'
+      ?`<span style="color:var(--tx3);font-family:var(--mono);font-size:10px;">…</span>`
+      :`<button class="btn ${p===dbPage?'btn-sol':'btn-ghost'} sm" onclick="dbGoPage(${p})">${p+1}</button>`
+    ).join('')}
+    <button class="btn btn-ghost sm" onclick="dbGoPage(${dbPage+1})" ${dbPage>=totalPages2-1?'disabled':''}>Next →</button>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--tx2);margin-left:6px;">Page ${dbPage+1} / ${totalPages2} &nbsp;·&nbsp; ${DB_PAGE_SIZE}/page</span>
+  `;
+}
+function dbGoPage(p){
+  const totalPages=Math.max(1,Math.ceil(filteredDB.length/DB_PAGE_SIZE));
+  dbPage=Math.max(0,Math.min(p,totalPages-1));
+  renderTable();
+  document.getElementById('db-tbody').closest('.tw')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function esc(s){return (s||'').replace(/"/g,'&quot;').substr(0,120);}
 
@@ -1329,6 +1439,8 @@ function runAnalysis(){
   addKV(el,'% formations at dec > 20°',((decs.filter(d=>d>20).length/decs.length)*100).toFixed(1)+'%');
   addKV(el,'Year span',[...new Set(data.map(r=>r.year).filter(Boolean))].length+' years');
   plotG(data);plotKpDist(data,kps);plotYear(data);plotMonth(data);
+  // Dual-Compartment aggregate pass
+  runDualCompartmentAggregate(data);
   // Sig table
   const stb=document.getElementById('sig-tb');stb.innerHTML='';
   data.filter(r=>r.solar_in_G2_window_3d==='True'&&r.hoax_flag!=='1').sort((a,b)=>(parseFloat(b.pre7d_Kp_max_best_max)||0)-(parseFloat(a.pre7d_Kp_max_best_max)||0)).slice(0,100).forEach(r=>{
@@ -1337,6 +1449,39 @@ function runAnalysis(){
   });
 }
 function addKV(el,k,v){el.innerHTML+=`<div class="kv"><span class="kv-k">${k}</span><span class="kv-v">${v}</span></div>`;}
+
+function runDualCompartmentAggregate(data){
+  // Run every record through dual-compartment model using day-of Kp → dQ_slow
+  // No carry-over between records (each is treated as day-of snapshot, not a time series)
+  const C=2.0,R=1.4; // Avebury baseline
+  let rest=0,octad=0,dodec=0,full=0;
+  const details=[];
+  data.forEach(r=>{
+    const kp=parseFloat(r.solar_Kp_max_best)||0;
+    const dst=parseFloat(r.solar_Dst_min)||0;
+    // dQ_slow: Kp contribution + Dst contribution
+    const dQ_s=Math.pow(kp/9,2)*3.0 + Math.abs(Math.min(0,dst))*0.005;
+    const res=calculateDualBatteryJS(0,dQ_s,0,0,C,R);
+    if(!res.discharged) rest++;
+    else if(res.snapped_gw===8) octad++;
+    else if(res.snapped_gw===12) dodec++;
+    else full++;
+    details.push({year:r.year,loc:(r.location||'').substr(0,20),kp,dQ_s:dQ_s.toFixed(3),gw:res.snapped_gw,nrci:res.nrci.toFixed(3),traj:res.trajectory.substr(0,30)});
+  });
+  const n=data.length||1;
+  document.getElementById('dca-rest').textContent=`${rest} (${(rest/n*100).toFixed(0)}%)`;
+  document.getElementById('dca-octad').textContent=`${octad} (${(octad/n*100).toFixed(0)}%)`;
+  document.getElementById('dca-dodec').textContent=`${dodec} (${(dodec/n*100).toFixed(0)}%)`;
+  document.getElementById('dca-full').textContent=`${full} (${(full/n*100).toFixed(0)}%)`;
+  document.getElementById('dca-detail').textContent=
+`Site baseline : Avebury (C=${C}, R=${R}, τ_slow=${(C*R).toFixed(2)}d)
+dQ_slow calc  : (Kp/9)² × 3.0  +  |Dst_min| × 0.005
+Records run   : ${n}
+─────────────────────────────────────────────────────────
+Golay weights : 0=Identity/Rest · 8=Octad · 12=Dodecad · 16=SOP · 24=Full
+NOTE: Historical records lack X-ray/CME data — dQ_fast=0 throughout.
+      Discharge rates will be conservative. Use Predict tab for full model.`;
+}
 function plotG(data){const ctx=document.getElementById('g-ch').getContext('2d');if(charts.g)charts.g.destroy();const g1=data.filter(r=>r.solar_in_G1_window_3d==='True').length,g2=data.filter(r=>r.solar_in_G2_window_3d==='True').length,g3=data.filter(r=>r.solar_in_G3_window_3d==='True').length,none=data.length-g1;charts.g=new Chart(ctx,{type:'bar',data:{labels:['G1+ (Kp≥5)','G2+ (Kp≥6)','G3+ (Kp≥7)','No Storm'],datasets:[{data:[g1,g2,g3,none],backgroundColor:['#2ecc8a','#e8a020','#e05050','#354050'],borderWidth:0}]},options:{responsive:true,scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});}
 function plotKpDist(data,kps){const ctx=document.getElementById('kp-ch').getContext('2d');if(charts.kp)charts.kp.destroy();const bins=Array(10).fill(0);kps.forEach(k=>{bins[Math.min(9,Math.floor(k))]++;});charts.kp=new Chart(ctx,{type:'bar',data:{labels:['0','1','2','3','4','5','6','7','8','9'],datasets:[{data:bins,backgroundColor:bins.map((_,i)=>i>=5?'#e05050':i>=3?'#e8a020':'#00c8b4'),borderWidth:0}]},options:{responsive:true,scales:{x:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}}},plugins:{legend:{display:false}}}});}
 function plotYear(data){const ctx=document.getElementById('yr-ch').getContext('2d');if(charts.yr)charts.yr.destroy();const yc={},ys={};data.forEach(r=>{if(!r.year)return;yc[r.year]=(yc[r.year]||0)+1;if(r.solar_SSN_best)ys[r.year]=parseFloat(r.solar_SSN_best)||0;});const yrs=Object.keys(yc).sort();charts.yr=new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[{label:'Formations',data:yrs.map(y=>yc[y]),backgroundColor:'rgba(240,165,0,.7)',yAxisID:'y',order:2},{label:'SSN',data:yrs.map(y=>ys[y]||0),borderColor:'#9b7fe8',borderWidth:1.5,type:'line',pointRadius:0,yAxisID:'y1',order:1}]},options:{responsive:true,scales:{x:{ticks:{maxTicksLimit:14,color:'#6a8090'},grid:{color:'#1c2330'}},y:{ticks:{color:'#6a8090'},grid:{color:'#1c2330'}},y1:{position:'right',ticks:{color:'#9b7fe8'},grid:{display:false}}},plugins:{legend:{labels:{color:'#6a8090'}}}}});}
@@ -1481,6 +1626,62 @@ function runPred(){
   window._lastPred={smw,pred,fe,ae,kp,cme,dec,utc,arid,win};
 }
 function logPred(){if(!window._lastPred){alert('Run a decode first.');return;}const p=window._lastPred;preds.push({logged:new Date().toISOString(),ar:p.arid,smw:p.smw,geometry:p.pred.geo,pg:p.pred.pg,site:p.pred.site,win:p.win,dec:p.dec.toFixed(1),outcome:'pending'});savePreds();renderPredLog();alert('Prediction logged.');}
+
+function dcSiteChange(){
+  const v=document.getElementById('dc-site').value;
+  if(v==='custom')return;
+  const [c,r]=v.split(',').map(parseFloat);
+  document.getElementById('dc-c').value=c;
+  document.getElementById('dc-r').value=r;
+}
+
+function runDualBattery(){
+  const dQ_f=parseFloat(document.getElementById('dc-dqf').value)||0;
+  const dQ_s=parseFloat(document.getElementById('dc-dqs').value)||0;
+  const Q_f_prev=parseFloat(document.getElementById('dc-qfp').value)||0;
+  const Q_s_prev=parseFloat(document.getElementById('dc-qsp').value)||0;
+  const c_site=parseFloat(document.getElementById('dc-c').value)||1.8;
+  const r_site=parseFloat(document.getElementById('dc-r').value)||1.4;
+  const res=calculateDualBatteryJS(dQ_f,dQ_s,Q_f_prev,Q_s_prev,c_site,r_site);
+
+  document.getElementById('dc-output').style.display='block';
+  document.getElementById('dc-qf').textContent=res.Q_f.toFixed(4);
+  document.getElementById('dc-qs').textContent=res.Q_s.toFixed(4);
+  document.getElementById('dc-qt').textContent=res.total_Q.toFixed(4);
+  document.getElementById('dc-hw').textContent=res.hw;
+  document.getElementById('dc-gw').textContent=res.snapped_gw;
+  document.getElementById('dc-nrci').textContent=res.nrci.toFixed(4);
+
+  const trEl=document.getElementById('dc-trajectory');
+  if(res.discharged){
+    trEl.style.background='rgba(240,165,0,.07)';
+    trEl.style.borderColor='var(--solar)';
+    trEl.style.color='var(--solar)';
+    trEl.textContent='⚡ DISCHARGE — '+res.trajectory;
+  } else {
+    trEl.style.background='rgba(46,204,138,.04)';
+    trEl.style.borderColor='var(--ok2)';
+    trEl.style.color='var(--ok)';
+    trEl.textContent='◉ CHARGING — '+res.trajectory;
+  }
+  document.getElementById('dc-detail').textContent=
+`τ_fast         = ${res.tau_f.toFixed(2)}d  (ionospheric ring-current)
+τ_slow         = ${res.tau_s.toFixed(2)}d  (C_site × R_site = ${c_site}×${r_site})
+dQ_fast        = ${dQ_f.toFixed(4)}  (X-ray + CME energy)
+dQ_slow        = ${dQ_s.toFixed(4)}  (Kp + Bz + CH-HSS + Dst)
+Q_fast(t)      = ${res.Q_f.toFixed(4)}
+Q_slow(t)      = ${res.Q_s.toFixed(4)}
+Q_total        = ${res.total_Q.toFixed(4)}
+─────────────────────────────────────────
+Gray HW (raw)  = ${res.hw}
+Golay snap     = ${res.snapped_gw}   {0→Null | 8→Octad | 12→Dodecad | 16→SOP | 24→Full}
+Symmetry tax   = ${res.tax}
+NRCI           = ${res.nrci.toFixed(4)}  (threshold 0.95 = PERFECT_V1)
+Trajectory     → ${res.trajectory}`;
+  // Update carry-over fields for next day chaining
+  document.getElementById('dc-qfp').value=res.Q_f.toFixed(4);
+  document.getElementById('dc-qsp').value=res.Q_s.toFixed(4);
+}
 function savePreds(){localStorage.setItem('gce_preds',JSON.stringify(preds));}
 function renderPredLog(){const tb=document.getElementById('pred-tb');if(!tb)return;tb.innerHTML='';[...preds].reverse().forEach(p=>{tb.innerHTML+=`<tr><td class="c-dim">${(p.logged||'').substr(0,19)}</td><td class="c-sol">${p.ar||'—'}</td><td class="c-gol">${p.smw||'—'}</td><td>${p.geometry||'—'}</td><td>${p.pg||'—'}</td><td>${p.site||'—'}</td><td>${p.win||'—'}</td><td class="c-lee">${p.dec||'—'}°</td><td class="${p.outcome==='confirmed'?'c-ok':p.outcome==='null'?'c-nul':'c-dim'}">${p.outcome||'pending'}</td></tr>`;});}
 function expPreds(){const csv=Papa.unparse(preds);const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='gce_predictions.csv';a.click();}
@@ -1872,6 +2073,56 @@ function importDocs() {
 
 // Init docs on load
 window.addEventListener('load', () => { if (document.getElementById('doc-cards')) renderDocs(); });
+
+// ═══════════════════════════════════════════════════════════════
+// DUAL-COMPARTMENT BATTERY MODEL (CAL-03 Resolution)
+// Fast store: ionospheric (tau_f=0.5d), Slow store: geological (tau_s=C*R)
+// ═══════════════════════════════════════════════════════════════
+function calculateDualBatteryJS(dQ_f, dQ_s, Q_f_prev, Q_s_prev, c_site, r_site){
+  const tau_f = 0.5;
+  const tau_s = c_site * r_site;
+
+  // RC Evolution — both compartments charge and decay independently
+  let Q_f = (Q_f_prev + dQ_f) * Math.exp(-1.0 / tau_f);
+  let Q_s = (Q_s_prev + dQ_s) * Math.exp(-1.0 / tau_s);
+  let total_Q = Q_f + Q_s;
+
+  // Map to 24-bit Gray Code → Hamming Weight
+  let n = Math.abs(parseInt(total_Q * 1000)) % 16777216; // 2^24
+  let gray = n ^ (n >>> 1);
+  let hw = gray.toString(2).split('').filter(c=>c==='1').length;
+
+  // Snap HW to nearest valid Golay weight {0,8,12,16,24}
+  const golayWeights=[0,8,12,16,24];
+  const snapped=golayWeights.reduce((a,b)=>Math.abs(b-hw)<Math.abs(a-hw)?b:a);
+
+  // NRCI from snapped weight
+  const taxMap={0:0,8:2,12:3,16:4,24:6};
+  const tax=taxMap[snapped]||0;
+  const nrci=10/(10+tax);
+
+  // UBP Trajectory from compartment dominance
+  let trajectory='Identity (Rest)';
+  let discharged=false;
+
+  if(hw>=4){
+    discharged=true;
+    if(snapped===8){
+      trajectory=Q_f>Q_s
+        ?'Octad-Fast (Simple Circle/Ring)'
+        :'Octad-Slow (Celtic Cross)';
+      } else if(snapped===12){
+        trajectory='Dodecad (Pictogram/Dumbbell)';
+      } else if(snapped===16){
+        trajectory='Sub-Octad Pair (Ringed Multi-Circle)';
+      } else if(snapped===24){
+        trajectory='Full Codeword (Fractal/Max-Complex)';
+      }
+  }
+
+  return {Q_f, Q_s, total_Q, hw, snapped_gw:snapped, nrci, trajectory, discharged,
+          tau_f, tau_s, tax};
+}
 
 // ═══════════════════════════════════════════════════════════════
 // SUBSTRATE CHARGE INDEX (SCI) — BATTERY MONITOR
