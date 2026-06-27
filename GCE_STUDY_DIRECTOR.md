@@ -367,7 +367,7 @@ T-08 (GFZ Kp pending), T-09 (poppy medium — new, no bit-depth coefficient)
 | CH HSS | Coronal Hole High-Speed Stream; fast solar wind; no flare/AR required |
 | CME | Coronal Mass Ejection; Earth-directed = strong fast-store impulse |
 | SMW | Solar Message Weight — legacy heuristic classifier; largely superseded by dual-compartment model |
-| NRCI | Normalized Reciprocal Counting Index; Golay lattice metric, 0–1; threshold 0.70 for discharge |
+| NRCI | Non-Randim Coherence Index; Golay lattice metric, 0–1; threshold 0.70 for discharge |
 | HW | Hamming Weight; number of 1-bits in a binary word |
 | Octad | Golay weight-8 codeword; maps to simple formation geometry (circles, rings) |
 | Dodecad | Golay weight-12 codeword; maps to complex geometry (pictograms) |
